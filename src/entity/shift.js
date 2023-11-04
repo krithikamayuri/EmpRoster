@@ -39,6 +39,13 @@ const Shift = sequelize.define('Shift', {
       shiftStartTime: '12:00:00',
       shiftEndTime: '21:00:00',
     },
+    {
+      emp_id: 1,
+      emp_name: 'John',
+      shiftDate: '2023-11-01',
+      shiftStartTime: '10:00:00',
+      shiftEndTime: '19:00:00',
+    }
   ];
 
   for (const data of shiftData) {

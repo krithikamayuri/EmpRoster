@@ -65,7 +65,7 @@ for (const data of shiftTimingData) {
       empId: 3,
       shiftId: 2,
       message: "test",
-      file: "testfile.pdf",
+      file: "testfile.txt",
       status: "pending",
     },
   ];

@@ -835,6 +835,25 @@ app.get('/api/getCancelShiftRequests', async (req, res) => {
     }
 });
 
+// Define a route for downloading a file
+app.get('/api/downloadFile/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'uploads', filename); // Assuming 'uploads' is the directory where files are stored
+
+    // Check if the file exists
+    if (fs.existsSync(filePath)) {
+        res.download(filePath, filename, (err) => {
+            if (err) {
+                console.error('Error while downloading the file:', err);
+                res.status(500).json({ status: false, error: 'Failed to download the file' });
+            }
+        });
+    } else {
+        res.status(404).json({ status: false, error: 'File not found' });
+    }
+});
+  
+
 app.get('/api/fetchShifts/:empId', async (req, res) => {
     const empId = req.params.empId;
     console.log(empId)
