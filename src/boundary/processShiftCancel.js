@@ -22,6 +22,42 @@ function RequestListTable() {
     fetchRequests();
   }, []);
 
+  const handleReject = async (requestId) => {
+    try {
+      const response = await axios.post(`/api/rejectRequest/${requestId}`);
+      if (response.data.status) {
+        // Update the status in the local state
+        setRequests((prevRequests) =>
+          prevRequests.map((request) =>
+            request.id === requestId ? { ...request, status: 'rejected' } : request
+          )
+        );
+      } else {
+        console.error('Failed to reject request');
+      }
+    } catch (error) {
+      console.error('Error rejecting request:', error);
+    }
+  };
+
+  const handleApprove = async (requestId) => {
+    try {
+      const response = await axios.post(`/api/approveRequest/${requestId}`);
+      if (response.data.status) {
+        // Update the status in the local state
+        setRequests((prevRequests) =>
+          prevRequests.map((request) =>
+            request.id === requestId ? { ...request, status: 'accepted' } : request
+          )
+        );
+      } else {
+        console.error('Failed to approve request');
+      }
+    } catch (error) {
+      console.error('Error approving request:', error);
+    }
+  };
+
   return (
     <div className='mt-3'>
       <div className="container">
@@ -34,6 +70,7 @@ function RequestListTable() {
               <tr>
                 <th>Request ID</th>
                 <th>Employee ID</th>
+                <th>Employee Name</th>
                 <th>Shift ID</th>
                 <th>Message</th>
                 <th>File Uploaded</th>
@@ -46,6 +83,7 @@ function RequestListTable() {
                 <tr key={request.id}>
                   <td>{request.id}</td>
                   <td>{request.empId}</td>
+                  <td>{request.empName}</td>
                   <td>{request.shiftId}</td>
                   <td>{request.message}</td>
                   <td>
@@ -59,6 +97,10 @@ function RequestListTable() {
                     )}
                   </td>
                   <td>{request.status}</td>
+                  <td>
+                    <button onClick={() => handleApprove(request.id)}>Approve</button>
+                    <button onClick={() => handleReject(request.id)}>Reject</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

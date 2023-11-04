@@ -17,6 +17,7 @@ const ShiftCancelRequest = sequelize.define('shiftCancelRequest', {
     autoIncrement: true,
   },
   empId: DataTypes.INTEGER,
+  empName: DataTypes.STRING,
   shiftId: DataTypes.INTEGER,
   message: DataTypes.TEXT,
   file: {
@@ -29,33 +30,6 @@ const ShiftCancelRequest = sequelize.define('shiftCancelRequest', {
   }
 });
 
-
-/*const shiftTimingData = [
-  {
-    requestedBy: 1,
-    requestedTo: 1,
-    message: "test",
-    date: '2023-10-14',
-  }
-];*/
-
-/*(async () => {
-  await sequelize.sync();
-  console.log('ShiftTiming model synced with the database');
-for (const data of shiftTimingData) {
-  try {
-    const [shiftTiming, created] = await shiftCancelRequest.findOrCreate();
-
-    if (created) {
-      console.log('swapShift created:');
-    } else {
-      console.log('ShiftTiming already exists:');
-    }
-  } catch (error) {
-    console.error('Error creating swap shift:', error);
-  }
-}
-})();*/
 (async () => {
   await sequelize.sync();
   console.log('ShiftCancelRequest model synced with the database');
@@ -63,11 +37,20 @@ for (const data of shiftTimingData) {
   const shiftCancelRequestData = [
     {
       empId: 3,
+      empName:"Gina",
       shiftId: 2,
       message: "test",
       file: "testfile.txt",
       status: "pending",
     },
+    {
+      empId: 1,
+      empName:"John",
+      shiftId: 5,
+      message: "test2",
+      file: "testfile2.txt",
+      status: "pending",
+    }
   ];
 
   for(const data of shiftCancelRequestData){

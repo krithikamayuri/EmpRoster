@@ -852,6 +852,46 @@ app.get('/api/downloadFile/:filename', (req, res) => {
         res.status(404).json({ status: false, error: 'File not found' });
     }
 });
+
+// API route to approve a request
+app.post('/api/approveRequest/:id', async (req, res) => {
+    const requestId = parseInt(req.params.id);
+  
+    try {
+      const request = await CancelShiftRequest.findByPk(requestId);
+  
+      if (!request) {
+        res.status(404).json({ status: false, message: 'Request not found' });
+      } else {
+        request.status = 'accepted';
+        await request.save(); // Save the updated status
+        res.json({ status: true, message: 'Request approved' });
+      }
+    } catch (error) {
+      console.error('Error approving request:', error);
+      res.status(500).json({ status: false, message: 'Internal Server Error' });
+    }
+});
+  
+  // API route to reject a request
+app.post('/api/rejectRequest/:id', async (req, res) => {
+    const requestId = parseInt(req.params.id);
+  
+    try {
+      const request = await CancelShiftRequest.findByPk(requestId);
+  
+      if (!request) {
+        res.status(404).json({ status: false, message: 'Request not found' });
+      } else {
+        request.status = 'rejected';
+        await request.save(); // Save the updated status
+        res.json({ status: true, message: 'Request rejected' });
+      }
+    } catch (error) {
+      console.error('Error rejecting request:', error);
+      res.status(500).json({ status: false, message: 'Internal Server Error' });
+    }
+});
   
 
 app.get('/api/fetchShifts/:empId', async (req, res) => {
