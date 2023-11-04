@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function RequestListTable() {
+function ShiftCancel() {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
@@ -87,19 +87,37 @@ function RequestListTable() {
                   <td>{request.shiftId}</td>
                   <td>{request.message}</td>
                   <td>
-                    {request.file && (
-                      <a
-                        href={`/api/downloadFile/${request.file}`}
-                        download
-                      >
-                        Download File
-                      </a>
-                    )}
+                  {request.file && (
+                        <a
+                          href={`/api/downloadFile/${request.file}`}
+                          download
+                          onClick={(e) => {
+                            e.preventDefault(); // Prevent the default behavior of clicking a link
+                            // Send a GET request to download the file
+                            fetch(`/api/downloadFile/${request.file}`, {
+                              method: 'GET',
+                            })
+                              .then((response) => {
+                                if (response.ok) {
+                                  // File download was successful
+                                } else {
+                                  // Handle the case when the file download failed
+                                  console.error('Failed to download the file');
+                                }
+                              })
+                              .catch((error) => {
+                                console.error('Error downloading the file:', error);
+                              });
+                          }}
+                        >
+                          Download File
+                        </a>
+                      )}
                   </td>
                   <td>{request.status}</td>
                   <td>
-                    <button onClick={() => handleApprove(request.id)}>Approve</button>
-                    <button onClick={() => handleReject(request.id)}>Reject</button>
+                    <button onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>
+                    <button onClick={() => handleReject(request.id)} disabled={request.status !== 'pending'}>Reject</button>
                   </td>
                 </tr>
               ))}
@@ -111,4 +129,4 @@ function RequestListTable() {
   );
 }
 
-export default RequestListTable;
+export default ShiftCancel;

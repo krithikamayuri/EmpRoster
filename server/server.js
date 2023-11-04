@@ -827,7 +827,6 @@ app.post('/api/cancelShiftRequest', upload.single('file'), async (req, res) => {
 app.get('/api/getCancelShiftRequests', async (req, res) => {
     try {
       const cancelShiftRequests = await CancelShiftRequest.findAll();
-  
       res.status(200).json({ status: true, data: cancelShiftRequests, message: 'Cancel shift requests retrieved successfully' });
     } catch (error) {
       console.error('Error fetching cancel shift requests:', error);
@@ -838,8 +837,9 @@ app.get('/api/getCancelShiftRequests', async (req, res) => {
 // Define a route for downloading a file
 app.get('/api/downloadFile/:filename', (req, res) => {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, 'uploads', filename); // Assuming 'uploads' is the directory where files are stored
-
+    console.log(filename);
+    const filePath = path.join(__dirname, 'uploads', filename);
+    console.log(filePath);
     // Check if the file exists
     if (fs.existsSync(filePath)) {
         res.download(filePath, filename, (err) => {
@@ -853,7 +853,6 @@ app.get('/api/downloadFile/:filename', (req, res) => {
     }
 });
 
-// API route to approve a request
 app.post('/api/approveRequest/:id', async (req, res) => {
     const requestId = parseInt(req.params.id);
   
@@ -862,16 +861,28 @@ app.post('/api/approveRequest/:id', async (req, res) => {
   
       if (!request) {
         res.status(404).json({ status: false, message: 'Request not found' });
-      } else {
-        request.status = 'accepted';
-        await request.save(); // Save the updated status
-        res.json({ status: true, message: 'Request approved' });
+        return;
       }
+  
+      // Update the request status to 'accepted'
+      request.status = 'accepted';
+      await request.save();
+      const shiftId = request.shiftId;
+      const shift = await Shift.findByPk(shiftId);
+  
+      if (shift) {
+        await shift.destroy(); // Delete the shift
+      } else {
+        console.log('Shift not found for the request');
+      }
+  
+      res.json({ status: true, message: 'Request approved and shift deleted' });
     } catch (error) {
       console.error('Error approving request:', error);
       res.status(500).json({ status: false, message: 'Internal Server Error' });
     }
 });
+  
   
   // API route to reject a request
 app.post('/api/rejectRequest/:id', async (req, res) => {
