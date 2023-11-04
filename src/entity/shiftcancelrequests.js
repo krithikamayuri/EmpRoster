@@ -56,18 +56,20 @@ for (const data of shiftTimingData) {
   }
 }
 })();*/
-
-const shiftCancelRequestData = [
-  {
-    empId: 3,
-    shiftId: 2,
-    message: "test",
-  },
-];
-
 (async () => {
   await sequelize.sync();
   console.log('ShiftCancelRequest model synced with the database');
+
+  const shiftCancelRequestData = [
+    {
+      empId: 3,
+      shiftId: 2,
+      message: "test",
+      file: "testfile.pdf",
+      status: "pending",
+    },
+  ];
+
   for(const data of shiftCancelRequestData){
     try{
       const[shiftCancelRequest, created] = await ShiftCancelRequest.findOrCreate({
@@ -79,9 +81,9 @@ const shiftCancelRequestData = [
       });
 
       if(created) {
-        console.log('ShiftCancelRequest created ');
+        console.log('ShiftCancelRequest created: ', shiftCancelRequest.toJSON());
       } else {
-        console.log('ShiftCancelRequest already exists ');
+        console.log('ShiftCancelRequest already exists: ', shiftCancelRequest.toJSON());
       }
     } catch(error){
       console.log('Error creating shift cancel request: ', error);

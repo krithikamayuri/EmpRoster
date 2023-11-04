@@ -824,6 +824,17 @@ app.post('/api/cancelShiftRequest', upload.single('file'), async (req, res) => {
     }
 });
 
+app.get('/api/getCancelShiftRequests', async (req, res) => {
+    try {
+      const cancelShiftRequests = await CancelShiftRequest.findAll();
+  
+      res.status(200).json({ status: true, data: cancelShiftRequests, message: 'Cancel shift requests retrieved successfully' });
+    } catch (error) {
+      console.error('Error fetching cancel shift requests:', error);
+      res.status(500).json({ status: false, error: 'Failed to retrieve cancel shift requests' });
+    }
+});
+
 app.get('/api/fetchShifts/:empId', async (req, res) => {
     const empId = req.params.empId;
     console.log(empId)
