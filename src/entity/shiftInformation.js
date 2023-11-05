@@ -7,73 +7,81 @@ const sequelize = new Sequelize({
   database: 'emproster',
 });
 
-const ShiftTiming = sequelize.define('ShiftTiming', {
+const shiftInformation = sequelize.define('shiftInformation', {
   date: {
     type: DataTypes.DATEONLY,
     primaryKey: true,
-  },
+  }, 
+  staffRequired: DataTypes.INTEGER,
   startTime: DataTypes.TIME,
   endTime: DataTypes.TIME,
 });
 
 (async () => {
   await sequelize.sync();
-  console.log('ShiftTiming model synced with the database');
+  console.log('shiftInformation model synced with the database');
 
-  const shiftTimingData = [
+  const shiftInformationData = [
     {
       date: '2023-10-14',
+      staffRequired: 1,
       startTime: '8:00:00',
       endTime: '16:00:00',
     },
     {
       date: '2023-10-15',
+      staffRequired: 2,
       startTime: '9:00:00',
       endTime: '17:00:00',
     },
     {
       date: '2023-10-16',
+      staffRequired: 2,
       startTime: '10:00:00',
       endTime: '18:00:00',
     },
     {
       date: '2023-10-17',
+      staffRequired: 2,
       startTime: '8:30:00',
       endTime: '16:30:00',
     },
     {
       date: '2023-10-18',
+      staffRequired: 2,
       startTime: '9:30:00',
       endTime: '17:30:00',
     },
     {
       date: '2023-10-19',
+      staffRequired: 2,
       startTime: '8:00:00',
       endTime: '16:00:00',
     },
     {
       date: '2023-10-20',
+      staffRequired: 3,
       startTime: '10:00:00',
       endTime: '18:00:00',
     },
   ];
 
-  for (const data of shiftTimingData) {
+  for (const data of shiftInformationData) {
     try {
-      const [shiftTiming, created] = await ShiftTiming.findOrCreate({
+      const [shiftInfo, created] = await shiftInformation.findOrCreate({
         where: { date: data.date }, // Check for duplicates based on date
         defaults: data, // Create the record if it doesn't exist
       });
 
       if (created) {
-        console.log('ShiftTiming created:', shiftTiming.toJSON());
+        console.log('shiftInformation created:', shiftInfo.toJSON());
       } else {
-        console.log('ShiftTiming already exists:', shiftTiming.toJSON());
+        console.log('shiftInformation already exists:', shiftInfo.toJSON());
       }
     } catch (error) {
-      console.error('Error creating ShiftTiming:', error);
+      console.error('Error creating shiftInformation:', error);
     }
   }
 })();
 
-module.exports = ShiftTiming;
+module.exports = shiftInformation;

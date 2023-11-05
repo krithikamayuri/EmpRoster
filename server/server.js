@@ -6,9 +6,10 @@ const Manager = require('../src/entity/manager');
 const Employee = require('../src/entity/employee');
 const Admin = require('../src/entity/admin');
 const Shift = require('../src/entity/shift');
-const StaffRequired = require('../src/entity/staffRequired');
+//const StaffRequired = require('../src/entity/staffRequired');
 const moment = require('moment');
-const ShiftTiming = require('../src/entity/shiftTiming');
+//const ShiftTiming = require('../src/entity/shiftInformation');
+const shiftInformation = require('../src/entity/shiftInformation');
 const Availability = require('../src/entity/availability');
 const LeaveRequest = require('../src/entity/leaveRequests');
 const SwapRequest = require("../src/entity/swapRequests");
@@ -327,6 +328,68 @@ app.get('/api/shiftCancelRequests', async (req, res) => {
     }
 });
 
+/*
+app.post('/api/assign-employees', async (req, res) => {
+    try {
+      // Parse the data from the request body
+      const { date, staffRequired, startTime, endTime } = req.body;
+  
+      // Add the data to the shiftInformation table
+      const shiftInfo = await shiftInformation.create({
+        date,
+        staffRequired,
+        startTime,
+        endTime,
+      });
+  
+      // Respond with a success message
+      res.status(201).json({
+        success: true,
+        message: 'Assignment successful',
+        data: shiftInfo,
+      });
+    } catch (error) {
+      console.error('An error occurred:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }); */
+
+  app.post('/api/assign-employees', async (req, res) => {
+    try {
+
+      await shiftInformation.destroy({ where: {} });
+      // Parse the data from the request body
+      const weekData = req.body.weekData;
+  
+      // Create an array to hold the inserted shift information
+      const insertedShifts = [];
+  
+      for (const dayData of weekData) {
+        const { date, staffRequired, startTime, endTime } = dayData;
+  
+        // Add the data to the shiftInformation table
+        const shiftInfo = await shiftInformation.create({
+          date,
+          staffRequired,
+          startTime,
+          endTime,
+        });
+  
+        insertedShifts.push(shiftInfo);
+      }
+  
+      // Respond with a success message and the inserted shift data
+      res.status(201).json({
+        success: true,
+        message: 'Assignment successful',
+        data: insertedShifts,
+      });
+    } catch (error) {
+      console.error('An error occurred:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
 app.post('/api/inputShift', async (req, res) => {
     try {
         // Extract the shift data from the request body
@@ -360,7 +423,9 @@ app.post('/api/inputShift', async (req, res) => {
 app.get('/api/staffRequired', async (req, res) => {
     try {
         // Query the StaffRequired model to retrieve the data
-        const staffRequiredData = await StaffRequired.findAll();
+        const staffRequiredData = await shiftInformation.findAll({
+            attributes: ['date', 'staffRequired'],
+        });
 
         // Transform the data into the desired format
         const staffRequired = {};
@@ -379,7 +444,7 @@ app.get('/api/staffRequired', async (req, res) => {
 app.get('/api/datesOnly', async (req, res) => {
     try {
         // Query the StaffRequired model to retrieve the data
-        const staffRequiredData = await StaffRequired.findAll();
+        const staffRequiredData = await shiftInformation.findAll();
 
         // Extract and format the dates
         const dates = staffRequiredData.map(record => {
@@ -409,7 +474,9 @@ app.get('/api/employeeIds', async (req, res) => {
 
 app.get('/api/shiftTimings', async (req, res) => {
     try {
-        const shiftTimings = await ShiftTiming.findAll();
+        const shiftTimings = await shiftInformation.findAll({
+            sttributes: ['date', 'startTime', 'endTime'],
+        });
 
         // Create an object to store shift timings in the desired format
         const shiftTimingsFormatted = {};

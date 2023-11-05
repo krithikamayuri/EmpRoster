@@ -118,7 +118,7 @@ leave_requests = {(data['date'], data['employeeId']): data['available'] for data
 
 model.Shift = Set(initialize=shifts)
 model.Days = Set(initialize=dates)
-model.staffRequired = Param(model.Days, initialize=staffRequired)
+model.staffRequired = Param(model.Days, initialize=staffRequired, default=0)
 model.employee = Set(initialize=employee_ids)
 model.Salary = Param(model.Shift, initialize=salary)
 model.employeeType = Param(model.employee, model.Shift, initialize=employeeType, default=0)

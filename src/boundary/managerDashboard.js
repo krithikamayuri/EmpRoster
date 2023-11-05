@@ -8,11 +8,13 @@ import Report from './report';
 import { getUserName } from '../controller/managerDashboardController';
 import axios from 'axios';
 import ShiftCancel from './processShiftCancel';
+import AssignEmployees from './assignEmployees';
 
 function ManagerDashboard(props) {
   //const [events, setEvents] = useState([]);
   const [reportButtonPressed, setReportButtonPressed] = useState(false);
   const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
+  const [assignButtonPressed, setAssignButtonPressed] = useState(false);
   const [userName, setUserName] = useState('');
   const { userEmail } = props;
   const [error, setError] = useState('');
@@ -57,6 +59,10 @@ function ManagerDashboard(props) {
   }
 
   const handlePythonScriptButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(true);
+    /*
     try {
       // Make a request to the server endpoint that runs the Python script
       const response = await axios.post('/api/runPy');
@@ -69,6 +75,7 @@ function ManagerDashboard(props) {
     } catch (error) {
       console.error('An error occurred:', error);
     }
+    */
   };
   
   useEffect(() => {
@@ -106,7 +113,9 @@ function ManagerDashboard(props) {
           <Route path="/" element={
           */}
 
-          {reportButtonPressed ? ( 
+          {assignButtonPressed ? (
+            <AssignEmployees />
+          ) : reportButtonPressed ? ( 
           <Report />
           ) : shiftButtonPressed ? (
           <ShiftCancel />
@@ -115,7 +124,7 @@ function ManagerDashboard(props) {
             <h2>Welcome to the Manager Dashboard, {userName} </h2>
             {error && <p className="error-message">{error}</p>}
             <button onClick={handleReportButtonClick}>Go to Report</button>
-            <button onClick={handlePythonScriptButtonClick}>Run Python Script</button>
+            <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
             <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
             <div>
             {messages.unsuccessfulMsg && <p>{messages.unsuccessfulMsg}</p>}
