@@ -25,7 +25,7 @@ const Report = () => {
 
   return (
     <div>
-      <h1>Welcome to the Reports Page</h1>
+      <h1>Generate Reports</h1>
       <p>Click on the name of an employee to view reports</p>
       {empName ? (
         <ul>

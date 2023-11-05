@@ -94,35 +94,58 @@ const EmployeeDetails = ({ employeeName }) => {
 
   return (
     <div>
-      <p>------------------------------------------</p>
-      <h4>Shift Information for {employeeName}</h4>
+      <h4 style={{ textAlign: 'center' }}>Shift Information for {employeeName}</h4>
       {Array.isArray(shiftInfo) ? (
-        shiftInfo.map((shift, index) => (
-          <div key={index}>
-            <p>Shift ID: {shift.shift_id}</p>
-            <p>Date of Shift: {new Date(shift.shift_date).toLocaleDateString()}</p> {/* Format the date */}
-            <p>Shift Start Time: {shift.shift_start}</p>
-            <p>Shift End Time: {shift.shift_end}</p>
-            <p>Number of Hours Worked: {calculateHoursWorked(shift.shift_start, shift.shift_end)} hours</p>
-            <p>------------------------------------------</p>
-          </div>
-        ))
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Shift ID</th>
+              <th>Date of Shift</th>
+              <th>Shift Start Time</th>
+              <th>Shift End Time</th>
+              <th>Number of Hours Worked</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shiftInfo.map((shift, index) => (
+              <tr key={index}>
+                <td>{shift.shift_id}</td>
+                <td>{new Date(shift.shift_date).toLocaleDateString()}</td>
+                <td>{shift.shift_start}</td>
+                <td>{shift.shift_end}</td>
+                <td>{calculateHoursWorked(shift.shift_start, shift.shift_end)} hours</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : shiftInfo ? (
-        <div>
-          <p>------------------------------------------</p>
-          <p>Shift ID: {shiftInfo.shift_id}</p>
-          <p>Date of Shift: {new Date(shiftInfo.shift_date).toLocaleDateString()}</p> {/* Format the date */}
-          <p>Shift Start Time: {shiftInfo.shift_start}</p>
-          <p>Shift End Time: {shiftInfo.shift_end}</p>
-          <p>Number of Hours Worked: {calculateHoursWorked(shiftInfo.shift_start, shiftInfo.shift_end)} hours</p>
-          <p>------------------------------------------</p>
-        </div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Shift ID</th>
+              <th>Date of Shift</th>
+              <th>Shift Start Time</th>
+              <th>Shift End Time</th>
+              <th>Number of Hours Worked</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{shiftInfo.shift_id}</td>
+              <td>{new Date(shiftInfo.shift_date).toLocaleDateString()}</td>
+              <td>{shiftInfo.shift_start}</td>
+              <td>{shiftInfo.shift_end}</td>
+              <td>{calculateHoursWorked(shiftInfo.shift_start, shiftInfo.shift_end)} hours</td>
+            </tr>
+          </tbody>
+        </table>
       ) : (
         <p>There are no shifts listed under this employee</p>
       )}
       <button onClick={handleDownloadPDF}>Download PDF</button>
     </div>
   );
+  
   
 };
 
