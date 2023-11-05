@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import DownloadLink from './DownloadLink';
+
 
 function ShiftCancel() {
   const [requests, setRequests] = useState([]);
@@ -24,7 +26,7 @@ function ShiftCancel() {
 
   const handleReject = async (requestId) => {
     try {
-      const response = await axios.post(`/api/rejectRequest/${requestId}`);
+      const response = await axios.post(`/api/rejectRequest/${requestId}`); //pass in the request ID
       if (response.data.status) {
         // Update the status in the local state
         setRequests((prevRequests) =>
@@ -42,7 +44,7 @@ function ShiftCancel() {
 
   const handleApprove = async (requestId) => {
     try {
-      const response = await axios.post(`/api/approveRequest/${requestId}`);
+      const response = await axios.post(`/api/approveRequest/${requestId}`); //pass in the request ID
       if (response.data.status) {
         // Update the status in the local state
         setRequests((prevRequests) =>
@@ -86,34 +88,7 @@ function ShiftCancel() {
                   <td>{request.empName}</td>
                   <td>{request.shiftId}</td>
                   <td>{request.message}</td>
-                  <td>
-                  {request.file && (
-                        <a
-                          href={`/api/downloadFile/${request.file}`}
-                          download
-                          onClick={(e) => {
-                            e.preventDefault(); // Prevent the default behavior of clicking a link
-                            // Send a GET request to download the file
-                            fetch(`/api/downloadFile/${request.file}`, {
-                              method: 'GET',
-                            })
-                              .then((response) => {
-                                if (response.ok) {
-                                  // File download was successful
-                                } else {
-                                  // Handle the case when the file download failed
-                                  console.error('Failed to download the file');
-                                }
-                              })
-                              .catch((error) => {
-                                console.error('Error downloading the file:', error);
-                              });
-                          }}
-                        >
-                          Download File
-                        </a>
-                      )}
-                  </td>
+                  <td><DownloadLink filename={request.file} /></td>
                   <td>{request.status}</td>
                   <td>
                     <button onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>

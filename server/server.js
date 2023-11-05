@@ -824,6 +824,9 @@ app.post('/api/cancelShiftRequest', upload.single('file'), async (req, res) => {
     }
 });
 
+// Serve static files from the ./uploads directory
+app.use('/uploads', express.static(__dirname + '/uploads'));
+
 app.get('/api/getCancelShiftRequests', async (req, res) => {
     try {
       const cancelShiftRequests = await CancelShiftRequest.findAll();
@@ -833,26 +836,7 @@ app.get('/api/getCancelShiftRequests', async (req, res) => {
       res.status(500).json({ status: false, error: 'Failed to retrieve cancel shift requests' });
     }
 });
-
-// Define a route for downloading a file
-app.get('/api/downloadFile/:filename', (req, res) => {
-    const filename = req.params.filename;
-    console.log(filename);
-    const filePath = path.join(__dirname, 'uploads', filename);
-    console.log(filePath);
-    // Check if the file exists
-    if (fs.existsSync(filePath)) {
-        res.download(filePath, filename, (err) => {
-            if (err) {
-                console.error('Error while downloading the file:', err);
-                res.status(500).json({ status: false, error: 'Failed to download the file' });
-            }
-        });
-    } else {
-        res.status(404).json({ status: false, error: 'File not found' });
-    }
-});
-
+ 
 app.post('/api/approveRequest/:id', async (req, res) => {
     const requestId = parseInt(req.params.id);
   
