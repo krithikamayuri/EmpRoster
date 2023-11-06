@@ -11,7 +11,7 @@ import ShiftCancel from './processShiftCancel';
 import AssignEmployees from './assignEmployees';
 
 function ManagerDashboard(props) {
-  //const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]);
   const [reportButtonPressed, setReportButtonPressed] = useState(false);
   const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
   const [assignButtonPressed, setAssignButtonPressed] = useState(false);
@@ -20,7 +20,7 @@ function ManagerDashboard(props) {
   const [error, setError] = useState('');
   const [messages, setMessages] = useState({});
 
-  /*
+  
   useEffect(() => {
     // Make a POST request to fetch events from the server
     axios.post('/calendar/fetch-events')
@@ -31,7 +31,7 @@ function ManagerDashboard(props) {
         console.error(error);
       });
   }, []); 
-*/
+
   const handleReportButtonClick = () => {
     // Set the state to indicate that the button has been pressed
     setReportButtonPressed(true);
@@ -142,8 +142,12 @@ function ManagerDashboard(props) {
             <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
-       // events={events}
+        events={events}
+        eventContent={renderEventContent}
+        timeZone="local"
         /> 
+
+      
         </div>
           )}
       
@@ -155,6 +159,18 @@ function ManagerDashboard(props) {
     */}
     </div>
   );
+
+  function renderEventContent(info) {
+    return (
+      <div>
+        <b>ID:</b> {info.event.id}
+      <br />
+      <b>Start Time:</b> {info.event.start.toLocaleTimeString()}
+      <br />
+      <b>End Time:</b> {info.event.end.toLocaleTimeString()}
+      </div>
+    );
+  }
 }
 
 export default ManagerDashboard;

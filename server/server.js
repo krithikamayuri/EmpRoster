@@ -37,6 +37,54 @@ const sequelize = new Sequelize({
     database: 'emproster'
 });
 
+app.get('/calendar/fetch-events', async (req, res) => {
+    try {
+        console.log('Received GET request to /calendar/fetch-events');
+      // Query the database to retrieve shift data
+      const shifts = await Shift.findAll();
+  
+      // Format the shift data as FullCalendar events
+      const events = shifts.map((shift) => {
+        return {
+          id: shift.emp_id, // Include the ID
+          start: shift.shiftStartTime,
+          end: shift.shiftEndTime,
+        };
+      });
+      
+      res.status(200).json(events);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      res.status(500).json({ error: 'Failed to fetch events' });
+    }
+  }); 
+/*
+  app.post('/calendar/fetch-events', (req, res) => {
+    try {
+      console.log('Received GET request to /calendar/fetch-events');
+  
+      // Hard-coded sample events for testing
+      const sampleEvents = [
+        {
+          id: 1,
+          start: '2023-11-10T10:00:00',
+          end: '2023-11-10T12:00:00',
+        },
+        {
+          id: 2,
+          start: '2023-11-12T14:00:00',
+          end: '2023-11-12T16:00:00',
+        },
+      ];
+  
+      res.status(200).json(sampleEvents);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      res.status(500).json({ error: 'Failed to fetch events' });
+    }
+  });*/
+  
+
 app.post("/api/register-admins", async (req, res) => {
     const { emp_email, emp_type, emp_name, emp_phoneno, emp_psw, emp_address } = req.body;
     console.log(req.body);
