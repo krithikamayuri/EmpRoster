@@ -328,61 +328,31 @@ app.get('/api/shiftCancelRequests', async (req, res) => {
     }
 });
 
-/*
+
 app.post('/api/assign-employees', async (req, res) => {
     try {
-      // Parse the data from the request body
-      const { date, staffRequired, startTime, endTime } = req.body;
-  
-      // Add the data to the shiftInformation table
-      const shiftInfo = await shiftInformation.create({
-        date,
-        staffRequired,
-        startTime,
-        endTime,
-      });
-  
-      // Respond with a success message
-      res.status(201).json({
-        success: true,
-        message: 'Assignment successful',
-        data: shiftInfo,
-      });
-    } catch (error) {
-      console.error('An error occurred:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  }); */
-
-  app.post('/api/assign-employees', async (req, res) => {
-    try {
-
       await shiftInformation.destroy({ where: {} });
       // Parse the data from the request body
-      const weekData = req.body.weekData;
+      const {weekData} = req.body;
+
+      // Use map to insert the shift information in a single step
+      const insertedShifts = await Promise.all(weekData.map(async (dayData) => {
+      const { date, staffRequired, startTime, endTime } = dayData;
   
-      // Create an array to hold the inserted shift information
-      const insertedShifts = [];
-  
-      for (const dayData of weekData) {
-        const { date, staffRequired, startTime, endTime } = dayData;
-  
-        // Add the data to the shiftInformation table
-        const shiftInfo = await shiftInformation.create({
+        // Add the data to the shiftInformation table and return the result
+        return await shiftInformation.create({
           date,
           staffRequired,
           startTime,
           endTime,
         });
-  
-        insertedShifts.push(shiftInfo);
-      }
-  
+      }));
+
       // Respond with a success message and the inserted shift data
       res.status(201).json({
         success: true,
         message: 'Assignment successful',
-        data: insertedShifts,
+       data: insertedShifts,
       });
     } catch (error) {
       console.error('An error occurred:', error);
