@@ -585,6 +585,7 @@ app.get('/api/getemployees', async (req, res) => {
 
 // get all shifts of employee
 app.get('/api/getemployeeshifts/:empId', async (req, res) => {
+    const today = new Date();
     try {
         // Retrieve employee data from the database
         const shifts = await Shift.findAll({
