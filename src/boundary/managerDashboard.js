@@ -18,7 +18,6 @@ function ManagerDashboard(props) {
   const [userName, setUserName] = useState('');
   const { userEmail } = props;
   const [error, setError] = useState('');
-  const [messages, setMessages] = useState({});
 
   
   useEffect(() => {
@@ -38,20 +37,6 @@ function ManagerDashboard(props) {
     setShiftButtonPressed(false);
   }
 
-  const getMessages = async () => {
-    try {
-      const response = await axios.get('/api/messages');
-      if (response.status === 200) {
-        const data = response.data;
-        setMessages(data);
-        console.log('Received messages from server:', data);
-      } else {
-        console.error("Failed to retrieve messages. Status code:", response.status);
-      }
-    } catch (error) {
-      console.error("An error occurred while retrieving messages:", error);
-    }
-  };
 
   const handleShiftButtonClick = () => {
     setShiftButtonPressed(true);
@@ -62,20 +47,6 @@ function ManagerDashboard(props) {
     setShiftButtonPressed(false);
     setReportButtonPressed(false);
     setAssignButtonPressed(true);
-    /*
-    try {
-      // Make a request to the server endpoint that runs the Python script
-      const response = await axios.post('/api/runPy');
-     
-      // Handle the response from the server
-      console.log(response.data);
-      
-      // Get messages after running python script
-      //
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
-    */
   };
   
   useEffect(() => {
@@ -99,9 +70,6 @@ function ManagerDashboard(props) {
    // getMessages();
   }, [userEmail]);
   
-  useEffect(() => {
-    getMessages();
-  }, );
 
   return (
     <div>
@@ -126,18 +94,7 @@ function ManagerDashboard(props) {
             <button onClick={handleReportButtonClick}>Go to Report</button>
             <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
             <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
-            <div>
-            {messages.unsuccessfulMsg && <p>{messages.unsuccessfulMsg}</p>}
-            {messages.staffShortage && <p>{messages.staffShortage}</p>}
-            {messages.staffShortage1 && <p>{messages.staffShortage1}</p>}
-            {messages.person && <p>{messages.person}</p>}
-            {messages.noLeave && <p>{messages.noLeave}</p>}
-            {messages.success && <p>{messages.success}</p>}
-            </div>
-
-            {messages.message && (
-    <pre>{messages.message}</pre>
-  )}
+            
 
             <FullCalendar
         plugins={[dayGridPlugin]}

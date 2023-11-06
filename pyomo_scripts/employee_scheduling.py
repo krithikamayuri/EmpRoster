@@ -200,27 +200,34 @@ success = ''
 noLeave = ''
 employees_to_contact = ''
 
+messages = []  # Create a list to store all messages
+
+# Calculate and store the days with staff shortages
 shortage = {}
 for day, required_staff in staffRequired.items():
     available_staff_for_day = sum(availability.get((day, person), 0) for person in employee_ids)
     if available_staff_for_day < required_staff:
         shortage[day] = required_staff - available_staff_for_day
 
-# Print the days with staff shortages
-for day, shortfall in shortage.items():
-    print(f"Not enough staff available on {day}. Shortfall: {shortfall}")
-    staffShortage = f"Not enough staff available on {day}. Shortfall: {shortfall}"
+        # Create and append messages for staff shortages
+        shortage_message = f"Not enough staff available on {day}. Shortfall: {shortage[day]}"
+        messages.append(shortage_message)
 
-if shortage:
-    for day, shortfall in shortage.items():
-        print(f"On {day}, contact the following employees:")
-        staffShortage1 = f"On {day}, contact the following employees:"
+        # Create and append messages for contacting employees
         employees_to_contact = []
         for person in employee_ids:
             if (day, person) not in availability:
-                print(f"- {person}")
-                employees_to_contact.append(person)
-                person = f"- {person}"
+                employees_to_contact.append(str(person))  # Convert to string
+
+        if employees_to_contact:
+            contact_message = f"On {day}, contact the following employees:\n" + "\n".join(map(str, employees_to_contact))
+            messages.append(contact_message)
+
+# Print all the messages together
+for message in messages:
+    print(message)
+
+noLeave_messages = []
 
 # Calculate the total days full-time employees have either submitted their availability or submitted leave
 total_days_with_availability_or_leave = {}
@@ -233,8 +240,13 @@ for e in model.employee:
 for e in model.employee:
     if model.employeeType[e, 'fullTime'] == 1:
         if total_days_with_availability_or_leave[e] < 5:
-            noLeave = f"{e} has not submitted availability or leave for {5 - total_days_with_availability_or_leave[e]} days."
-            print(f"{e} has not submitted availability or leave for {5 - total_days_with_availability_or_leave[e]} days.")
+            noLeave_message = f"{e} has not submitted availability or leave for {5 - total_days_with_availability_or_leave[e]} days."
+            noLeave_messages.append(noLeave_message)
+            print(noLeave_message)
+
+# Print all the messages for employees with no availability or leave together
+for message in noLeave_messages:
+    print(message)
 
 # Check if the solver was successful
 if result.solver.status == SolverStatus.ok and result.solver.termination_condition == TerminationCondition.optimal:
@@ -264,7 +276,15 @@ if result.solver.status == SolverStatus.ok and result.solver.termination_conditi
         print('Error:', response.status_code)
         success = 'Error adding shift data'
 
-formatted_message = f"{unsuccessfulMsg}\n{staffShortage}\n{staffShortage1}\n{employees_to_contact}\n{noLeave}\n{success}"
+#formatted_message = f"{unsuccessfulMsg}\n{staffShortage}\n{staffShortage1}\n{employees_to_contact}\n{noLeave}\n{success}"
+formatted_message = "\n".join([
+    unsuccessfulMsg,
+    *messages,
+    "\n",
+    *noLeave_messages,
+    success
+])
+
 messages_data = {"message": formatted_message}
 
 # Send the messages to your API endpoint

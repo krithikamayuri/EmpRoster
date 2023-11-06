@@ -414,20 +414,28 @@ function AssignEmployees() {
       <br></br>
       <h5>Auto-assign Employees</h5>
       <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
-      <div>
-            {messages.unsuccessfulMsg && <p>{messages.unsuccessfulMsg}</p>}
-            {messages.staffShortage && <p>{messages.staffShortage}</p>}
-            {messages.staffShortage1 && <p>{messages.staffShortage1}</p>}
-            {messages.person && <p>{messages.person}</p>}
-            {messages.noLeave && <p>{messages.noLeave}</p>}
-            {messages.success && <p>{messages.success}</p>}
-            </div>
 
-            {messages.message && (
-            <pre>{messages.message}</pre>
-    )}
+{messages.message && (
+  <pre>
+    {messages.message
+      .split("Not enough staff available")
+      .map((line, index) => (
+        <div key={index}>
+          {index === 0 ? (
+            <p>{line}</p>
+          ) : line.trim() !== "" ? (
+            <p>{"Not enough staff available" + line}</p>
+          ) : (
+            <br />
+          )}
         </div>
-  );    
-}
+      ))}
+  </pre>
+)}
+
+
+
+        </div>
+)};
 
 export default AssignEmployees;
