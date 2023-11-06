@@ -523,6 +523,9 @@ app.get('/api/getemployeeshifts/:empId', async (req, res) => {
         const shifts = await Shift.findAll({
             where: {
                 emp_id: req.params.empId,
+                shiftDate: {
+                    [Sequelize.Op.gt]: today,
+                  },
             },
         });
         res.json(shifts);

@@ -1,41 +1,47 @@
 .ever {
-    float: left;
-    color: white;
-  }
-  
-  .admin {
-    float: right;
-    color: white;
-  
-  }
-  
-  .main-container { /* Fix the typo here */
-    background-color: rgb(62, 62, 62);
-    width: 100%;
-    height: 80px;
-    padding: 10px 20px;
-  
-  }
-  .create-account{
-    background-color: rgb(111, 111, 111);
-    /* height: 85vh; */
-    padding: 30px;
-    margin-top: 30px;
-  }
-  .create-account button{
-    margin-left: 20px;
-  }
-  .active {
-    background-color: rgb(0, 0, 0);
-    color: white;
-  }
+  float: left;
+  color: white;
+}
+
+.admin {
+  float: right;
+  color: white;
+
+}
+
+.main-container {
+  /* Fix the typo here */
+  background-color: rgb(62, 62, 62);
+  width: 100%;
+  height: 80px;
+  padding: 10px 20px;
+
+}
+
+.create-account {
+  background-color: rgb(111, 111, 111);
+  /* height: 85vh; */
+  padding: 30px;
+  margin-top: 30px;
+}
+
+.create-account button {
+  margin-left: 20px;
+}
+
+.active {
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
 /* navbar css */
-.navbar{
+.navbar {
   margin-top: 20px;
   background-color: rgb(96, 96, 96);
   color: white;
 }
-.nav-link{
+
+.nav-link {
   color: white;
   font-size: larger;
   margin-left: 30px;
@@ -48,19 +54,36 @@ avaibility table */
   border-collapse: collapse;
 }
 
-.availability-table th, .availability-table td {
+.availability-table th,
+.availability-table td {
   border: 1px solid black;
   text-align: center;
   font-size: larger;
   font-weight: bolder;
   padding: 20px;
-  width: 14%; /* Equal width for each cell */
+  width: 14%;
+  /* Equal width for each cell */
 }
 
-.employee-container { /* Fix the typo here */
+.employee-container {
+  /* Fix the typo here */
   background-color: rgb(62, 62, 62);
   width: 100%;
   height: 80px;
   padding: 10px 20px;
+}
 
+html,
+body {
+  height: 100%;
+}
+
+.loginBox {
+  max-height: 600px;
+  padding: 20px;
+  background-color: #f1f1f1;
+}
+
+.loginBox .form-control {
+  /* background-color: #f1f1f1; */
 }
