@@ -1,6 +1,7 @@
 //import React, { useState } from 'react';
 //import { login } from '../controller/loginController';
 import loginImage from "../images/login-small.jpg";
+import logo from "../images/logo.png";
 
 const React = require('react');
 const { login } = require('../controller/loginController');
@@ -55,6 +56,9 @@ const Login = ({ onLogin }) => {
           </div>
           <div className="col-md-6">
             <div>
+              <div className="text-center">
+                <img src={logo} style={{ width: "100px", margin: "auto", marginBottom: "20px", display: "inline-block" }} />
+              </div>
               <h2 className="text-center">Welcome To Evergreen</h2>
               <p className="mb-5 text-center">a cleaning company roster</p>
               <h4 className="mb-3">Login</h4>
@@ -65,7 +69,7 @@ const Login = ({ onLogin }) => {
                   <input
                     type="text"
                     placeholder="Email"
-                    className="form-control py-3"
+                    className="form-control py-3 shadow-none"
                     value={userEmail}
                     onChange={handleUsernameChange}
                     required
@@ -79,7 +83,7 @@ const Login = ({ onLogin }) => {
                   <span class="input-group-text px-4"><i class="ri-lock-line"></i> </span>
                   <input
                     type="password"
-                    className="form-control py-3"
+                    className="form-control py-3 shadow-none"
                     placeholder="Password"
                     value={userPsw}
                     onChange={handlePasswordChange}
