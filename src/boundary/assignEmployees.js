@@ -192,16 +192,17 @@ export default AssignEmployees;
 
 
 
-import React, { useState } from 'react';
-//import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import moment from 'moment';
-import { assignEmployees } from '../controller/assignEmployeesController';
+//import { assignEmployees } from '../controller/assignEmployeesController';
 
 function AssignEmployees() {
   const [selectedWeek, setSelectedWeek] = useState(new Date());
   const [weekData, setWeekData] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [messages, setMessages] = useState({});
 
   const timeOptions = [];
   for (let hour = 0; hour < 24; hour++) {
@@ -215,7 +216,7 @@ function AssignEmployees() {
   const handleWeekChange = (date) => {
     setSelectedWeek(date);
   };
-
+/*
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -226,7 +227,15 @@ function AssignEmployees() {
         startTime: weekData[index]?.startTime,
         endTime: weekData[index]?.endTime,
       }));
-
+      
+      /*
+      const weekDataToSend = weekData.map((data, index) => ({
+        date: data.date,
+        staffRequired: data.staffRequired,
+        startTime: data.startTime,
+        endTime: data.endTime,
+      })); *//*
+      console.log("Client-side weekData:", weekDataToSend);
       const response = await assignEmployees ({ weekData: weekDataToSend });
 
       if (response && response.message === 'Assignment successful') {
@@ -242,7 +251,81 @@ function AssignEmployees() {
       setErrorMessage('An error occurred. Please try again later.');
       setSuccessMessage('');
     }
+  };*/
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      console.log("Client-side weekData:", weekData);
+  
+      const url = '/api/assign-employees';
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ weekData }),
+      };
+  
+      const response = await fetch(url, requestOptions);
+  
+      if (response.ok) {
+        const responseData = await response.json();
+  
+        if (responseData.message === 'Assignment successful') {
+          setSuccessMessage('Shift information successfully added.');
+          setErrorMessage('');
+        } else {
+          setSuccessMessage('');
+          setErrorMessage('Shift information failed to add.');
+          console.error('Shift information failed to add.');
+        }
+      } else {
+        setSuccessMessage('');
+        setErrorMessage('HTTP error! Status: ' + response.status);
+        console.error('HTTP error! Status: ' + response.status);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      setErrorMessage('An error occurred. Please try again later.');
+      setSuccessMessage('');
+    }
   };
+
+  const getMessages = async () => {
+    try {
+      const response = await axios.get('/api/messages');
+      if (response.status === 200) {
+        const data = response.data;
+        setMessages(data);
+        console.log('Received messages from server:', data);
+      } else {
+        console.error("Failed to retrieve messages. Status code:", response.status);
+      }
+    } catch (error) {
+      console.error("An error occurred while retrieving messages:", error);
+    }
+  };
+
+  const handlePythonScriptButtonClick = async () => {
+    try {
+      // Make a request to the server endpoint that runs the Python script
+      const response = await axios.post('/api/runPy');
+     
+      // Handle the response from the server
+      console.log(response.data);
+      
+      // Get messages after running python script
+      //
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
+  useEffect(() => {
+    getMessages();
+  }, );
 
   const generateWeekDates = (startOfWeek) => {
     const dates = [];
@@ -256,7 +339,10 @@ function AssignEmployees() {
 
   const handleDayDataChange = (index, data) => {
     const updatedWeekData = [...weekData];
-    updatedWeekData[index] = data;
+    updatedWeekData[index] = {
+      ...data,
+      date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
+    };
     setWeekData(updatedWeekData);
   };
 
@@ -274,7 +360,7 @@ function AssignEmployees() {
       <form onSubmit={handleSubmit}>
         {daysInWeek.map((day, index) => (
           <div key={day}>
-            <h5>{moment(day).format('YYYY-MM-DD')}</h5>
+            <h5>{moment(day).format('DD-MM-YYYY')}</h5>
             <label>Staff Required: </label>
             <input
               type="number"
@@ -324,8 +410,24 @@ function AssignEmployees() {
       </form>
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
-    </div>
-  );
+
+      <br></br>
+      <h5>Auto-assign Employees</h5>
+      <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+      <div>
+            {messages.unsuccessfulMsg && <p>{messages.unsuccessfulMsg}</p>}
+            {messages.staffShortage && <p>{messages.staffShortage}</p>}
+            {messages.staffShortage1 && <p>{messages.staffShortage1}</p>}
+            {messages.person && <p>{messages.person}</p>}
+            {messages.noLeave && <p>{messages.noLeave}</p>}
+            {messages.success && <p>{messages.success}</p>}
+            </div>
+
+            {messages.message && (
+            <pre>{messages.message}</pre>
+    )}
+        </div>
+  );    
 }
 
 export default AssignEmployees;
