@@ -3,6 +3,7 @@ import { getHoursWorked } from '../controller/shiftController';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
+
 //method to calculate the hours worked for each employee according to shifts
 const calculateHoursWorked = (startTime, endTime) => {
   if (!startTime || !endTime) {
