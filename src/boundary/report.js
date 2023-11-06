@@ -25,8 +25,8 @@ const Report = () => {
 
   return (
     <div>
-      <h1>Generate Reports</h1>
-      <p>Click on the name of an employee to view reports</p>
+      <h1>Generate Reports on Hours Worked</h1>
+      <p>Click on the name of an employee to view and download reports</p>
       {empName ? (
         <ul>
           {empName.map((emp, index) => (

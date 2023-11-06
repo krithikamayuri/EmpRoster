@@ -30,14 +30,34 @@ const User = sequelize.define('Users', {
       userPsw: 'john_123',
     },
     {
+      userTypes: 'employee',
+      userEmail: 'lucy@hotmail.com',
+      userPsw: 'EmpLucy@001',
+    },
+    {
+      userTypes: 'employee',
+      userEmail: 'gina006@yahoo.com',
+      userPsw: 'Gin@_e06',
+    },
+    {
       userTypes: 'manager',
       userEmail: 'tony@gmail.com',
       userPsw: '123',
     },
     {
+      userTypes: 'manager',
+      userEmail: 'alicia64@yahoo.com',
+      userPsw: 'a1ici@_mger4646',
+    },
+    {
       userTypes: 'admin',
       userEmail: 'michael@gmail.com',
       userPsw: 'secure54',
+    },
+    {
+      userTypes: 'admin',
+      userEmail: 'susan.lee@gmail.com',
+      userPsw: 'secret234',
     },
     {
       userTypes: 'superAdmin',
