@@ -88,9 +88,9 @@ const SwapRequest = ({empEmail, employeeId}) => {
 
   return (
       <>
-        <button onClick={handleGoBack}>Previous page</button>
+        
           <div className='container'>
-
+          <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i> Previous page</button>
           <h4>Assigned Shifts To Me</h4>
           <table className='table table-hover'>
             <thead>

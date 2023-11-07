@@ -9,7 +9,7 @@ const Cancellation = () => {
     <div>
       <h1>Please pick your selected schedule</h1>
       <p>Submit MC here</p>
-      <button onClick={handleGoBack}>Previous page</button>
+      <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i>Previous page</button>
     </div>
   );
 };
