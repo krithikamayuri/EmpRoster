@@ -15,7 +15,7 @@ const Availability = ({ events }) => {
         initialView="dayGridMonth"
         events={events}
       />
-      <button onClick={handleGoBack}>Previous page</button>
+      <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i>Previous page</button>
     </div>
   );
 };
