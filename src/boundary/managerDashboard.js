@@ -10,6 +10,7 @@ import axios from 'axios';
 import ShiftCancel from './processShiftCancel';
 import AssignEmployees from './assignEmployees';
 import AddEmployee from './AddEmployee';
+import LatecomerReports from './LatecomerReports';
 
 function ManagerDashboard(props) {
   const [events, setEvents] = useState([]);
@@ -17,6 +18,7 @@ function ManagerDashboard(props) {
   const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
   const [assignButtonPressed, setAssignButtonPressed] = useState(false);
   const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
+  const [lateButtonPressed, setLateButtonPressed] = useState(false);
   const [userName, setUserName] = useState('');
   const { userEmail } = props;
   const [error, setError] = useState('');
@@ -57,6 +59,14 @@ function ManagerDashboard(props) {
     setAssignButtonPressed(false);
     setEmployeeButtonPressed(true);
   };
+
+  const handleLateButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(false);
+    setLateButtonPressed(true);
+  }
   
   useEffect(() => {
     const getName = async () => {
@@ -98,14 +108,17 @@ function ManagerDashboard(props) {
           <ShiftCancel />
           ) : employeeButtonPressed ? (
             <AddEmployee />
+          ) : lateButtonPressed ? (
+            <LatecomerReports/> 
           ) : (
             <div>
             <h2>Welcome to the Manager Dashboard, {userName} </h2>
             {error && <p className="error-message">{error}</p>}
-            <button onClick={handleReportButtonClick}>Go to Report</button>
+            <button onClick={handleReportButtonClick}>Working Hours Report</button>
             <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
             <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
             <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+            <button onClick={handleLateButtonClick}>Clock In Reports</button>
             
             
 

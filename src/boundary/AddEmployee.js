@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Report from './report';
+import AssignEmployees from './assignEmployees';
+import LatecomerReports from './LatecomerReports';
+import ShiftCancel from './processShiftCancel';
 
 function AddEmployee(){
     const [emp_phoneno, setEmp_phoneno] = useState("");
@@ -11,6 +15,11 @@ function AddEmployee(){
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [reportButtonPressed, setReportButtonPressed] = useState(false);
+    const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
+    const [assignButtonPressed, setAssignButtonPressed] = useState(false);
+    const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
+    const [lateButtonPressed, setLateButtonPressed] = useState(false);
 
     // Error state for each input field
   const [errors, setErrors] = useState({
@@ -22,6 +31,39 @@ function AddEmployee(){
     emp_address: "",
     confirmPassword: "",
   });
+
+  const handleReportButtonClick = () => {
+    // Set the state to indicate that the button has been pressed
+    setReportButtonPressed(true);
+    setShiftButtonPressed(false);
+  }
+
+
+  const handleShiftButtonClick = () => {
+    setShiftButtonPressed(true);
+    setReportButtonPressed(false);
+  }
+
+  const handlePythonScriptButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(true);
+  };
+
+  const handleEmployeeButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(true);
+  };
+
+  const handleLateButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(false);
+    setLateButtonPressed(true);
+  }
 
   const handlesubmit = () => {
     // Clear previous errors
@@ -148,6 +190,26 @@ function AddEmployee(){
 
   return(
     <>
+    {assignButtonPressed ? (
+      <AssignEmployees />
+    ) : reportButtonPressed ? ( 
+    <Report />
+    ) : shiftButtonPressed ? (
+    <ShiftCancel />
+    ) : employeeButtonPressed ? (
+      <AddEmployee />
+    ) : lateButtonPressed ? (
+      <LatecomerReports/> 
+    ) : (
+    <div>
+      <div className='mgernav'>
+        <h4>EverGreen Solutions - Manager Dashboard</h4>
+        <button onClick={handleReportButtonClick}>Working Hours Report</button>
+        <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+        <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+        <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+        <button onClick={handleLateButtonClick}>Clock In Reports</button>
+      </div>
     <div className="system-form mt-5" style={{ width: "70%", margin: "auto" }}>
     <h3 className='text-center'>Create Employee Account</h3>  
 
@@ -266,6 +328,8 @@ function AddEmployee(){
         {isLoading ? "Saving..." : "Save Data"}
         </button>
    </div>
+   </div>
+    )}
   </>
   );
 };

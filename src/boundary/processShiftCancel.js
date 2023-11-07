@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DownloadLink from './DownloadLink';
+import Report from './report';
+import AssignEmployees from './assignEmployees';
+import AddEmployee from './AddEmployee';
+import LatecomerReports from './LatecomerReports';
 
 
 function ShiftCancel() {
   const [requests, setRequests] = useState([]);
+  const [reportButtonPressed, setReportButtonPressed] = useState(false);
+  const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
+  const [assignButtonPressed, setAssignButtonPressed] = useState(false);
+  const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
+  const [lateButtonPressed, setLateButtonPressed] = useState(false);
 
   useEffect(() => {
     async function fetchRequests() {
@@ -23,6 +32,39 @@ function ShiftCancel() {
 
     fetchRequests();
   }, []);
+
+  const handleReportButtonClick = () => {
+    // Set the state to indicate that the button has been pressed
+    setReportButtonPressed(true);
+    setShiftButtonPressed(false);
+  }
+
+
+  const handleShiftButtonClick = () => {
+    setShiftButtonPressed(true);
+    setReportButtonPressed(false);
+  }
+
+  const handlePythonScriptButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(true);
+  };
+
+  const handleEmployeeButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(true);
+  };
+
+  const handleLateButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(false);
+    setLateButtonPressed(true);
+  }
 
   const handleReject = async (requestId) => {
     try {
@@ -61,46 +103,70 @@ function ShiftCancel() {
   };
 
   return (
-    <div className='mt-3'>
-      <div className="container">
-        <div className="card">
-          <div className="card-header bg-primary text-white p-2">
-            <h1>Shift Cancel Requests</h1>
+    <>
+    {assignButtonPressed ? (
+      <AssignEmployees />
+    ) : reportButtonPressed ? ( 
+    <Report />
+    ) : shiftButtonPressed ? (
+    <ShiftCancel />
+    ) : employeeButtonPressed ? (
+      <AddEmployee />
+    ) : lateButtonPressed ? (
+      <LatecomerReports/> 
+    ) : (
+      <div>
+        <div className='mgernav'>
+          <h4>EverGreen Solutions - Manager Dashboard</h4>
+          <button onClick={handleReportButtonClick}>Working Hours Report</button>
+          <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+          <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+          <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+          <button onClick={handleLateButtonClick}>Clock In Reports</button>
+        </div>
+        <div className='mt-3'>
+          <div className="container">
+            <div className="card">
+              <div className="card-header bg-primary text-white p-2">
+                <h1>Shift Cancel Requests</h1>
+              </div>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Request ID</th>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                    <th>Shift ID</th>
+                    <th>Message</th>
+                    <th>File Uploaded</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requests.map((request) => (
+                    <tr key={request.id}>
+                      <td>{request.id}</td>
+                      <td>{request.empId}</td>
+                      <td>{request.empName}</td>
+                      <td>{request.shiftId}</td>
+                      <td>{request.message}</td>
+                      <td><DownloadLink filename={request.file} /></td>
+                      <td>{request.status}</td>
+                      <td>
+                        <button onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>
+                        <button onClick={() => handleReject(request.id)} disabled={request.status !== 'pending'}>Reject</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Request ID</th>
-                <th>Employee ID</th>
-                <th>Employee Name</th>
-                <th>Shift ID</th>
-                <th>Message</th>
-                <th>File Uploaded</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((request) => (
-                <tr key={request.id}>
-                  <td>{request.id}</td>
-                  <td>{request.empId}</td>
-                  <td>{request.empName}</td>
-                  <td>{request.shiftId}</td>
-                  <td>{request.message}</td>
-                  <td><DownloadLink filename={request.file} /></td>
-                  <td>{request.status}</td>
-                  <td>
-                    <button onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>
-                    <button onClick={() => handleReject(request.id)} disabled={request.status !== 'pending'}>Reject</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
-    </div>
+    )}
+    </>
   );
 }
 

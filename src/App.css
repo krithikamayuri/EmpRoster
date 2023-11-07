@@ -9,6 +9,12 @@
 
 }
 
+.mgernav {
+  background-color: rgb(62, 62, 62);
+  color: white; /* Text color for the parent div */
+  padding: 10px 20px;
+}
+
 .main-container {
   /* Fix the typo here */
   background-color: rgb(62, 62, 62);

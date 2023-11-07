@@ -195,6 +195,10 @@ export default AssignEmployees;
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import Report from './report';
+import LatecomerReports from './LatecomerReports';
+import ShiftCancel from './processShiftCancel';
+import AddEmployee from './AddEmployee';
 //import { assignEmployees } from '../controller/assignEmployeesController';
 
 function AssignEmployees() {
@@ -203,6 +207,11 @@ function AssignEmployees() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [messages, setMessages] = useState({});
+  const [reportButtonPressed, setReportButtonPressed] = useState(false);
+  const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
+  const [assignButtonPressed, setAssignButtonPressed] = useState(false);
+  const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
+  const [lateButtonPressed, setLateButtonPressed] = useState(false);
 
   const timeOptions = [];
   for (let hour = 0; hour < 24; hour++) {
@@ -216,6 +225,39 @@ function AssignEmployees() {
   const handleWeekChange = (date) => {
     setSelectedWeek(date);
   };
+
+  const handleReportButtonClick = () => {
+    // Set the state to indicate that the button has been pressed
+    setReportButtonPressed(true);
+    setShiftButtonPressed(false);
+  }
+
+
+  const handleShiftButtonClick = () => {
+    setShiftButtonPressed(true);
+    setReportButtonPressed(false);
+  }
+
+  const handleScriptButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(true);
+  };
+
+  const handleEmployeeButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(true);
+  };
+
+  const handleLateButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(false);
+    setLateButtonPressed(true);
+  }
 /*
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -349,6 +391,27 @@ function AssignEmployees() {
   const daysInWeek = generateWeekDates(selectedWeek);
 
   return (
+    <>
+    {assignButtonPressed ? (
+      <AssignEmployees />
+    ) : reportButtonPressed ? ( 
+    <Report />
+    ) : shiftButtonPressed ? (
+    <ShiftCancel />
+    ) : employeeButtonPressed ? (
+      <AddEmployee />
+    ) : lateButtonPressed ? (
+      <LatecomerReports/> 
+    ) : (
+    <div>
+      <div className='mgernav'>
+        <h4>EverGreen Solutions - Manager Dashboard</h4>
+        <button onClick={handleReportButtonClick}>Working Hours Report</button>
+        <button onClick={handleScriptButtonClick}>Assign Employees</button>
+        <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+        <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+        <button onClick={handleLateButtonClick}>Clock In Reports</button>
+      </div>
     <div>
       <h2>Assign Employees for a Week</h2>
       <label>Select a Week: </label>
@@ -436,6 +499,9 @@ function AssignEmployees() {
 
 
         </div>
+        </div>
+    )}
+        </>
 )};
 
 export default AssignEmployees;
