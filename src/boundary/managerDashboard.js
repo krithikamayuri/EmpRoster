@@ -9,12 +9,14 @@ import { getUserName } from '../controller/managerDashboardController';
 import axios from 'axios';
 import ShiftCancel from './processShiftCancel';
 import AssignEmployees from './assignEmployees';
+import AddEmployee from './AddEmployee';
 
 function ManagerDashboard(props) {
   const [events, setEvents] = useState([]);
   const [reportButtonPressed, setReportButtonPressed] = useState(false);
   const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
   const [assignButtonPressed, setAssignButtonPressed] = useState(false);
+  const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
   const [userName, setUserName] = useState('');
   const { userEmail } = props;
   const [error, setError] = useState('');
@@ -47,6 +49,13 @@ function ManagerDashboard(props) {
     setShiftButtonPressed(false);
     setReportButtonPressed(false);
     setAssignButtonPressed(true);
+  };
+
+  const handleEmployeeButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(true);
   };
   
   useEffect(() => {
@@ -87,6 +96,8 @@ function ManagerDashboard(props) {
           <Report />
           ) : shiftButtonPressed ? (
           <ShiftCancel />
+          ) : employeeButtonPressed ? (
+            <AddEmployee />
           ) : (
             <div>
             <h2>Welcome to the Manager Dashboard, {userName} </h2>
@@ -94,6 +105,8 @@ function ManagerDashboard(props) {
             <button onClick={handleReportButtonClick}>Go to Report</button>
             <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
             <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+            <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+            
             
 
             <FullCalendar

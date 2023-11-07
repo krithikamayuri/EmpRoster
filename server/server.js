@@ -83,7 +83,60 @@ app.get('/calendar/fetch-events', async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch events' });
     }
   });*/
-  
+app.post("/api/createEmployee", async(req, res) => {
+    const { emp_email, emp_name, emp_emergency_contact, emp_phoneno, emp_psw, emp_address } = req.body;
+    console.log(req.body);
+
+    try{
+        let employee = null;
+        employee = await Employee.findOne({
+            where: {
+                emp_email: emp_email
+            }
+        });
+
+        if (employee !== null) {
+            return res.json({
+                status: false,
+                msg: "This email is already registered"
+            });
+        }
+
+        if(employee === null){
+            const newEmp = Employee.build({
+                emp_name: emp_name,
+                emp_address: emp_address,
+                emp_phoneno: emp_phoneno,
+                emp_emergency_contact: emp_emergency_contact,
+                emp_email: emp_email,
+                emp_psw: emp_psw
+            });
+            const newUser = User.build({
+                userName: emp_name,
+                userAddress: emp_address,
+                userPhoneNo: emp_phoneno,
+                userEmail: emp_email,
+                userPsw: emp_psw,
+                userTypes: 'employee'
+            });
+
+            await newUser.save();
+            await newEmp.save();
+            return res.json({
+                status: true,
+                msg: `Employee is created successfully`
+            });
+        }
+
+    }catch (error){
+        // Handle the error
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            msg: "An error occurred during registration"
+        });
+    }
+});
 
 app.post("/api/register-admins", async (req, res) => {
     const { emp_email, emp_type, emp_name, emp_phoneno, emp_psw, emp_address } = req.body;
