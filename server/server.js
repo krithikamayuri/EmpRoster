@@ -19,7 +19,6 @@ const upload = multer({ dest: './uploads/' })
 const fs = require("fs");
 const path = require('path');
 const CancelShiftRequest = require("../src/entity/shiftcancelrequests");
-const sequelize = require("../src/sequelize");
 
 const app = express();
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
@@ -29,6 +28,14 @@ const { exec } = require('child_process');
 
 app.use(cors())
 app.use(express.json());
+
+const sequelize = new Sequelize({
+    dialect: 'mysql',
+    host: 'localhost',
+    username: 'root',
+    password: 'test',
+    database: 'emproster'
+});
 
 app.get('/calendar/fetch-events', async (req, res) => {
     try {
