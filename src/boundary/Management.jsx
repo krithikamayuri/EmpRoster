@@ -141,7 +141,7 @@ function Management() {
 
   return (
     <>
-      <div className="main-container">
+      <div className="main-container mt-5">
         <h3 className="ever mt-2">EverGreen Solutions</h3>
         <div className="admin">
           <p className="text-danger">System Admin</p>
@@ -149,18 +149,21 @@ function Management() {
         </div>
       </div>
       <div className="container create-account">
-        <button onClick={() => openForm('system', 'admin')} className={(emp_type === 'admin') ? 'active' : '' } >Create System Admin Account</button>
-        <button onClick={() => openForm('manager', 'manager')} className={(emp_type === 'MAN') ? 'active' : '' }>Create Manager Account</button>
+        <button onClick={() => openForm('system', 'admin')} className={(emp_type === 'admin') ? 'btn btn-danger' : 'btn btn-outline-primary text-light' } >Create System Admin Account</button>
+        <button onClick={() => openForm('manager', 'manager')} className={(emp_type === 'manager') ? 'btn btn-danger' : 'btn btn-outline-primary text-light' }>Create Manager Account</button>
      
         {/* Conditionally render the forms based on the selectedForm state */}
         {selectedForm === 'system' && (
-  <div className="system-form mt-5" style={{ width: "70%", margin: "auto" }}>
-    <h3 className='text-center'>Create System Admin Account</h3>  
+  <div className="system-form mt-5 card " style={{ width: "70%", margin: "auto" }}>
+    <h3 className='text-center card-header bg-primary text-light'>Create System Admin Account</h3>  
+    <div className='card-body'>
+
     <div className="row">
       <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Full Name</label>
+        <label className='form-label'>Full Name</label>
         <input
           type="text"
+          className='form-control'
           name="emp_name"
           style={{ width: "90%" }}
           value={emp_name}
@@ -170,9 +173,10 @@ function Management() {
         <span className="text-danger">{errors.emp_name}</span> {/* Display error message */}
       </div>
       <div className="col-md-6 mt-md-0 mt-3">
-  <label style={{ fontWeight: "bold" }}>Phone Number</label>
+  <label className='form-label'>Phone Number</label>
   <input
     type="number"
+    className='form-control'
     name="emp_phoneno"
     style={{ width: "90%" }}
     value={emp_phoneno}
@@ -192,9 +196,10 @@ function Management() {
     </div>
     <div className="row">
       <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold", display: 'block' }}>Email</label>
+        <label className='form-label' style={{  display: 'block' }}>Email</label>
         <input
           type="text"
+          className='form-control'
           name="emp_email"
           style={{ width: "90%" }}
           value={emp_email}
@@ -207,9 +212,10 @@ function Management() {
     </div>
     <div className="row">
       <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Password</label>
+        <label className='form-label'>Password</label>
         <input
           type="password"
+          className='form-control'
           name="emp_psw"
           style={{ width: "90%" }}
           value={emp_psw}
@@ -219,10 +225,11 @@ function Management() {
         <span className="text-danger">{errors.emp_psw}</span>
       </div>
       <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Confirm Password</label>
+        <label className='form-label'>Confirm Password</label>
         <input
           type="password"
           name="confirmPassword"
+          className='form-control'
           style={{ width: "90%" }}
           value={confirmPassword}
           required
@@ -233,112 +240,124 @@ function Management() {
     </div>
     <div className="row">
       <div className="col-md-12 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Address</label>
+        <label className='form-label'>Address</label>
         <textarea
           name="emp_address"
           style={{ width: "95%" }}
+          className='form-control'
           value={emp_address}
           required
           onChange={(e) => { setEmp_address(e.target.value) }}
         ></textarea>
         <span className="text-danger">{errors.emp_address}</span>
       </div>
-    </div>
-    <button className='text-center' onClick={handlesubmit} disabled={isLoading}>
+    </div></div>
+    <div className='card-footer text-center'>
+    <button className='text-center btn btn-success' onClick={handlesubmit} disabled={isLoading}>
       {isLoading ? "Saving..." : "Save Data"}
     </button>
-    <button className='text-end' onClick={closeForm}>X</button>
+    <button className='text-end btn btn-danger' onClick={closeForm}>X</button> </div>
   </div>
 )}
-        {selectedForm === 'manager' && (
-           <div className="system-form mt-5" style={{ width: "70%", margin: "auto" }}>
-           <h3 className='text-center'>Create Manager Account</h3>  
-           <div className="row">
-             <div className="col-md-6 mt-md-0 mt-3">
-               <label style={{ fontWeight: "bold" }}>Full Name</label>
-               <input
-                 type="text"
-                 name="emp_name"
-                 style={{ width: "90%" }}
-                 value={emp_name}
-                 required
-                 onChange={(e) => { setemp_name(e.target.value) }}
-               />
-               <span className="text-danger">{errors.emp_name}</span> {/* Display error message */}
-             </div>
-             <div className="col-md-6 mt-md-0 mt-3">
-               <label style={{ fontWeight: "bold" }}>Phone Number</label>
-               <input
-                 type="number"
-                 name="emp_phoneno"
-                 style={{ width: "90%" }}
-                 value={emp_phoneno}
-                 required
-                 onChange={(e) => { setEmp_phoneno(e.target.value) }}
-               />
-               <span className="text-danger">{errors.emp_phoneno}</span>
-             </div>
-           </div>
-           <div className="row">
-             <div className="col-md-6 mt-md-0 mt-3">
-               <label style={{ fontWeight: "bold" ,display: 'block' }}>Email</label>
-               <input
-                 type="text"
-                 name="emp_email"
-                 style={{ width: "90%" }}
-                 value={emp_email}
-                 required
-                 onChange={(e) => { setEmp_email(e.target.value) }}
-               />
-               <span className="text-danger">{errors.emp_email}</span>
-             </div>
-           
-           </div>
-           <div className="row">
-             <div className="col-md-6 mt-md-0 mt-3">
-               <label style={{ fontWeight: "bold" }}>Password</label>
-               <input
-                 type="password"
-                 name="emp_psw"
-                 style={{ width: "90%" }}
-                 value={emp_psw}
-                 required
-                 onChange={(e) => { setEmp_psw(e.target.value) }}
-               />
-               <span className="text-danger">{errors.emp_psw}</span>
-             </div>
-             <div className="col-md-6 mt-md-0 mt-3">
-               <label style={{ fontWeight: "bold" }}>Confirm Password</label>
-               <input
-                 type="password"
-                 name="confirmPassword"
-                 style={{ width: "90%" }}
-                 value={confirmPassword}
-                 required
-                 onChange={(e) => { setConfirmPassword(e.target.value) }}
-               />
-               <span className="text-danger">{errors.confirmPassword}</span>
-             </div>
-           </div>
-           <div className="row">
-             <div className="col-md-12 mt-md-0 mt-3">
-               <label style={{ fontWeight: "bold" }}>Address</label>
-               <textarea
-                 name="emp_address"
-                 style={{ width: "95%" }}
-                 value={emp_address}
-                 required
-                 onChange={(e) => { setEmp_address(e.target.value) }}
-               ></textarea>
-               <span className="text-danger">{errors.emp_address}</span>
-             </div>
-           </div>
-           <button className='text-center' onClick={handlesubmit} disabled={isLoading}>
-             {isLoading ? "Saving..." : "Save Data"}
-           </button>
-           <button className='text-end' onClick={closeForm}>X</button>
-         </div>
-        )}
+       {selectedForm === 'manager' && (
+  <div className="system-form mt-5 card" style={{ width: "70%", margin: "auto" }}>
+    <h3 className="text-center card-header bg-primary text-light">Create Manager Account</h3>
+    <div className="card-body">
+      <div className="row">
+        <div className="col-md-6 mt-md-0 mt-3">
+          <label className="form-label">Full Name</label>
+          <input
+            type="text"
+            className="form-control"
+            name="emp_name"
+            style={{ width: "90%" }}
+            value={emp_name}
+            required
+            onChange={(e) => { setemp_name(e.target.value) }}
+          />
+          <span className="text-danger">{errors.emp_name}</span>
+        </div>
+        <div className="col-md-6 mt-md-0 mt-3">
+          <label className="form-label">Phone Number</label>
+          <input
+            type="number"
+            className="form-control"
+            name="emp_phoneno"
+            style={{ width: "90%" }}
+            value={emp_phoneno}
+            required
+            onChange={(e) => { setEmp_phoneno(e.target.value) }}
+          />
+          <span className="text-danger">{errors.emp_phoneno}</span>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-6 mt-md-0 mt-3">
+          <label className="form-label">Email</label>
+          <input
+            type="text"
+            className="form-control"
+            name="emp_email"
+            style={{ width: "90%" }}
+            value={emp_email}
+            required
+            onChange={(e) => { setEmp_email(e.target.value) }}
+          />
+          <span className="text-danger">{errors.emp_email}</span>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-6 mt-md-0 mt-3">
+          <label className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            name="emp_psw"
+            style={{ width: "90%" }}
+            value={emp_psw}
+            required
+            onChange={(e) => { setEmp_psw(e.target.value) }}
+          />
+          <span className="text-danger">{errors.emp_psw}</span>
+        </div>
+        <div className="col-md-6 mt-md-0 mt-3">
+          <label className="form-label">Confirm Password</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            className="form-control"
+            style={{ width: "90%" }}
+            value={confirmPassword}
+            required
+            onChange={(e) => { setConfirmPassword(e.target.value) }}
+          />
+          <span className="text-danger">{errors.confirmPassword}</span>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-12 mt-md-0 mt-3">
+          <label className="form-label">Address</label>
+          <textarea
+            name="emp_address"
+            style={{ width: "95%" }}
+            className="form-control"
+            value={emp_address}
+            required
+            onChange={(e) => { setEmp_address(e.target.value) }}
+          ></textarea>
+          <span className="text-danger">{errors.emp_address}</span>
+        </div>
+      </div>
+    </div>
+    <div className="card-footer text-center">
+      <button className="btn btn-success" onClick={handlesubmit} disabled={isLoading}>
+        {isLoading ? "Saving..." : "Save Data"}
+      </button>
+      <button className="btn btn-danger text-end bg-danger" onClick={closeForm}>X</button>
+    </div>
+  </div>
+)}
+
       </div>
     </>
   );

@@ -36,7 +36,7 @@ return (
     {isLoggedIn ? (
       <div className="container">
         <div>
-          <img src={logo} style={{ width: "40px", float: "left", marginTop: "2px", marginRight: "10px" }}  />
+          <img src={logo} style={{ width: "40px", float: "left",marginTop:"-5px", marginRight: "10px" }}  />
         </div>
         <div className="text-end float-end">
           <button onClick={handleLogout} className="btn btn-danger btn-sm mt-1">
@@ -59,7 +59,7 @@ return (
         )}
         {userType === 'superAdmin' && (
           <div>
-            <h2>Welcome to the Manager Dashboard, {userEmail}</h2>
+            <h4 className="mt-3">Welcome to the Manager Dashboard, {userEmail}</h4>
             <Management userEmail={userEmail}/>
           </div>
         )}
