@@ -1,14 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  host: 'localhost',
-  username: 'root',
-  password: 'test',
-  database: 'emproster',
-});
-
-
-
+const { DataTypes } = require('sequelize');
+const sequelize = require('../sequelize'); // Import the sequelize instance
 
 const ShiftCancelRequest = sequelize.define('shiftCancelRequest', {
   id: {
