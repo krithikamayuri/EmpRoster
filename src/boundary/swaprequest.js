@@ -88,55 +88,45 @@ const SwapRequest = ({empEmail, employeeId}) => {
 
   return (
       <>
-        
-        <div className="container">
-  <div className="card mt-4">
-    <h4 className="card-header bg-primary text-light">Assigned Shifts To Me</h4>
-    {shifts.length === 0 ? (
-      <div className="alert alert-danger text-center mt-3">
-        No shifts found.
-      </div>
-    ) : (
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>Shift ID</th>
-            <th>Shift Date</th>
-            <th>Emp Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {shifts &&
-            shifts.map((shift, index) => {
-              return (
-                <tr key={index}>
-                  <td>{shift.shiftID}</td>
-                  <td>{moment(shift.shiftDate).format("MM-DD-YYYY")}</td>
-                  <td>{shift.emp_name}</td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleModalOpen(shift)}
-                      className="btn btn-outline-primary btn-sm"
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleModal"
-                    >
-                      Swap Shift
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
-    )}
-  </div>
-  <button onClick={handleGoBack} className="btn btn-outline-dark my-2 btn-sm mt-3">
-    <i className="ri-arrow-left-line"></i> Previous page
-  </button>
-</div>
 
+      <div>
+          <div className='mt-5'>
+          <div className='container'>
+          <div className="card" style = {{border: '1px solid black'}}>
+          {/* <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i> Previous page</button> */}
+          <div className="card-header text-white" style={{background: 'linear-gradient(to bottom, green, #395144'}}>
+            <h1>Shifts Assigned To Me</h1>
+          </div>
+          <table className='table table-hover'>
+            <thead>
+              <tr>
+                <th>Shift ID</th>
+                <th>Shift Date</th>
+                <th>Emp Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            {
+              shifts && shifts.map( (shift, index) => {
+                  return(
+                      <tr key={index}>
+                        <td>{shift.shiftID}</td>
+                        <td>{moment(shift.shiftDate).format("MM-DD-YYYY")}</td>
+                        <td>{shift.emp_name}</td>
+                        <td><button type="button" onClick={ () => handleModalOpen(shift)} className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                          Swap Shift
+                        </button></td>
+                      </tr>
+                  )
+                })
+            }
+            </tbody>
+          </table>
+
+
+
+        </div>
 
         <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog">
@@ -183,7 +173,10 @@ const SwapRequest = ({empEmail, employeeId}) => {
             </div>
           </div>
         </div>
-
+        </div>
+        </div>
+        <button onClick={handleGoBack} className='btn btn-outline-dark m-4'><i class="ri-arrow-left-line"></i>Previous page</button>
+        </div>
       </>
 
   );

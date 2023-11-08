@@ -39,7 +39,7 @@ return (
           <img src={logo} style={{ width: "40px", float: "left",marginTop:"-5px", marginRight: "10px" }}  />
         </div>
         <div className="text-end float-end">
-          <button onClick={handleLogout} className="btn btn-danger btn-sm mt-1">
+          <button onClick={handleLogout} className="btn btn-danger btn-sm m-2">
           <i class="ri-logout-circle-line"></i> Logout</button>
         </div>
         {userType === 'employee' && (
@@ -63,7 +63,9 @@ return (
             <Management userEmail={userEmail}/>
           </div>
         )}
-        {/*<Calendar />*/}
+
+        {/* <button onClick={handleLogout}>Logout</button> ??*/} 
+
       </div>
     ) : (
       <div>
