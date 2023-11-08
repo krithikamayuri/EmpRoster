@@ -23,7 +23,7 @@ const LeaveRequest = sequelize.define('LeaveRequest', {
   console.log('LeaveRequest model synced with the database');
 
   const leaveRequestData = [
-    { emp_id: 2, date: '2023-10-15', status: 'approved' },
+    { emp_id: 2, date: '2023-10-15', status: 'denied' },
     // Add more leave request data as needed
   ];
 

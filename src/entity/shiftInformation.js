@@ -23,47 +23,11 @@ const shiftInformation = sequelize.define('shiftInformation', {
 
   const shiftInformationData = [
     {
-      date: '2023-10-14',
+      date: '2023-08-19',
       staffRequired: 1,
       startTime: '8:00:00',
       endTime: '16:00:00',
-    },
-    {
-      date: '2023-10-15',
-      staffRequired: 2,
-      startTime: '9:00:00',
-      endTime: '17:00:00',
-    },
-    {
-      date: '2023-10-16',
-      staffRequired: 2,
-      startTime: '10:00:00',
-      endTime: '18:00:00',
-    },
-    {
-      date: '2023-10-17',
-      staffRequired: 2,
-      startTime: '8:30:00',
-      endTime: '16:30:00',
-    },
-    {
-      date: '2023-10-18',
-      staffRequired: 2,
-      startTime: '9:30:00',
-      endTime: '17:30:00',
-    },
-    {
-      date: '2023-10-19',
-      staffRequired: 2,
-      startTime: '8:00:00',
-      endTime: '16:00:00',
-    },
-    {
-      date: '2023-10-20',
-      staffRequired: 3,
-      startTime: '10:00:00',
-      endTime: '18:00:00',
-    },
+    }
   ];
 
   for (const data of shiftInformationData) {

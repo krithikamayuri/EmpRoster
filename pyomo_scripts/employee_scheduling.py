@@ -84,6 +84,21 @@ except Exception as e:
     print(f"An error occurred while fetching shift timings from the API: {e}")
     shift_timings = {}
 
+# Send data to availability
+try:
+    # Create a payload using the 'dates' data
+    payload = {'dates': dates}  # Modify this based on your API's requirements
+
+    # Make a POST request to the '/api/availability' endpoint to send data
+    response = requests.post('http://localhost:5000/api/availability', json=payload)
+
+    if response.status_code == 200:
+        print("Data sent to /api/availability successfully.")
+    else:
+        print(f"Failed to send data to /api/availability. Status code: {response.status_code}")
+except Exception as e:
+    print(f"An error occurred while sending data to /api/availability: {e}")
+
 # Fetch employee availability from the database
 try:
     response = requests.get('http://localhost:5000/api/availability')

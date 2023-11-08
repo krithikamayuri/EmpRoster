@@ -621,19 +621,50 @@ app.get('/api/empType', async (req, res) => {
     }
 });
 
-app.get('/api/availability', async (req, res) => {
-    try {
-        const availability = await Availability.findAll();
+const sharedData = [];
 
+app.post('/api/availability', async (req, res) => {
+    try {
+        const newData = req.body; // Get the JSON data from the request body
+        
+        // Clear the sharedData array
+        sharedData.length = 0;
+
+        sharedData.push(newData);
+
+        console.log('Received new data:', newData);
+
+        res.status(200).json({ message: 'Data sent to /api/availability successfully' });
+    } catch (error) {
+        console.error('An error occurred:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.get('/api/availability', async (req, res) => {
+    console.log('The data from sharedData', sharedData);
+    
+    try {
         const availabilityData = [];
 
-        // Convert the Sequelize instances to the correct format
-        availability.forEach((record) => {
-            const emp_id = record.emp_id;
-            const formattedDate = moment(record.date).format('YYYY-MM-DD');
-            //availabilityData[[formattedDate, emp_id]] = 1;
-            availabilityData.push({ date: formattedDate, employeeId: emp_id, available: 1 });
-        });
+        // Iterate through the sharedData array
+        for (const dataObject of sharedData) {
+            for (const date of dataObject.dates) {
+                const availability = await Availability.findAll({
+                    where: {
+                        date: date
+                    }
+                });
+
+                // Convert the Sequelize instances to the correct format for each date
+                availability.forEach((record) => {
+                    const emp_id = record.emp_id;
+                    const formattedDate = moment(record.date).format('YYYY-MM-DD');
+                    availabilityData.push({ date: formattedDate, employeeId: emp_id, available: 1 });
+                });
+            }
+        }
+
         res.json(availabilityData);
     } catch (error) {
         console.error('An error occurred:', error);
@@ -878,16 +909,6 @@ app.post('/api/send-messages', (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
-/*
-app.get('/api/messages', (req, res) => {
-    try {
-        res.json(msgData);
-    } catch (error) {
-        console.error('An error occurred:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-}); */
 
 app.get('/api/messages', (req, res) => {
     try {

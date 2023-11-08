@@ -14,7 +14,7 @@ const Availability = sequelize.define('Availability', {
     autoIncrement: true,
   },
   emp_id: DataTypes.INTEGER,
-  date: DataTypes.DATE,
+  date: DataTypes.DATEONLY,
 });
 
 (async () => {
