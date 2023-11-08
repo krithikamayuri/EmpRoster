@@ -429,6 +429,40 @@ app.get('/api/shiftCancelRequests', async (req, res) => {
     }
 });
 
+app.get('/findLateTime/:empId/:date', async (req, res) => {
+    const empId = req.params.empId;
+    const date = req.params.date;
+  
+    try {
+      const clockInOutRecord = await ClockInOut.findOne({
+        where: { empId, date },
+      });
+  
+      if (!clockInOutRecord) {
+        return res.status(404).json({ message: 'Clock-in record not found' });
+      }
+  
+      const shiftId = clockInOutRecord.shiftId;
+
+      const shiftRecord = await Shift.findByPk(shiftId);
+  
+      if (!shiftRecord) {
+        return res.status(404).json({ message: 'Shift record not found' });
+      }
+  
+      const clockInTime = new Date(clockInOutRecord.clockIn);
+      const shiftStartTime = new Date(shiftRecord.shiftStart);
+  
+      if (clockInTime > shiftStartTime) {
+        res.json({ message: 'Clock-in time is later than shift start time' });
+      } else {
+        res.json({ message: 'Clock-in time is not later than shift start time' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Error comparing times', error: error.message });
+    }
+});
+
 
 app.post('/api/assign-employees', async (req, res) => {
     try {

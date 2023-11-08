@@ -5,6 +5,7 @@ import AddEmployee from './AddEmployee';
 import ShiftCancel from './processShiftCancel';
 import { useState } from 'react';
 import ManagerDashboard from './managerDashboard';
+import { compareTimings } from '../controller/reportController';
 
 function LatecomerReports() {
   const [reportButtonPressed, setReportButtonPressed] = useState(false);
@@ -13,6 +14,11 @@ function LatecomerReports() {
   const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
   const [lateButtonPressed, setLateButtonPressed] = useState(false);
   const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
+  const [empId, setEmpId] = useState(''); // Initialize empId as an empty string
+  const [date, setDate] = useState(''); // Initialize date as an empty string
+  const [reportData, setReportData] = useState(null);
+  const [error, setError] = useState(null);
+  const [lateShiftsCount, setLateShiftsCount] = useState(0);
 
   const handleReportButtonClick = () => {
     // Set the state to indicate that the button has been pressed
@@ -56,6 +62,29 @@ function LatecomerReports() {
     setMgerButtonPressed(true);
   }
 
+  const handleEmpIdChange = (event) => {
+    setEmpId(event.target.value);
+  };
+
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Fetch data when the user submits the form
+    compareTimings(empId, date)
+      .then((data) => {
+        setReportData(data);
+
+        if (data && data.message === 'Clock-in time is later than shift start time') {
+          setLateShiftsCount((count) => count + 1);
+        }
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  };
+
   return (
     <>
       {assignButtonPressed ? (
@@ -81,8 +110,34 @@ function LatecomerReports() {
             <button onClick={handleLateButtonClick}>Clock In Reports</button>
             <button onClick={handleMgerButtonPressed}>Go to home page</button>
           </div>
+          <h1>View Clock-In Reports</h1>
+          <p>Please select below</p>
+          <form>
+            <label>
+              Employee ID:
+              <input type="text" value={empId} onChange={handleEmpIdChange} />
+            </label>
+          <br />
+            <label>
+              Date:
+              <input type="text" value={date} onChange={handleDateChange} />
+            </label>
+          <br />
+            <button type="button" onClick={handleSubmit}>
+            Submit
+            </button>
+        </form>
 
-          <h1>Reports on Clock-In Timings</h1>
+      {error && <p>Error: {error.message}</p>}
+
+      {reportData && (
+        <div>
+          <p>Report Data:</p>
+          <pre>{JSON.stringify(reportData, null, 2)}</pre>
+        </div>
+      )}
+
+      <p>Number of Shifts Late: {lateShiftsCount}</p>
         </div>
       )}
     </>
