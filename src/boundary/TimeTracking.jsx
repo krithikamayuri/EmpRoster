@@ -90,7 +90,7 @@ console.log(clockOutTime)
     <div className="container mt-5">
       <div className="card">
         <div className="card-header bg-primary text-white">
-          <h1>Employee Time Tracking</h1>
+          <h3>Employee Time Tracking</h3>
         </div>
         <div className="card-body">
           <div className="row">

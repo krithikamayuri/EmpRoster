@@ -6,6 +6,7 @@ import AdminDashboard from './boundary/adminDashboard';
 import EmployeeDashboard from './boundary/employeeDashboard';
 import ManagerDashboard from './boundary/managerDashboard';
 import Management from "./boundary/Management";
+import logo from "./images/logo.png"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,7 +34,14 @@ function App() {
 return (
   <div>
     {isLoggedIn ? (
-      <div>
+      <div className="container">
+        <div>
+          <img src={logo} style={{ width: "40px", float: "left", marginTop: "2px", marginRight: "10px" }}  />
+        </div>
+        <div className="text-end float-end">
+          <button onClick={handleLogout} className="btn btn-danger btn-sm mt-1">
+          <i class="ri-logout-circle-line"></i> Logout</button>
+        </div>
         {userType === 'employee' && (
           <div>
             <EmployeeDashboard userEmail={userEmail} employeeId={employeeId}/>
@@ -55,7 +63,6 @@ return (
             <Management userEmail={userEmail}/>
           </div>
         )}
-        <button onClick={handleLogout}>Logout</button>
         {/*<Calendar />*/}
       </div>
     ) : (

@@ -81,7 +81,7 @@ useEffect( () => {
   return (
       <>
           <div className='container'>
-          <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i>Previous page</button>
+          <button onClick={handleGoBack} className='btn btn-outline-dark my-2 btn-sm'><i class="ri-arrow-left-line"></i>Previous page</button>
 
           <h4>Swap Shift Requests Received</h4>
           <div>
