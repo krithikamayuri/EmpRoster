@@ -9,7 +9,7 @@ function Empdashboardnav(){
             EverGreen Solutions
           </h3>
           <div className="admin" style={{ textAlign: 'center' }}>
-            <p className="text" style={{ color: 'white', fontFamily: 'Verdana, sans-serif', fontSize: '18px' }}>
+            <p className="text" style={{ color: 'white', fontFamily: 'Verdana, sans-serif', fontSize: '18px', marginRight: '10px' }}>
               Employee
             </p>
             <style>
@@ -20,9 +20,6 @@ function Empdashboardnav(){
               `}
             </style>
 
-            <a href="/logout" className="logout-link" style={{ textDecoration: "none", color: "white" }}>
-              <h5 style={{ lineHeight: "0.4", textAlign: "center" }}>Logout</h5>
-            </a>
           </div>
         </div>
 
@@ -62,4 +59,4 @@ function Empdashboardnav(){
         </>
     )
 }
- export default Empdashboardnav;
+export default Empdashboardnav;

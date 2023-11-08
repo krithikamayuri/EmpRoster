@@ -96,6 +96,7 @@ console.log(clockOutTime)
       <div className="card" style = {{border: '1px solid black'}}>
         <div className="card-header text-white" style ={{background: 'linear-gradient(to bottom, green, #395144'}}>
           <h1>Employee Time Tracking</h1>
+
         </div>
         <div className="card-body">
           <div className="row">

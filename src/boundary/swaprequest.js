@@ -88,6 +88,7 @@ const SwapRequest = ({empEmail, employeeId}) => {
 
   return (
       <>
+
       <div>
           <div className='mt-5'>
           <div className='container'>
@@ -126,7 +127,6 @@ const SwapRequest = ({empEmail, employeeId}) => {
 
 
         </div>
-
 
         <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog">

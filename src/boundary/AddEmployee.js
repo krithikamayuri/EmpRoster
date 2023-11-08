@@ -4,6 +4,7 @@ import Report from './report';
 import AssignEmployees from './assignEmployees';
 import LatecomerReports from './LatecomerReports';
 import ShiftCancel from './processShiftCancel';
+import ManagerDashboard from './managerDashboard';
 
 function AddEmployee(){
     const [emp_phoneno, setEmp_phoneno] = useState("");
@@ -20,6 +21,7 @@ function AddEmployee(){
     const [assignButtonPressed, setAssignButtonPressed] = useState(false);
     const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
     const [lateButtonPressed, setLateButtonPressed] = useState(false);
+    const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
 
     // Error state for each input field
   const [errors, setErrors] = useState({
@@ -63,6 +65,15 @@ function AddEmployee(){
     setAssignButtonPressed(false);
     setEmployeeButtonPressed(false);
     setLateButtonPressed(true);
+  }
+
+  const handleMgerButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(false);
+    setLateButtonPressed(false);
+    setMgerButtonPressed(true);
   }
 
   const handlesubmit = () => {
@@ -200,6 +211,8 @@ function AddEmployee(){
       <AddEmployee />
     ) : lateButtonPressed ? (
       <LatecomerReports/> 
+    ) : mgerButtonPressed ? (
+      <ManagerDashboard /> 
     ) : (
     <div>
       <div className='mgernav'>
@@ -209,6 +222,7 @@ function AddEmployee(){
         <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
         <button onClick={handleEmployeeButtonClick}>Add Employees</button>
         <button onClick={handleLateButtonClick}>Clock In Reports</button>
+        <button onClick={handleMgerButtonClick}>Go to home page</button>
       </div>
     <div className="system-form mt-5" style={{ width: "70%", margin: "auto" }}>
     <h3 className='text-center'>Create Employee Account</h3>  

@@ -5,6 +5,7 @@ import AssignEmployees from './assignEmployees';
 import AddEmployee from './AddEmployee';
 import ShiftCancel from './processShiftCancel';
 import LatecomerReports from './LatecomerReports';
+import ManagerDashboard from './managerDashboard';
 
 const Report = () => {
   const [empName, setEmpName] = useState(null);
@@ -14,6 +15,7 @@ const Report = () => {
   const [assignButtonPressed, setAssignButtonPressed] = useState(false);
   const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
   const [lateButtonPressed, setLateButtonPressed] = useState(false);
+  const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +67,15 @@ const Report = () => {
     setLateButtonPressed(true);
   }
 
+  const handleMgerButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(false);
+    setLateButtonPressed(false);
+    setMgerButtonPressed(true);
+  }
+
   return (
     <>
     {assignButtonPressed ? (
@@ -77,6 +88,8 @@ const Report = () => {
       <AddEmployee />
     ) : lateButtonPressed ? (
       <LatecomerReports/> 
+    ) : mgerButtonPressed ? (
+      <ManagerDashboard/>
     ) : (
     <div>
       <div className='mgernav'>
@@ -86,6 +99,7 @@ const Report = () => {
         <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
         <button onClick={handleEmployeeButtonClick}>Add Employees</button>
         <button onClick={handleLateButtonClick}>Clock In Reports</button>
+        <button onClick={handleMgerButtonClick}>Go to home page</button>
       </div>
       
       <h1>Generate Reports on Hours Worked</h1>

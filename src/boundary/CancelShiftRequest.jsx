@@ -65,11 +65,12 @@ const CancelShiftRequest = (props) => {
 
   return (
     <div>
-<div className='mt-5'>
-<div className="container">
-  <div className="card" style = {{border: '1px solid black'}}>
+    <div className='mt-5'>
+    <div className="container">
+    <div className="card" style = {{border: '1px solid black'}}>
     <div className="card-header text-white" style={{background: 'linear-gradient(to bottom, green, #395144'}}>
       <h1>Employee Shifts</h1>
+
     </div>
     <table className="table">
       <thead>

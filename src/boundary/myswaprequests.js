@@ -87,6 +87,7 @@ useEffect( () => {
           <div className="card-header text-white" style ={{background: 'linear-gradient(to bottom, green, #395144'}}>
             <h1>Request received for shift swapping</h1>
           </div>
+
           <div>
             { isLoading === true ? <div className='text-center'><div className="spinner-border text-danger" role="status">
             <span className="visually-hidden">Loading...</span>
