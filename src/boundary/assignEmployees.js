@@ -199,6 +199,7 @@ import Report from './report';
 import LatecomerReports from './LatecomerReports';
 import ShiftCancel from './processShiftCancel';
 import AddEmployee from './AddEmployee';
+import ManagerDashboard from './managerDashboard';
 //import { assignEmployees } from '../controller/assignEmployeesController';
 
 function AssignEmployees() {
@@ -212,6 +213,7 @@ function AssignEmployees() {
   const [assignButtonPressed, setAssignButtonPressed] = useState(false);
   const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
   const [lateButtonPressed, setLateButtonPressed] = useState(false);
+  const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
 
   const timeOptions = [];
   for (let hour = 0; hour < 24; hour++) {
@@ -257,6 +259,15 @@ function AssignEmployees() {
     setAssignButtonPressed(false);
     setEmployeeButtonPressed(false);
     setLateButtonPressed(true);
+  }
+
+  const handleMgerButtonClick = async () => {
+    setShiftButtonPressed(false);
+    setReportButtonPressed(false);
+    setAssignButtonPressed(false);
+    setEmployeeButtonPressed(false);
+    setLateButtonPressed(false);
+    setMgerButtonPressed(true);
   }
 /*
   const handleSubmit = async (e) => {
@@ -401,7 +412,9 @@ function AssignEmployees() {
     ) : employeeButtonPressed ? (
       <AddEmployee />
     ) : lateButtonPressed ? (
-      <LatecomerReports/> 
+      <LatecomerReports /> 
+    ) : mgerButtonPressed ? (
+      <ManagerDashboard /> 
     ) : (
     <div>
       <div className='mgernav'>
@@ -411,6 +424,7 @@ function AssignEmployees() {
         <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
         <button onClick={handleEmployeeButtonClick}>Add Employees</button>
         <button onClick={handleLateButtonClick}>Clock In Reports</button>
+        <button onClick={handleMgerButtonClick}>Go to home page</button>
       </div>
     <div>
       <h2>Assign Employees for a Week</h2>
@@ -495,7 +509,6 @@ function AssignEmployees() {
       ))}
   </pre>
 )}
-
 
 
         </div>

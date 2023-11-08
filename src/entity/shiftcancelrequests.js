@@ -46,7 +46,7 @@ const ShiftCancelRequest = sequelize.define('shiftCancelRequest', {
     {
       empId: 1,
       empName:"John",
-      shiftId: 5,
+      shiftId: 3,
       message: "test2",
       file: "testfile2.txt",
       status: "pending",
