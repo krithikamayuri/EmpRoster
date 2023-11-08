@@ -26,6 +26,10 @@ const CancelShiftRequest = (props) => {
       });
   }, [props.userEmail]);
 
+  const handleGoBack = () => {
+    window.history.back(); // This will take the user back to the previous page
+  };
+  
   const handleCancelShift = () => {
     if (selectedShift) {
       const formData = new FormData();
@@ -60,10 +64,11 @@ const CancelShiftRequest = (props) => {
   
 
   return (
-    <div className=' mt-3'>
-      <div className="container">
-  <div className="card">
-    <div className="card-header bg-primary text-white p-2">
+    <div>
+<div className='mt-5'>
+<div className="container">
+  <div className="card" style = {{border: '1px solid black'}}>
+    <div className="card-header text-white" style={{background: 'linear-gradient(to bottom, green, #395144'}}>
       <h1>Employee Shifts</h1>
     </div>
     <table className="table">
@@ -145,6 +150,8 @@ const CancelShiftRequest = (props) => {
           </div>
         </div>
       </div>
+    </div>
+    <button onClick={handleGoBack} className='btn btn-outline-dark m-4'><i class="ri-arrow-left-line"></i>Previous page</button>
     </div>
   );
 };

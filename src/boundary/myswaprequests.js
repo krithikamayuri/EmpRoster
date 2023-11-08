@@ -80,10 +80,13 @@ useEffect( () => {
 
   return (
       <>
+      <div>
+      <div className='mt-5'>
           <div className='container'>
-          <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i>Previous page</button>
-
-          <h4>Swap Shift Requests Received</h4>
+          <div className="card" style = {{border: '1px solid black'}}>
+          <div className="card-header text-white" style ={{background: 'linear-gradient(to bottom, green, #395144'}}>
+            <h1>Request received for shift swapping</h1>
+          </div>
           <div>
             { isLoading === true ? <div className='text-center'><div className="spinner-border text-danger" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -169,8 +172,10 @@ useEffect( () => {
             </div>
           </div>
         </div>
-
-
+        </div>
+        <button onClick={handleGoBack} className='btn btn-outline-dark m-4'><i class="ri-arrow-left-line"></i>Previous page</button>
+        </div>
+        </div>
       </>
 
   );

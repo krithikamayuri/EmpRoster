@@ -55,7 +55,7 @@ return (
             <Management userEmail={userEmail}/>
           </div>
         )}
-        <button onClick={handleLogout}>Logout</button>
+        {/* <button onClick={handleLogout}>Logout</button> ??*/} 
         {/*<Calendar />*/}
       </div>
     ) : (

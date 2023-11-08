@@ -84,12 +84,17 @@ console.log(clockOutTime)
         console.error('Error updating clock out time:', error);
       });
   };
+
+  const handleGoBack = () => {
+    window.history.back(); // This will take the user back to the previous page
+  };
   
 
   return (
+    <div>
     <div className="container mt-5">
-      <div className="card">
-        <div className="card-header bg-primary text-white">
+      <div className="card" style = {{border: '1px solid black'}}>
+        <div className="card-header text-white" style ={{background: 'linear-gradient(to bottom, green, #395144'}}>
           <h1>Employee Time Tracking</h1>
         </div>
         <div className="card-body">
@@ -113,30 +118,31 @@ console.log(clockOutTime)
         <div className="card-footer row">
           <div className="col-md-6">
           <button
-  className="btn btn-success"
-  onClick={handleClockIn}
-  disabled={clockInDisabled}
->
-  {clockInDisabled
-    ? `Clocked In: ${clockInTime}`
-    : 'Clock In'}
-</button>
+            className="btn btn-success"
+            onClick={handleClockIn}
+            disabled={clockInDisabled}
+              >
+                {clockInDisabled
+                  ? `Clocked In: ${clockInTime}`
+                  : 'Clock In'}
+              </button>
 
-          </div>
-          <div className="col-md-6 text-end">
-          <button
-  className="btn btn-danger"
-  onClick={handleClockOut}
-  disabled={clockOutDisabled}
->
-  {clockOutDisabled
-    ? `Clocked Out: ${clockOutTime}`
-    : 'Clock Out'}
-</button>
-
+                    </div>
+                    <div className="col-md-6 text-end">
+                    <button
+            className="btn btn-danger"
+            onClick={handleClockOut}
+            disabled={clockOutDisabled}
+          >
+            {clockOutDisabled
+              ? `Clocked Out: ${clockOutTime}`
+              : 'Clock Out'}
+          </button>
           </div>
         </div>
       </div>
+    </div>
+    <button onClick={handleGoBack} className='btn btn-outline-dark m-4'><i class="ri-arrow-left-line" ></i>Previous page</button>
     </div>
   );
 }

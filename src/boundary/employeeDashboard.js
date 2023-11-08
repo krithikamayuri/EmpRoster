@@ -56,7 +56,6 @@ function EmployeeDashboard(props) {
 
   return (
     <div>
-      <h2>Welcome to the employee Dashboard, {userName} </h2>
       {error && <p className="error-message">{error}</p>}
       <Router>
         <Empdashboardnav />

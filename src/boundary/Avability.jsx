@@ -154,21 +154,25 @@ const renderCheckboxes = (day) => {
       });
   };
 
+  const handleGoBack = () => {
+    window.history.back(); // This will take the user back to the previous page
+  };
+
   return (
-    <div className="container create-account">
-    
+    <div>
+    <div className="container create-account" style = {{background: 'linear-gradient(to bottom, green, #395144', borderRadius: '15px', border: '1.5px solid black'}}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <p style={{ color: 'white', fontSize: 'larger' }}>
-          Which days are you available to work? Please check the box
+        <p style={{ color: 'white', fontSize: '2rem'}}>
+          Please check the box on the days you are available to work.
         </p>
       </div>
-<div className='bg-light mt-4'>
-{weeks.map((week, index) => (
+        <div className='bg-light mt-4'>
+        {weeks.map((week, index) => (
         <div key={index} className="mt-5">
           <table className="availability-table">
             <thead>
-              <tr>
-                <th colSpan="7" className="bg-success">
+              <tr style ={{background: '#E8FFCE'}}>
+                <th colSpan="7">
                   Week of {week.startDate.format('DD/MM/YYYY')} - {week.endDate.format('DD/MM/YYYY')}
                 </th>
               </tr>
@@ -199,11 +203,14 @@ const renderCheckboxes = (day) => {
 </div>
      
       <div style={{ textAlign: 'center', marginTop: '10px' }}>
-        <button className='btn btn-dark text-light' onClick={addWeek}><strong>+</strong></button><br></br>
-        <button onClick={handleSubmit} className='btn btn-success mt-3'>Submit</button>
+        <button className='btn btn-light text-dark' style={{border: '1.5px solid black'}} onClick={addWeek}><strong>+</strong></button><br></br>
+        <button onClick={handleSubmit} className='btn btn-light btn-success mt-3' style={{border: '1.5px solid black'}}>Submit</button>
       </div>
+    </div>
+    <button onClick={handleGoBack} className='btn btn-outline-dark m-4'><i class="ri-arrow-left-line"></i>Previous page</button>
     </div>
   );
 }
+
 
 export default Availability;

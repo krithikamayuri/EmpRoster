@@ -88,10 +88,14 @@ const SwapRequest = ({empEmail, employeeId}) => {
 
   return (
       <>
-        
+      <div>
+          <div className='mt-5'>
           <div className='container'>
-          <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i> Previous page</button>
-          <h4>Assigned Shifts To Me</h4>
+          <div className="card" style = {{border: '1px solid black'}}>
+          {/* <button onClick={handleGoBack} className='btn btn-outline-dark m-2'><i class="ri-arrow-left-line"></i> Previous page</button> */}
+          <div className="card-header text-white" style={{background: 'linear-gradient(to bottom, green, #395144'}}>
+            <h1>Shifts Assigned To Me</h1>
+          </div>
           <table className='table table-hover'>
             <thead>
               <tr>
@@ -169,7 +173,10 @@ const SwapRequest = ({empEmail, employeeId}) => {
             </div>
           </div>
         </div>
-
+        </div>
+        </div>
+        <button onClick={handleGoBack} className='btn btn-outline-dark m-4'><i class="ri-arrow-left-line"></i>Previous page</button>
+        </div>
       </>
 
   );
