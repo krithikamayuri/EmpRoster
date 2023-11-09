@@ -141,12 +141,12 @@ function Management() {
 
   return (
     <>
-      <div className="main-container mt-5">
+      <div className="main-container" style ={{background: 'linear-gradient(to bottom, #AA8B56, #876445)', marginTop: '0px', borderBottom: '2px solid black'}}>
         <h3 className="ever mt-2">EverGreen Solutions</h3>
-        <div className="admin">
+        {/* <div className="admin">
           <p className="text-danger">System Admin</p>
          <a href="/logout" style={{textDecoration:"none" , color:"white"}}><h5 style={{ lineHeight: "0.4", textAlign: "center" }}>Logout</h5></a> 
-        </div>
+        </div> */}
       </div>
       <div className="container create-account">
         <button onClick={() => openForm('system', 'admin')} className={(emp_type === 'admin') ? 'btn btn-danger' : 'btn btn-outline-primary text-light' } >Create System Admin Account</button>
@@ -155,7 +155,7 @@ function Management() {
         {/* Conditionally render the forms based on the selectedForm state */}
         {selectedForm === 'system' && (
   <div className="system-form mt-5 card " style={{ width: "70%", margin: "auto" }}>
-    <h3 className='text-center card-header bg-primary text-light'>Create System Admin Account</h3>  
+    <h3 className='text-center card-header bg-primary text-light' style={{background: 'linear-gradient(to bottom, green, #395144'}}>Create System Admin Account</h3>  
     <div className='card-body'>
 
     <div className="row">
@@ -261,7 +261,7 @@ function Management() {
 )}
        {selectedForm === 'manager' && (
   <div className="system-form mt-5 card" style={{ width: "70%", margin: "auto" }}>
-    <h3 className="text-center card-header bg-primary text-light">Create Manager Account</h3>
+    <h3 className="text-center card-header bg-primary text-light" style={{background: 'linear-gradient(to bottom, green, #395144'}}>Create Manager Account</h3>
     <div className="card-body">
       <div className="row">
         <div className="col-md-6 mt-md-0 mt-3">
