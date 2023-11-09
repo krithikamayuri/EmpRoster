@@ -84,6 +84,12 @@ function AssignEmployees() {
 
     try {
       console.log("Client-side weekData:", weekData);
+      const updatedWeekData = weekData.map((data, index) => ({
+        ...data,
+        date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
+      }));
+      
+      console.log ("new one:", updatedWeekData);
 
       const url = '/api/assign-employees';
       const requestOptions = {
@@ -91,7 +97,7 @@ function AssignEmployees() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ weekData }),
+        body: JSON.stringify({ weekData:updatedWeekData }),
       };
 
       const response = await fetch(url, requestOptions);
