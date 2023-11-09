@@ -9,7 +9,7 @@ const Shift = sequelize.define('Shift', {
   },
   emp_id: DataTypes.INTEGER,
   emp_name: DataTypes.STRING,
-  shiftDate: DataTypes.DATE,
+  shiftDate: DataTypes.DATEONLY,
   shiftStartTime: DataTypes.TIME,
   shiftEndTime: DataTypes.TIME,
 });

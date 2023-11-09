@@ -20,6 +20,7 @@ const fs = require("fs");
 const path = require('path');
 const CancelShiftRequest = require("../src/entity/shiftcancelrequests");
 const sequelize = require("../src/sequelize");
+const { Op } = require('sequelize');
 
 const app = express();
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
@@ -459,21 +460,45 @@ app.post('/api/inputShift', async (req, res) => {
         // Extract the shift data from the request body
         const shiftData = req.body;
 
+        for (const newDates of sharedData) {
+            for (const date of newDates.dates) {
+                await Shift.destroy({
+                    where: {
+                        shiftDate: date
+                    }
+                });
+            }
+        }
+
         // Iterate through the shiftData to insert assigned shifts
         for (const shiftKey in shiftData) {
             if (shiftData[shiftKey] === 1) {
-                const [date, emp_id] = shiftKey.split(',');
+                const [date, emp_name] = shiftKey.split(',');
                 const shiftStartTime = shiftData[`${shiftKey}_start_time`];
                 const shiftEndTime = shiftData[`${shiftKey}_end_time`];
 
-                // Create a new shift record in the database
-                const shift = await Shift.create({
-                    emp_id: parseInt(emp_id),
-                    shiftDate: new Date(date),
-                    shiftStartTime: shiftStartTime,
-                    shiftEndTime: shiftEndTime,
+                // Find the emp_id based on emp_name
+                const employee = await Employee.findOne({
+                    where: {
+                        emp_name: emp_name
+                    }
                 });
-                //console.log('Shift created:', shift.toJSON());
+
+                if (employee) {
+                    const emp_id = employee.emp_id;
+
+                    // Create a new shift record in the database
+                    const shift = await Shift.create({
+                        emp_id: emp_id,
+                        emp_name: emp_name,
+                        shiftDate: new Date(date),
+                        shiftStartTime: shiftStartTime,
+                        shiftEndTime: shiftEndTime,
+                    });
+
+                } else {
+                    console.error(`Employee not found for emp_name: ${emp_name}`);
+                }
             }
         }
 
@@ -524,10 +549,10 @@ app.get('/api/datesOnly', async (req, res) => {
 
 app.get('/api/employeeIds', async (req, res) => {
     try {
-        const employeeIds = await Employee.findAll({ attributes: ['emp_id'] });
+        const employeeIds = await Employee.findAll({ attributes: ['emp_name'] });
 
         // Extract employee IDs from the Sequelize result
-        const ids = employeeIds.map((employee) => employee.emp_id);
+        const ids = employeeIds.map((employee) => employee.emp_name);
 
         res.json(ids);
     } catch (error) {
@@ -568,9 +593,9 @@ app.get('/api/empType', async (req, res) => {
 
         // Convert the Sequelize instances to the correct format
         employees.forEach((record) => {
-            const emp_id = record.emp_id;
+            const emp_name = record.emp_name;
             const emp_type = record.emp_type;
-            employeeType.push({ emp_id: emp_id, emp_type: emp_type, status: 1 });
+            employeeType.push({ emp_name: emp_name, emp_type: emp_type, status: 1 });
         });
 
         res.json(employeeType);
@@ -602,7 +627,7 @@ app.post('/api/availability', async (req, res) => {
 
 app.get('/api/availability', async (req, res) => {
     console.log('The data from sharedData', sharedData);
-    
+
     try {
         const availabilityData = [];
 
@@ -616,11 +641,22 @@ app.get('/api/availability', async (req, res) => {
                 });
 
                 // Convert the Sequelize instances to the correct format for each date
-                availability.forEach((record) => {
+                for (const record of availability) {
                     const emp_id = record.emp_id;
                     const formattedDate = moment(record.date).format('YYYY-MM-DD');
-                    availabilityData.push({ date: formattedDate, employeeId: emp_id, available: 1 });
-                });
+                   
+                    // Find the emp_name based on emp_id
+                    const employee = await Employee.findOne({
+                        where: {
+                            emp_id: emp_id
+                        }
+                    });
+
+                    // If an employee with the specified emp_id is found, use their emp_name
+                    const emp_name = employee ? employee.emp_name : "Unknown Employee";
+
+                    availabilityData.push({ date: formattedDate, employeeName: emp_name, available: 1 });
+                }
             }
         }
 

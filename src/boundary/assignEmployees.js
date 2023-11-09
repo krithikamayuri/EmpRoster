@@ -82,7 +82,9 @@ function AssignEmployees() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     try {
+      console.log("Client-side weekData:", weekData);
       console.log("Client-side weekData:", weekData);
       const updatedWeekData = weekData.map((data, index) => ({
         ...data,
@@ -100,10 +102,13 @@ function AssignEmployees() {
         body: JSON.stringify({ weekData:updatedWeekData }),
       };
 
+
       const response = await fetch(url, requestOptions);
+
 
       if (response.ok) {
         const responseData = await response.json();
+
 
         if (responseData.message === 'Assignment successful') {
           setSuccessMessage('Shift information successfully added.');
@@ -145,8 +150,10 @@ function AssignEmployees() {
       // Make a request to the server endpoint that runs the Python script
       const response = await axios.post('/api/runPy');
 
+
       // Handle the response from the server
       console.log(response.data);
+
 
     } catch (error) {
       console.error('An error occurred:', error);
@@ -162,11 +169,16 @@ function AssignEmployees() {
     for (let i = 0; i < 7; i++) {
       const day = new Date(startOfWeek);
       day.setDate(day.getDate() + i);
-      dates.push(day);
+      dates.push({
+        date: moment(day).format('YYYY-MM-DD'),
+        staffRequired: '0',
+        startTime: '09:00',
+        endTime: '17:00',
+      });
     }
     return dates;
   };
-
+  
   const handleDayDataChange = (index, data) => {
     const updatedWeekData = [...weekData];
     updatedWeekData[index] = {
@@ -288,13 +300,30 @@ function AssignEmployees() {
                   ))}
               </pre>
             )}
+            {messages.message && (
+              <pre>
+                {messages.message
+                  .split("Not enough staff available")
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <p>{line}</p>
+                      ) : line.trim() !== "" ? (
+                        <p>{"Not enough staff available" + line}</p>
+                      ) : (
+                        <br />
+                      )}
+                    </div>
+                  ))}
+              </pre>
+            )}
 
 
           </div>
-        </div>
+          </div>
       )}
     </>
   )
-};
+};  
 
 export default AssignEmployees;
