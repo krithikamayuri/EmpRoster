@@ -81,10 +81,10 @@ function AssignEmployees() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       console.log("Client-side weekData:", weekData);
-  
+
       const url = '/api/assign-employees';
       const requestOptions = {
         method: 'POST',
@@ -93,12 +93,12 @@ function AssignEmployees() {
         },
         body: JSON.stringify({ weekData }),
       };
-  
+
       const response = await fetch(url, requestOptions);
-  
+
       if (response.ok) {
         const responseData = await response.json();
-  
+
         if (responseData.message === 'Assignment successful') {
           setSuccessMessage('Shift information successfully added.');
           setErrorMessage('');
@@ -138,10 +138,10 @@ function AssignEmployees() {
     try {
       // Make a request to the server endpoint that runs the Python script
       const response = await axios.post('/api/runPy');
-     
+
       // Handle the response from the server
       console.log(response.data);
-      
+
     } catch (error) {
       console.error('An error occurred:', error);
     }
@@ -149,7 +149,7 @@ function AssignEmployees() {
 
   useEffect(() => {
     getMessages();
-  }, );
+  },);
 
   const generateWeekDates = (startOfWeek) => {
     const dates = [];
@@ -174,118 +174,121 @@ function AssignEmployees() {
 
   return (
     <>
-    {assignButtonPressed ? (
-      <AssignEmployees />
-    ) : reportButtonPressed ? ( 
-    <Report />
-    ) : shiftButtonPressed ? (
-    <ShiftCancel />
-    ) : employeeButtonPressed ? (
-      <AddEmployee />
-    ) : lateButtonPressed ? (
-      <LatecomerReports /> 
-    ) : mgerButtonPressed ? (
-      <ManagerDashboard /> 
-    ) : (
-    <div>
-      <div className='mgernav'>
-        <h4>EverGreen Solutions - Manager Dashboard</h4>
-        <button onClick={handleReportButtonClick}>Working Hours Report</button>
-        <button onClick={handleScriptButtonClick}>Assign Employees</button>
-        <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
-        <button onClick={handleEmployeeButtonClick}>Add Employees</button>
-        <button onClick={handleLateButtonClick}>Clock In Reports</button>
-        <button onClick={handleMgerButtonClick}>Go to home page</button>
-      </div>
-    <div>
-      <h2>Assign Employees for a Week</h2>
-      <label>Select a Week: </label>
-      <input
-        type="date"
-        value={moment(selectedWeek).format('YYYY-MM-DD')}
-        onChange={(e) => handleWeekChange(e.target.value)}
-      />
-      <form onSubmit={handleSubmit}>
-        {daysInWeek.map((day, index) => (
-          <div key={day}>
-            <h5>{moment(day).format('DD-MM-YYYY')}</h5>
-            <label>Staff Required: </label>
-            <input
-              type="number"
-              value={weekData[index]?.staffRequired || ''}
-              onChange={(e) =>
-                handleDayDataChange(index, {
-                  ...weekData[index],
-                  staffRequired: e.target.value,
-                })
-              }
-            />
-            <label>Start Time: </label>
-            <select
-              value={weekData[index]?.startTime || ''}
-              onChange={(e) =>
-                handleDayDataChange(index, {
-                  ...weekData[index],
-                  startTime: e.target.value,
-                })
-              }
-            >
-              {timeOptions.map((time, timeIndex) => (
-                <option key={timeIndex} value={time}>
-                  {time}
-                </option>
-              ))}
-            </select>
-            <label>End Time: </label>
-            <select
-              value={weekData[index]?.endTime || ''}
-              onChange={(e) =>
-                handleDayDataChange(index, {
-                  ...weekData[index],
-                  endTime: e.target.value,
-                })
-              }
-            >
-              {timeOptions.map((time, timeIndex) => (
-                <option key={timeIndex} value={time}>
-                  {time}
-                </option>
-              ))}
-            </select>
+      {assignButtonPressed ? (
+        <AssignEmployees />
+      ) : reportButtonPressed ? (
+        <Report />
+      ) : shiftButtonPressed ? (
+        <ShiftCancel />
+      ) : employeeButtonPressed ? (
+        <AddEmployee />
+      ) : lateButtonPressed ? (
+        <LatecomerReports />
+      ) : mgerButtonPressed ? (
+        <ManagerDashboard />
+      ) : (
+        <div>
+          <div className='mgernav topGreenHeader'>
+            <h4 className=''>EverGreen Solutions - Manager Dashboard</h4>
           </div>
-        ))}
-        <button type="submit">Add shift data</button>
-      </form>
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <div className='manager_nav' style={{ background: 'linear-gradient(rgb(170, 139, 86), rgb(135, 100, 69))', padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>
+              <button onClick={handleReportButtonClick}>Working Hours Report</button>
+              <button onClick={handleScriptButtonClick}>Assign Employees</button>
+              <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+              <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+              <button onClick={handleLateButtonClick}>Clock In Reports</button>
+              <button onClick={handleMgerButtonClick}>Go to home page</button>
+            </div>
+          <div>
+            <h2>Assign Employees for a Week</h2>
+            <label>Select a Week: </label>
+            <input
+              type="date"
+              value={moment(selectedWeek).format('YYYY-MM-DD')}
+              onChange={(e) => handleWeekChange(e.target.value)}
+            />
+            <form onSubmit={handleSubmit}>
+              {daysInWeek.map((day, index) => (
+                <div key={day}>
+                  <h5>{moment(day).format('DD-MM-YYYY')}</h5>
+                  <label>Staff Required: </label>
+                  <input
+                    type="number"
+                    value={weekData[index]?.staffRequired || ''}
+                    onChange={(e) =>
+                      handleDayDataChange(index, {
+                        ...weekData[index],
+                        staffRequired: e.target.value,
+                      })
+                    }
+                  />
+                  <label>Start Time: </label>
+                  <select
+                    value={weekData[index]?.startTime || ''}
+                    onChange={(e) =>
+                      handleDayDataChange(index, {
+                        ...weekData[index],
+                        startTime: e.target.value,
+                      })
+                    }
+                  >
+                    {timeOptions.map((time, timeIndex) => (
+                      <option key={timeIndex} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                  <label>End Time: </label>
+                  <select
+                    value={weekData[index]?.endTime || ''}
+                    onChange={(e) =>
+                      handleDayDataChange(index, {
+                        ...weekData[index],
+                        endTime: e.target.value,
+                      })
+                    }
+                  >
+                    {timeOptions.map((time, timeIndex) => (
+                      <option key={timeIndex} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              <button type="submit">Add shift data</button>
+            </form>
+            {successMessage && <p className="success-message">{successMessage}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-      <br></br>
-      <h5>Auto-assign Employees</h5>
-      <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+            <br></br>
+            <h5>Auto-assign Employees</h5>
+            <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
 
-{messages.message && (
-  <pre>
-    {messages.message
-      .split("Not enough staff available")
-      .map((line, index) => (
-        <div key={index}>
-          {index === 0 ? (
-            <p>{line}</p>
-          ) : line.trim() !== "" ? (
-            <p>{"Not enough staff available" + line}</p>
-          ) : (
-            <br />
-          )}
+            {messages.message && (
+              <pre>
+                {messages.message
+                  .split("Not enough staff available")
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <p>{line}</p>
+                      ) : line.trim() !== "" ? (
+                        <p>{"Not enough staff available" + line}</p>
+                      ) : (
+                        <br />
+                      )}
+                    </div>
+                  ))}
+              </pre>
+            )}
+
+
+          </div>
         </div>
-      ))}
-  </pre>
-)}
-
-
-        </div>
-        </div>
-    )}
-        </>
-)};
+      )}
+    </>
+  )
+};
 
 export default AssignEmployees;

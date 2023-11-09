@@ -103,3 +103,17 @@ body {
 .loginBox .form-control:focus {
   outline: none;
 }
+
+.manager_nav > button {
+  background: none;
+    color: white;
+    border: 0px;
+    font-size: 18px;
+}
+.manager_nav > button:hover {
+  color: #000;
+}
+.topGreenHeader {
+  background: linear-gradient(to right, green, rgb(57, 81, 68));
+  height: 80px;
+}

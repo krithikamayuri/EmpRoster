@@ -78,49 +78,54 @@ const Report = () => {
 
   return (
     <>
-    {assignButtonPressed ? (
-      <AssignEmployees />
-    ) : reportButtonPressed ? ( 
-    <Report />
-    ) : shiftButtonPressed ? (
-    <ShiftCancel />
-    ) : employeeButtonPressed ? (
-      <AddEmployee />
-    ) : lateButtonPressed ? (
-      <LatecomerReports/> 
-    ) : mgerButtonPressed ? (
-      <ManagerDashboard/>
-    ) : (
-    <div>
-      <div className='mgernav'>
-        <h4>EverGreen Solutions - Manager Dashboard</h4>
-        <button onClick={handleReportButtonClick}>Working Hours Report</button>
-        <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
-        <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
-        <button onClick={handleEmployeeButtonClick}>Add Employees</button>
-        <button onClick={handleLateButtonClick}>Clock In Reports</button>
-        <button onClick={handleMgerButtonClick}>Go to home page</button>
-      </div>
-      
-      <h1>Generate Reports on Hours Worked</h1>
-      <p>Click on the name of an employee to view and download reports</p>
-      {empName ? (
-        <ul>
-          {empName.map((emp, index) => (
-            <li key={index}>
-              <button onClick={() => handleEmployeeClick(emp)}>{emp}</button>
-            </li>
-          ))}
-        </ul>
+      {assignButtonPressed ? (
+        <AssignEmployees />
+      ) : reportButtonPressed ? (
+        <Report />
+      ) : shiftButtonPressed ? (
+        <ShiftCancel />
+      ) : employeeButtonPressed ? (
+        <AddEmployee />
+      ) : lateButtonPressed ? (
+        <LatecomerReports />
+      ) : mgerButtonPressed ? (
+        <ManagerDashboard />
       ) : (
-        <p>No employee names available</p>
-      )}
+        <div>
+          <div className='mgernav p-0'>
 
-      {selectedEmployee && (
-        <EmployeeDetails employeeName={selectedEmployee} />
+            <div className='mgernav topGreenHeader'>
+              <h4>EverGreen Solutions - Manager Dashboard</h4>
+            </div>
+            <div className='manager_nav' style={{ background: 'linear-gradient(rgb(170, 139, 86), rgb(135, 100, 69))', padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>
+              <button onClick={handleReportButtonClick}>Working Hours Report</button>
+              <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+              <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+              <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+              <button onClick={handleLateButtonClick}>Clock In Reports</button>
+              <button onClick={handleMgerButtonClick}>Go to home page</button>
+            </div>
+          </div>
+
+          <h1>Generate Reports on Hours Worked</h1>
+          <p>Click on the name of an employee to view and download reports</p>
+          {empName ? (
+            <ul>
+              {empName.map((emp, index) => (
+                <li key={index}>
+                  <button onClick={() => handleEmployeeClick(emp)}>{emp}</button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No employee names available</p>
+          )}
+
+          {selectedEmployee && (
+            <EmployeeDetails employeeName={selectedEmployee} />
+          )}
+        </div>
       )}
-    </div>
-    )}
     </>
   );
 };

@@ -75,7 +75,7 @@ function LatecomerReports() {
       ) : (
         <div>
           <div className='mgernav'>
-            <h4>EverGreen Solutions - Manager Dashboard</h4>
+            <h4>EverGreen Solutions - Manager Dashboard444</h4>
             <button onClick={handleReportButtonClick}>Working Hours Report</button>
             <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
             <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
