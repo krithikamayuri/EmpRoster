@@ -141,8 +141,8 @@ function AdminDashboard() {
 
   return (
     <>
-      <div className="main-container">
-        <h3 className="ever mt-2">EverGreen Solutions</h3>
+      <div className="main-container topGreenHeader text-white">
+        <h3 className="mt-0 ">EverGreen Solutions</h3>
         <div className="admin">
           <p className="text-danger">System Admin</p>
          {/* <a href="/logout" style={{textDecoration:"none" , color:"white"}}><h5 style={{ lineHeight: "0.4", textAlign: "center" }}>Logout</h5></a>  */}

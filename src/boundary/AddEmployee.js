@@ -6,27 +6,27 @@ import LatecomerReports from './LatecomerReports';
 import ShiftCancel from './processShiftCancel';
 import ManagerDashboard from './managerDashboard';
 
-function AddEmployee(){
-    const [emp_phoneno, setEmp_phoneno] = useState("");
-    const [emp_emergency_contact, setEmp_emergencycont] = useState("");
-    const [emp_psw, setEmp_psw] = useState("");
-    const [emp_email, setEmp_email] = useState("");
-    const [emp_name, setemp_name] = useState("");
-    const [emp_address, setEmp_address] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [formSubmitted, setFormSubmitted] = useState(false);
-    const [reportButtonPressed, setReportButtonPressed] = useState(false);
-    const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
-    const [assignButtonPressed, setAssignButtonPressed] = useState(false);
-    const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
-    const [lateButtonPressed, setLateButtonPressed] = useState(false);
-    const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
+function AddEmployee() {
+  const [emp_phoneno, setEmp_phoneno] = useState("");
+  const [emp_emergency_contact, setEmp_emergencycont] = useState("");
+  const [emp_psw, setEmp_psw] = useState("");
+  const [emp_email, setEmp_email] = useState("");
+  const [emp_name, setemp_name] = useState("");
+  const [emp_address, setEmp_address] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [reportButtonPressed, setReportButtonPressed] = useState(false);
+  const [shiftButtonPressed, setShiftButtonPressed] = useState(false);
+  const [assignButtonPressed, setAssignButtonPressed] = useState(false);
+  const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
+  const [lateButtonPressed, setLateButtonPressed] = useState(false);
+  const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
 
-    // Error state for each input field
+  // Error state for each input field
   const [errors, setErrors] = useState({
     emp_phoneno: "",
-    emp_emergency_contact:"",
+    emp_emergency_contact: "",
     emp_psw: "",
     emp_email: "",
     emp_name: "",
@@ -79,9 +79,9 @@ function AddEmployee(){
   const handlesubmit = () => {
     // Clear previous errors
     setErrors({
-  
+
       emp_phoneno: "",
-      emp_emergency_contact:"",
+      emp_emergency_contact: "",
       emp_psw: "",
       emp_email: "",
       emp_name: "",
@@ -105,11 +105,11 @@ function AddEmployee(){
       formIsValid = false;
     }
     if (!emp_emergency_contact) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          emp_emergency_contact: "Emergency contact is required",
-        }));
-        formIsValid = false;
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emp_emergency_contact: "Emergency contact is required",
+      }));
+      formIsValid = false;
     }
     if (!emp_psw) {
       setErrors((prevErrors) => ({
@@ -158,10 +158,10 @@ function AddEmployee(){
       return;
     }
 
-   
+
 
     const formdata = {
-    
+
       emp_psw,
       emp_email,
       emp_name,
@@ -169,7 +169,7 @@ function AddEmployee(){
       emp_emergency_contact,
       emp_address,
     };
-    if ( !emp_phoneno || !emp_emergency_contact || !emp_psw || !emp_email || !emp_name || !emp_address || !confirmPassword) {
+    if (!emp_phoneno || !emp_emergency_contact || !emp_psw || !emp_email || !emp_name || !emp_address || !confirmPassword) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -180,7 +180,7 @@ function AddEmployee(){
         console.log('Data saved successfully:', response.data);
 
         // Clear input fields after successful submission
-      
+
         setEmp_psw("");
         setEmp_email("");
         setemp_name("");
@@ -199,152 +199,157 @@ function AddEmployee(){
       });
   };
 
-  return(
+  return (
     <>
-    {assignButtonPressed ? (
-      <AssignEmployees />
-    ) : reportButtonPressed ? ( 
-    <Report />
-    ) : shiftButtonPressed ? (
-    <ShiftCancel />
-    ) : employeeButtonPressed ? (
-      <AddEmployee />
-    ) : lateButtonPressed ? (
-      <LatecomerReports/> 
-    ) : mgerButtonPressed ? (
-      <ManagerDashboard /> 
-    ) : (
-    <div>
-      <div className='mgernav'>
-        <h4>EverGreen Solutions - Manager Dashboard</h4>
-        <button onClick={handleReportButtonClick}>Working Hours Report</button>
-        <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
-        <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
-        <button onClick={handleEmployeeButtonClick}>Add Employees</button>
-        <button onClick={handleLateButtonClick}>Clock In Reports</button>
-        <button onClick={handleMgerButtonClick}>Go to home page</button>
-      </div>
-    <div className="system-form mt-5" style={{ width: "70%", margin: "auto" }}>
-    <h3 className='text-center'>Create Employee Account</h3>  
+      {assignButtonPressed ? (
+        <AssignEmployees />
+      ) : reportButtonPressed ? (
+        <Report />
+      ) : shiftButtonPressed ? (
+        <ShiftCancel />
+      ) : employeeButtonPressed ? (
+        <AddEmployee />
+      ) : lateButtonPressed ? (
+        <LatecomerReports />
+      ) : mgerButtonPressed ? (
+        <ManagerDashboard />
+      ) : (
+        <div>
+          <div className='mgernav p-0'>
+            <div className='mgernav topGreenHeader'>
+              <h4>EverGreen Solutions - Manager Dashboard</h4>
+            </div>
+            <div className='manager_nav' style={{ background: 'linear-gradient(rgb(170, 139, 86), rgb(135, 100, 69))', padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>
+              <button onClick={handleReportButtonClick}>Working Hours Report</button>
+              <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+              <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+              <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+              <button onClick={handleLateButtonClick}>Clock In Reports</button>
+              <button onClick={handleMgerButtonClick}>Go to home page</button>
+            </div>
 
-    <div className="row">
-      <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Full Name</label>
-        <input
-          type="text"
-          name="emp_name"
-          style={{ width: "90%" }}
-          value={emp_name}
-          required
-          onChange={(e) => { setemp_name(e.target.value) }}
-        />
-        <span className="text-danger">{errors.emp_name}</span> {/* Display error message */}
-    </div>
+          </div>
+          <div className="system-form mt-5" style={{ width: "70%", margin: "auto" }}>
+            <h3 className='text-center'>Create Employee Account</h3>
 
-    <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Phone Number</label>
-        <input
-            type="number"
-            name="emp_phoneno"
-            style={{ width: "90%" }}
-            value={emp_phoneno}
-            required
-            onChange={(e) => {
-            const enteredValue = e.target.value;
-            if (/^\d{0,8}$/.test(enteredValue)) {
-                setEmp_phoneno(enteredValue);
-            }
-            }}
-        />
-        {(formSubmitted && emp_phoneno.length !== 8) && (
-            <span className="text-danger">Phone number must be exactly 8 digits long</span>
-        )}
-    </div>
+            <div className="row">
+              <div className="col-md-6 mt-md-0 mt-3">
+                <label style={{ fontWeight: "bold" }}>Full Name</label>
+                <input
+                  type="text"
+                  name="emp_name"
+                  style={{ width: "90%" }}
+                  value={emp_name}
+                  required
+                  onChange={(e) => { setemp_name(e.target.value) }}
+                />
+                <span className="text-danger">{errors.emp_name}</span> {/* Display error message */}
+              </div>
 
-    <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Emergency Contact</label>
-        <input
-            type="number"
-            name="emp_emergency_contact"
-            style={{ width: "90%" }}
-            value={emp_emergency_contact}
-            required
-            onChange={(e) => {
-            const enteredValue = e.target.value;
-            if (/^\d{0,8}$/.test(enteredValue)) {
-                setEmp_emergencycont(enteredValue);
-            }
-            }}
-        />
-        {(formSubmitted && emp_emergency_contact.length !== 8) && (
-            <span className="text-danger">Phone number must be exactly 8 digits long</span>
-        )}
-    </div>
+              <div className="col-md-6 mt-md-0 mt-3">
+                <label style={{ fontWeight: "bold" }}>Phone Number</label>
+                <input
+                  type="number"
+                  name="emp_phoneno"
+                  style={{ width: "90%" }}
+                  value={emp_phoneno}
+                  required
+                  onChange={(e) => {
+                    const enteredValue = e.target.value;
+                    if (/^\d{0,8}$/.test(enteredValue)) {
+                      setEmp_phoneno(enteredValue);
+                    }
+                  }}
+                />
+                {(formSubmitted && emp_phoneno.length !== 8) && (
+                  <span className="text-danger">Phone number must be exactly 8 digits long</span>
+                )}
+              </div>
 
-    </div>
-    <div className="row">
-      <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold", display: 'block' }}>Email</label>
-        <input
-          type="text"
-          name="emp_email"
-          style={{ width: "90%" }}
-          value={emp_email}
-          required
-          onChange={(e) => { setEmp_email(e.target.value) }}
-        />
-        <span className="text-danger">{errors.emp_email}</span>
-      </div>
-    </div>
+              <div className="col-md-6 mt-md-0 mt-3">
+                <label style={{ fontWeight: "bold" }}>Emergency Contact</label>
+                <input
+                  type="number"
+                  name="emp_emergency_contact"
+                  style={{ width: "90%" }}
+                  value={emp_emergency_contact}
+                  required
+                  onChange={(e) => {
+                    const enteredValue = e.target.value;
+                    if (/^\d{0,8}$/.test(enteredValue)) {
+                      setEmp_emergencycont(enteredValue);
+                    }
+                  }}
+                />
+                {(formSubmitted && emp_emergency_contact.length !== 8) && (
+                  <span className="text-danger">Phone number must be exactly 8 digits long</span>
+                )}
+              </div>
 
-    <div className="row">
-      <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Password</label>
-        <input
-          type="password"
-          name="emp_psw"
-          style={{ width: "90%" }}
-          value={emp_psw}
-          required
-          onChange={(e) => { setEmp_psw(e.target.value) }}
-        />
-        <span className="text-danger">{errors.emp_psw}</span>
-    </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 mt-md-0 mt-3">
+                <label style={{ fontWeight: "bold", display: 'block' }}>Email</label>
+                <input
+                  type="text"
+                  name="emp_email"
+                  style={{ width: "90%" }}
+                  value={emp_email}
+                  required
+                  onChange={(e) => { setEmp_email(e.target.value) }}
+                />
+                <span className="text-danger">{errors.emp_email}</span>
+              </div>
+            </div>
 
-    <div className="col-md-6 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Confirm Password</label>
-        <input
-          type="password"
-          name="confirmPassword"
-          style={{ width: "90%" }}
-          value={confirmPassword}
-          required
-          onChange={(e) => { setConfirmPassword(e.target.value) }}
-        />
-        <span className="text-danger">{errors.confirmPassword}</span>
-      </div>
-    </div>
+            <div className="row">
+              <div className="col-md-6 mt-md-0 mt-3">
+                <label style={{ fontWeight: "bold" }}>Password</label>
+                <input
+                  type="password"
+                  name="emp_psw"
+                  style={{ width: "90%" }}
+                  value={emp_psw}
+                  required
+                  onChange={(e) => { setEmp_psw(e.target.value) }}
+                />
+                <span className="text-danger">{errors.emp_psw}</span>
+              </div>
 
-    <div className="row">
-      <div className="col-md-12 mt-md-0 mt-3">
-        <label style={{ fontWeight: "bold" }}>Address</label>
-        <textarea
-          name="emp_address"
-          style={{ width: "95%" }}
-          value={emp_address}
-          required
-          onChange={(e) => { setEmp_address(e.target.value) }}
-        ></textarea>
-        <span className="text-danger">{errors.emp_address}</span>
-      </div>
-    </div>
-        <button className='text-center' onClick={handlesubmit} disabled={isLoading}>
-        {isLoading ? "Saving..." : "Save Data"}
-        </button>
-   </div>
-   </div>
-    )}
-  </>
+              <div className="col-md-6 mt-md-0 mt-3">
+                <label style={{ fontWeight: "bold" }}>Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  style={{ width: "90%" }}
+                  value={confirmPassword}
+                  required
+                  onChange={(e) => { setConfirmPassword(e.target.value) }}
+                />
+                <span className="text-danger">{errors.confirmPassword}</span>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-12 mt-md-0 mt-3">
+                <label style={{ fontWeight: "bold" }}>Address</label>
+                <textarea
+                  name="emp_address"
+                  style={{ width: "95%" }}
+                  value={emp_address}
+                  required
+                  onChange={(e) => { setEmp_address(e.target.value) }}
+                ></textarea>
+                <span className="text-danger">{errors.emp_address}</span>
+              </div>
+            </div>
+            <button className='text-center' onClick={handlesubmit} disabled={isLoading}>
+              {isLoading ? "Saving..." : "Save Data"}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

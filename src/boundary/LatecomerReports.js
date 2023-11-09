@@ -62,49 +62,54 @@ function LatecomerReports() {
     <>
       {assignButtonPressed ? (
         <AssignEmployees />
-      ) : reportButtonPressed ? ( 
-      <Report />
+      ) : reportButtonPressed ? (
+        <Report />
       ) : shiftButtonPressed ? (
-      <ShiftCancel />
+        <ShiftCancel />
       ) : employeeButtonPressed ? (
         <AddEmployee />
       ) : lateButtonPressed ? (
-        <LatecomerReports/> 
+        <LatecomerReports />
       ) : mgerButtonPressed ? (
-        <ManagerDashboard/>
+        <ManagerDashboard />
       ) : (
         <div>
-          <div className='mgernav'>
-            <h4>EverGreen Solutions - Manager Dashboard444</h4>
-            <button onClick={handleReportButtonClick}>Working Hours Report</button>
-            <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
-            <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
-            <button onClick={handleEmployeeButtonClick}>Add Employees</button>
-            <button onClick={handleLateButtonClick}>Clock In Reports</button>
-            <button onClick={handleMgerButtonPressed}>Go to home page</button>
+          <div className='mgernav p-0'>
+            <div className='mgernav topGreenHeader'>
+              <h4>EverGreen Solutions - Manager Dashboar</h4>
+            </div>
+            <div className='manager_nav' style={{ background: 'linear-gradient(rgb(170, 139, 86), rgb(135, 100, 69))', padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>
+              <button onClick={handleReportButtonClick}>Working Hours Report</button>
+              <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+              <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+              <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+              <button onClick={handleLateButtonClick}>Clock In Reports</button>
+              <button onClick={handleMgerButtonPressed}>Go to home page</button>
+            </div>
+
           </div>
           <div className='mt-3'>
-          <div className="container">
-            <div className="card">
-              <div className="card-header bg-primary text-white p-2">
-                <h1>Clock In Timings</h1>
+            <div className="container">
+              <div className="card">
+                <div className="card-header bg-primary text-white p-0">
+                  <h1 className='topGreenHeader mb-0'>Clock In Timings</h1>
+                </div>
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Date</th>
+                      <th>Shift Start Time</th>
+                      <th>Actual Clock-In Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
-              <table className="table">
-                <thead>
-                  <tr>
-                  <th>Name</th>
-                  <th>Date</th>
-                  <th>Shift Start Time</th>
-                  <th>Actual Clock-In Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
             </div>
           </div>
-        </div>
-          
+
         </div>
       )}
     </>

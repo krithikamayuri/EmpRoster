@@ -23,7 +23,7 @@ function ManagerDashboard(props) {
   const { userEmail } = props;
   const [error, setError] = useState('');
 
-  
+
   useEffect(() => {
     // Make a POST request to fetch events from the server
     axios.post('/calendar/fetch-events')
@@ -33,7 +33,7 @@ function ManagerDashboard(props) {
       .catch((error) => {
         console.error(error);
       });
-  }, []); 
+  }, []);
 
   const handleReportButtonClick = () => {
     // Set the state to indicate that the button has been pressed
@@ -67,7 +67,7 @@ function ManagerDashboard(props) {
     setEmployeeButtonPressed(false);
     setLateButtonPressed(true);
   }
-  
+
   useEffect(() => {
     const getName = async () => {
       try {
@@ -86,9 +86,9 @@ function ManagerDashboard(props) {
     };
 
     getName();
-   // getMessages();
+    // getMessages();
   }, [userEmail]);
-  
+
 
   return (
     <div>
@@ -100,40 +100,40 @@ function ManagerDashboard(props) {
           <Route path="/" element={
           */}
 
-          {assignButtonPressed ? (
-            <AssignEmployees />
-          ) : reportButtonPressed ? ( 
-          <Report />
-          ) : shiftButtonPressed ? (
-          <ShiftCancel />
-          ) : employeeButtonPressed ? (
-            <AddEmployee />
-          ) : lateButtonPressed ? (
-            <LatecomerReports/> 
-          ) : (
-            <div>
-            <h2>Welcome to the Manager Dashboard, {userName} </h2>
-            {error && <p className="error-message">{error}</p>}
+      {assignButtonPressed ? (
+        <AssignEmployees />
+      ) : reportButtonPressed ? (
+        <Report />
+      ) : shiftButtonPressed ? (
+        <ShiftCancel />
+      ) : employeeButtonPressed ? (
+        <AddEmployee />
+      ) : lateButtonPressed ? (
+        <LatecomerReports />
+      ) : (
+        <div>
+          <h2 className='topGreenHeader text-white mb-0'>Welcome to the Manager Dashboard, {userName} </h2>
+          {error && <p className="error-message">{error}</p>}
+          <div className='manager_nav' style={{ background: 'linear-gradient(rgb(170, 139, 86), rgb(135, 100, 69))', padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>
             <button onClick={handleReportButtonClick}>Working Hours Report</button>
             <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
             <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
             <button onClick={handleEmployeeButtonClick}>Add Employees</button>
             <button onClick={handleLateButtonClick}>Clock In Reports</button>
-            
-            
+          </div>
 
-            <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        events={events}
-        eventContent={renderEventContent}
-        timeZone="local"
-        /> 
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            events={events}
+            eventContent={renderEventContent}
+            timeZone="local"
+          />
 
-      
+
         </div>
-          )}
-      
+      )}
+
       {/*}
       } 
       />
@@ -147,10 +147,10 @@ function ManagerDashboard(props) {
     return (
       <div>
         <b>ID:</b> {info.event.id}
-      <br />
-      <b>Start Time:</b> {info.event.start.toLocaleTimeString()}
-      <br />
-      <b>End Time:</b> {info.event.end.toLocaleTimeString()}
+        <br />
+        <b>Start Time:</b> {info.event.start.toLocaleTimeString()}
+        <br />
+        <b>End Time:</b> {info.event.end.toLocaleTimeString()}
       </div>
     );
   }
