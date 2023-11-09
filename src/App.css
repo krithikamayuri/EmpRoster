@@ -16,6 +16,14 @@
   padding: 10px 20px;
 }
 
+.greenBt {
+  color: green;
+}
+
+.redBt {
+  color: red;
+}
+
 .main-container {
   /* Fix the typo here */
   background-color: rgb(62, 62, 62);

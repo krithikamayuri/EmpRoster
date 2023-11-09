@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../sequelize'); 
+const Shift = require('./shift');
 
 const ClockInOut = sequelize.define('ClockInOut', {
   clockId: {
@@ -14,6 +15,8 @@ const ClockInOut = sequelize.define('ClockInOut', {
   clockOut: DataTypes.TIME,
   date: DataTypes.DATEONLY,
 });
+
+ClockInOut.belongsTo(Shift, { foreignKey: 'shiftId' });
 
 (async () => {
   await sequelize.sync();

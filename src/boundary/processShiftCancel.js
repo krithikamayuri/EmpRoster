@@ -168,8 +168,8 @@ function ShiftCancel() {
                       <td><DownloadLink filename={request.file} /></td>
                       <td>{request.status}</td>
                       <td>
-                        <button onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>
-                        <button onClick={() => handleReject(request.id)} disabled={request.status !== 'pending'}>Reject</button>
+                        <button className='greenBt' onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>
+                        <button className='redBt' onClick={() => handleReject(request.id)} disabled={request.status !== 'pending'}>Reject</button>
                       </td>
                     </tr>
                   ))}

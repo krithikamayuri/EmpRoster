@@ -1147,6 +1147,14 @@ app.post('/api/clockinout', async (req, res) => {
     }
   });
 
+  
+  
+
+
+  
+
+  
+
 
 
 app.listen(5000, () => {
