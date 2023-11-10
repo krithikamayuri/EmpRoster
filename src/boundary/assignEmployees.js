@@ -338,25 +338,6 @@ const handleDayDataChange = (index, data) => {
                   ))}
               </pre>
             )}
-            {messages.message && (
-              <pre>
-                {messages.message
-                  .split("Not enough staff available")
-                  .map((line, index) => (
-                    <div key={index}>
-                      {index === 0 ? (
-                        <p>{line}</p>
-                      ) : line.trim() !== "" ? (
-                        <p>{"Not enough staff available" + line}</p>
-                      ) : (
-                        <br />
-                      )}
-                    </div>
-                  ))}
-              </pre>
-            )}
-
-
           </div>
           </div>
       )}
