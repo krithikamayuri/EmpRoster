@@ -356,36 +356,44 @@ app.get('/api/emp_names', async (req, res) => {
 });
 
 app.get('/api/clockInReports', async (req, res) => {
-    try{
-        const clockIns = await ClockInOut.findAll({
-            attributes: ['clockId', 'empName', 'clockIn', 'date']
+    try {
+      const clockIns = await ClockInOut.findAll({
+        attributes: ['clockId', 'empName', 'clockIn', 'date'],
+        include: [
+            {
+              model: Shift,
+              attributes: ['shiftStartTime'],
+            },
+        ],
+      });
+  
+      if (clockIns.length > 0) {
+        const clockInList = clockIns.map((clockin) => ({
+          clock_id: clockin.clockId,
+          clock_name: clockin.empName,
+          clock_time: clockin.clockIn,
+          clock_date: clockin.date,
+          shift_start_time: clockin.Shift ? clockin.Shift.shiftStartTime : null,
+        }));
+  
+        res.json({
+          success: true,
+          message: 'Clock In information retrieved successfully',
+          clockIns: clockInList,
         });
-
-        if (clockIns.length > 0) {
-            const clockInList = clockIns.map((clockin) => ({
-                clock_id: clockin.clockId,
-                clock_name: clockin.empName,
-                clock_time: clockin.clockIn,
-                clock_date: clockin.date,
-            }));
-
-            res.json({
-                success: true,
-                message: 'Clock In information retrieved successfully',
-                clockIns: clockInList,
-            })
-        } else {
-            res.json({
-                success: true,
-                message: 'No shifts found for the employee',
-                clockIns: [],
-            });
-        }
-    } catch(error) {
-        console.error('Database query error: ' + err);
-        res.status(500).json({ error: 'Database query error' });
+      } else {
+        res.json({
+          success: true,
+          message: 'No shifts found for the employee',
+          clockIns: [],
+        });
+      }
+    } catch (error) {
+      console.error('Database query error: ' + error);
+      res.status(500).json({ error: 'Database query error' });
     }
-});
+  });
+
 
 app.get('/api/hoursWorked', async (req, res) => {
     try {

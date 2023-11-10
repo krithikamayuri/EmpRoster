@@ -163,21 +163,31 @@ function ShiftCancel() {
                     </tr>
                   </thead>
                   <tbody>
-                    {requests.map((request) => (
-                      <tr key={request.id}>
-                        <td>{request.id}</td>
-                        <td>{request.empId}</td>
-                        <td>{request.empName}</td>
-                        <td>{request.shiftId}</td>
-                        <td>{request.message}</td>
-                        <td><DownloadLink filename={request.file} /></td>
-                        <td>{request.status}</td>
-                        <td>
-                          <button className='greenBt' onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>
-                          <button className='redBt' onClick={() => handleReject(request.id)} disabled={request.status !== 'pending'}>Reject</button>
-                        </td>
-                      </tr>
-                    ))}
+                  {Array.isArray(requests) && requests.map((request) => {
+                      const isAccepted = request.status === 'accepted';
+                      const isPending = request.status === 'pending';
+
+                      return (
+                        <tr key={request.id}>
+                          <td>{request.id}</td>
+                          <td>{request.empId}</td>
+                          <td>{request.empName}</td>
+                          <td>{request.shiftId}</td>
+                          <td>{request.message}</td>
+                          <td><DownloadLink filename={request.file} /></td>
+                          <td
+                            style={{ color: isAccepted ? 'green' : isPending ? 'yellow' : 'red' }}
+                          >
+                            {request.status}
+                          </td>
+                          <td>
+                            <button className='greenBt' onClick={() => handleApprove(request.id)} disabled={request.status !== 'pending'}>Approve</button>
+                            <button className='redBt' onClick={() => handleReject(request.id)} disabled={request.status !== 'pending'}>Reject</button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+
                   </tbody>
                 </table>
               </div>

@@ -19,12 +19,15 @@ function LatecomerReports() {
 
   useEffect(() => {
     axios.get('/api/clockInReports')
-      .then(response => setLateComings(response.data))
+      .then(response => {
+        console.log(response.data); // Log the response data
+        setLateComings(response.data.clockIns); // Assuming clockIns is the array containing clock in reports
+      })
       .catch(error => {
         console.error(error);
-        // Handle the error, e.g., set an error state or display a message to the user
       });
   }, []);
+  
 
   const handleReportButtonClick = () => {
     // Set the state to indicate that the button has been pressed
@@ -109,20 +112,34 @@ function LatecomerReports() {
                     <tr>
                       <th>Name</th>
                       <th>Date</th>
+                      <th>Shift Start Time</th>
                       <th>Actual Clock-In Time</th>
+                      <th>Status</th>
                     </tr>
-                    <tbody>
-                    {Array.isArray(lateComings) && lateComings.map(latecoming => (
-                      <tr key={latecoming.clock_id}>
-                        <td>{latecoming.clock_name}</td>
-                        <td>{latecoming.clock_date}</td>
-                        <td>{latecoming.clock_time}</td>
-                      </tr>
-                    ))}
-                    </tbody>
                   </thead>
                   <tbody>
-                  </tbody>
+                {Array.isArray(lateComings) && lateComings.map(latecoming => {
+                  
+                  const clockInTime = new Date(`2000-01-01T${latecoming.clock_time}`);
+                  const shiftStartTime = new Date(`2000-01-01T${latecoming.shift_start_time}`);
+
+                  const isLate = clockInTime > shiftStartTime;
+
+                  return (
+                    <tr key={latecoming.clock_id}>
+                      <td>{latecoming.clock_name}</td>
+                      <td>{new Date(latecoming.clock_date).toLocaleDateString()}</td>
+                      <td>{latecoming.shift_start_time}</td>
+                      <td>{latecoming.clock_time}</td>
+                      <td
+                        style={{ color: isLate ? 'red' : 'green' }}
+                      >
+                        {isLate ? 'Late' : 'On Time'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
                 </table>
               </div>
             </div>
