@@ -15,6 +15,16 @@ function LatecomerReports() {
   const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
   const [lateButtonPressed, setLateButtonPressed] = useState(false);
   const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
+  const [lateComings, setLateComings] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/clockInReports')
+      .then(response => setLateComings(response.data))
+      .catch(error => {
+        console.error(error);
+        // Handle the error, e.g., set an error state or display a message to the user
+      });
+  }, []);
 
   const handleReportButtonClick = () => {
     // Set the state to indicate that the button has been pressed
@@ -99,9 +109,17 @@ function LatecomerReports() {
                     <tr>
                       <th>Name</th>
                       <th>Date</th>
-                      <th>Shift Start Time</th>
                       <th>Actual Clock-In Time</th>
                     </tr>
+                    <tbody>
+                    {Array.isArray(lateComings) && lateComings.map(latecoming => (
+                      <tr key={latecoming.clock_id}>
+                        <td>{latecoming.clock_name}</td>
+                        <td>{latecoming.clock_date}</td>
+                        <td>{latecoming.clock_time}</td>
+                      </tr>
+                    ))}
+                    </tbody>
                   </thead>
                   <tbody>
                   </tbody>
@@ -114,13 +132,6 @@ function LatecomerReports() {
       )}
     </>
   );
-}
-
-//function to compare timings
-function isLate(shiftStartTime, clockIn) {
-  const shiftStart = new Date(shiftStartTime);
-  const clockInTime = new Date(clockIn);
-  return clockInTime > shiftStart;
 }
 
 export default LatecomerReports;
