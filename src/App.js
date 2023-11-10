@@ -59,7 +59,7 @@ return (
         )}
         {userType === 'superAdmin' && (
           <div>
-            <h4 className="employee-container mb-0" style={{ background: 'linear-gradient(to right, green, #395144' , padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>Welcome to the Manager Dashboard, {userEmail}</h4>
+            <h4 className="employee-container mb-0" style={{ background: 'linear-gradient(to right, green, #395144' , padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>Welcome to the Admin Dashboard, {userEmail}</h4>
             <Management userEmail={userEmail}/>
           </div>
         )}

@@ -343,7 +343,7 @@ function AddEmployee() {
                 <span className="text-danger">{errors.emp_address}</span>
               </div>
             </div>
-            <button className='text-center' onClick={handlesubmit} disabled={isLoading}>
+            <button className='text-center btn btn-success' onClick={handlesubmit} disabled={isLoading}>
               {isLoading ? "Saving..." : "Save Data"}
             </button>
           </div>
