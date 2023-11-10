@@ -9,8 +9,14 @@ import ManagerDashboard from './managerDashboard';
 //import { assignEmployees } from '../controller/assignEmployeesController';
 
 function AssignEmployees() {
+  const defaultShiftData = {
+    staffRequired: undefined,
+  };
+
+  const [weekData, setWeekData] = useState(Array(7).fill(defaultShiftData));
+
   const [selectedWeek, setSelectedWeek] = useState(new Date());
-  const [weekData, setWeekData] = useState([]);
+  //const [weekData, setWeekData] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [messages, setMessages] = useState({});
@@ -20,6 +26,7 @@ function AssignEmployees() {
   const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
   const [lateButtonPressed, setLateButtonPressed] = useState(false);
   const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
+  const [errorMessages, setErrorMessages] = useState(Array(7).fill(''));
 
   const timeOptions = [];
   for (let hour = 8; hour < 19; hour++) {
@@ -82,8 +89,10 @@ function AssignEmployees() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     try {
       console.log("Client-side weekData:", weekData);
+
       const updatedWeekData = weekData.map((data, index) => ({
         ...data,
         date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
@@ -100,10 +109,13 @@ function AssignEmployees() {
         body: JSON.stringify({ weekData:updatedWeekData }),
       };
 
+
       const response = await fetch(url, requestOptions);
+
 
       if (response.ok) {
         const responseData = await response.json();
+
 
         if (responseData.message === 'Assignment successful') {
           setSuccessMessage('Shift information successfully added.');
@@ -145,8 +157,10 @@ function AssignEmployees() {
       // Make a request to the server endpoint that runs the Python script
       const response = await axios.post('/api/runPy');
 
+
       // Handle the response from the server
       console.log(response.data);
+
 
     } catch (error) {
       console.error('An error occurred:', error);
@@ -167,14 +181,47 @@ function AssignEmployees() {
     return dates;
   };
 
-  const handleDayDataChange = (index, data) => {
-    const updatedWeekData = [...weekData];
-    updatedWeekData[index] = {
-      ...data,
-      date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
-    };
-    setWeekData(updatedWeekData);
+const handleDayDataChange = (index, data) => {
+  const updatedWeekData = [...weekData];
+  const updatedData = {
+    ...data,
+    date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
   };
+
+  // Check if start time and end time are the same
+  if (updatedData.startTime !== null && updatedData.startTime === updatedData.endTime ) {
+    // Display an error message or handle it as needed
+    const errorMessage = `Cannot add the same start and end time for ${updatedData.date}`;
+      setErrorMessages((prevMessages) => {
+        const newMessages = [...prevMessages];
+        newMessages[index] = errorMessage;
+        return newMessages;
+      });
+    return;
+  }
+
+  // Check if start time and end time are the same
+  if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime >= updatedData.endTime) {
+    // Display an error message or handle it as needed
+    const errorMessage = `End time must be greater than start time for ${updatedData.date}`;
+    setErrorMessages((prevMessages) => {
+      const newMessages = [...prevMessages];
+      newMessages[index] = errorMessage;
+      return newMessages;
+    });
+    return;
+  }
+
+  // Reset the error message for the current date
+  setErrorMessages((prevMessages) => {
+    const newMessages = [...prevMessages];
+    newMessages[index] = '';
+    return newMessages;
+  });
+
+  updatedWeekData[index] = updatedData;
+  setWeekData(updatedWeekData);
+};
 
   const daysInWeek = generateWeekDates(selectedWeek);
 
@@ -225,12 +272,14 @@ function AssignEmployees() {
                       handleDayDataChange(index, {
                         ...weekData[index],
                         staffRequired: e.target.value,
+                        startTime: e.target.value > 0 ? '09:00' : null,
+                        endTime: e.target.value > 0 ? '17:00' : null,
                       })
                     }
                   />
                   <label>Start Time: </label>
                   <select
-                    value={weekData[index]?.startTime || ''}
+                    value={weekData[index]?.startTime || '09:00'}
                     onChange={(e) =>
                       handleDayDataChange(index, {
                         ...weekData[index],
@@ -246,7 +295,7 @@ function AssignEmployees() {
                   </select>
                   <label>End Time: </label>
                   <select
-                    value={weekData[index]?.endTime || ''}
+                    value={weekData[index]?.endTime || '17:00'}
                     onChange={(e) =>
                       handleDayDataChange(index, {
                         ...weekData[index],
@@ -260,6 +309,7 @@ function AssignEmployees() {
                       </option>
                     ))}
                   </select>
+                  {errorMessages[index] && <p className="error-message">{errorMessages[index]}</p>}
                 </div>
               ))}
               <button type="submit">Add shift data</button>
@@ -288,13 +338,30 @@ function AssignEmployees() {
                   ))}
               </pre>
             )}
+            {messages.message && (
+              <pre>
+                {messages.message
+                  .split("Not enough staff available")
+                  .map((line, index) => (
+                    <div key={index}>
+                      {index === 0 ? (
+                        <p>{line}</p>
+                      ) : line.trim() !== "" ? (
+                        <p>{"Not enough staff available" + line}</p>
+                      ) : (
+                        <br />
+                      )}
+                    </div>
+                  ))}
+              </pre>
+            )}
 
 
           </div>
-        </div>
+          </div>
       )}
     </>
   )
-};
+};  
 
 export default AssignEmployees;

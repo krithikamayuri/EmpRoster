@@ -68,7 +68,7 @@ except Exception as e:
     print(f"An error occurred while fetching employee type from the API: {e}")
     employeeTypeData = []
 
-employeeType = {(data['emp_id'], data['emp_type']): data['status'] for data in employeeTypeData}
+employeeType = {(data['emp_name'], data['emp_type']): data['status'] for data in employeeTypeData}
 
 # Fetch shift timings from the database
 try:
@@ -113,7 +113,7 @@ except Exception as e:
     print(f"An error occurred while fetching availability from the API: {e}")
     availabilityData = []
 
-availability = {(data['date'], data['employeeId']): data['available'] for data in availabilityData}
+availability = {(data['date'], data['employeeName']): data['available'] for data in availabilityData}
 
 # Fetch employee leave requests from the database
 try:
