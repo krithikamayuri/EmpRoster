@@ -189,9 +189,15 @@ const handleDayDataChange = (index, data) => {
   };
 
   // Check if start time and end time are the same
-  if (updatedData.startTime !== null && updatedData.startTime === updatedData.endTime ) {
+  if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime === updatedData.endTime ) {
     // Display an error message or handle it as needed
-    const errorMessage = `Cannot add the same start and end time for ${updatedData.date}`;
+    const errorMessage = (
+      <>
+        Start and end timings are the same for, {updatedData.date}.<br />
+        The default (09:00 - 17:00) will be used if you do make adjustments.
+      </>
+    );
+    
       setErrorMessages((prevMessages) => {
         const newMessages = [...prevMessages];
         newMessages[index] = errorMessage;
@@ -200,10 +206,16 @@ const handleDayDataChange = (index, data) => {
     return;
   }
 
-  // Check if start time and end time are the same
-  if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime >= updatedData.endTime) {
+  // Check if end time is later than start time
+  if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime > updatedData.endTime) {
     // Display an error message or handle it as needed
-    const errorMessage = `End time must be greater than start time for ${updatedData.date}`;
+    //const errorMessage = `End time must be later than start time for ${updatedData.date}`;
+    const errorMessage = (
+      <>
+        End time is earlier than start time for, {updatedData.date}.<br />
+        The default (09:00 - 17:00) will be used if you do make adjustments.
+      </>
+    );
     setErrorMessages((prevMessages) => {
       const newMessages = [...prevMessages];
       newMessages[index] = errorMessage;
