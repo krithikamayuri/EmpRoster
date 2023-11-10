@@ -76,7 +76,7 @@ function LatecomerReports() {
         <div>
           <div className='mgernav p-0'>
             <div className='mgernav topGreenHeader'>
-              <h4>EverGreen Solutions - Manager Dashboar</h4>
+              <h4>EverGreen Solutions - Manager Dashboard</h4>
             </div>
             <div className='manager_nav' style={{ background: 'linear-gradient(rgb(170, 139, 86), rgb(135, 100, 69))', padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>
               <button onClick={handleReportButtonClick}>Working Hours Report</button>
