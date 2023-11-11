@@ -1,12 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+/*import React, { useState, useEffect } from 'react';
+//import axios from 'axios';
 import moment from 'moment';
 import Report from './report';
 import LatecomerReports from './LatecomerReports';
 import ShiftCancel from './processShiftCancel';
 import AddEmployee from './AddEmployee';
 import ManagerDashboard from './managerDashboard';
-//import { assignEmployees } from '../controller/assignEmployeesController';
+import { assignEmployees } from '../controller/assignEmployeesController';
+import { getMessages } from '../controller/getMessagesController';
+import { runPython } from '../controller/runPythonController';*/
+
+const React = require ('react');
+const { useState, useEffect } = require('react');
+const moment = require('moment');
+const Report = require('./report');
+const LatecomerReports = require('./LatecomerReports');
+const ShiftCancel = require('./processShiftCancel');
+const AddEmployee = require('./AddEmployee');
+const ManagerDashboard = require('./managerDashboard');
+const { assignEmployees } = require('../controller/assignEmployeesController');
+const { getMessages } = require('../controller/getMessagesController');
+const { runPython } = require('../controller/runPythonController');
+
 
 function AssignEmployees() {
   const defaultShiftData = {
@@ -89,7 +104,6 @@ function AssignEmployees() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     try {
       console.log("Client-side weekData:", weekData);
 
@@ -100,22 +114,8 @@ function AssignEmployees() {
       
       console.log ("new one:", updatedWeekData);
 
-      const url = '/api/assign-employees';
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ weekData:updatedWeekData }),
-      };
-
-
-      const response = await fetch(url, requestOptions);
-
-
-      if (response.ok) {
-        const responseData = await response.json();
-
+      try {
+        const responseData = await assignEmployees(updatedWeekData);
 
         if (responseData.message === 'Assignment successful') {
           setSuccessMessage('Shift information successfully added.');
@@ -125,10 +125,10 @@ function AssignEmployees() {
           setErrorMessage('Shift information failed to add.');
           console.error('Shift information failed to add.');
         }
-      } else {
+      } catch (error) {
         setSuccessMessage('');
-        setErrorMessage('HTTP error! Status: ' + response.status);
-        console.error('HTTP error! Status: ' + response.status);
+        setErrorMessage('HTTP error! Status: ' + error);
+        console.error('HTTP error! Status: ' + error);
       }
     } catch (error) {
       console.error('An error occurred:', error);
@@ -137,38 +137,32 @@ function AssignEmployees() {
     }
   };
 
-  const getMessages = async () => {
+  const getMessagesFunction = async () => {
     try {
-      const response = await axios.get('/api/messages');
-      if (response.status === 200) {
-        const data = response.data;
+      const messages = await getMessages();
+      if (messages.message === 'ok') {
+        const data = messages.data;
         setMessages(data);
         console.log('Received messages from server:', data);
       } else {
-        console.error("Failed to retrieve messages. Status code:", response.status);
+        console.error("Failed to retrieve messages. Status code:", messages.status);
       }
     } catch (error) {
-      console.error("An error occurred while retrieving messages:", error);
+      console.error('An error occurred while getting messages:', error);
     }
   };
 
   const handlePythonScriptButtonClick = async () => {
-    try {
-      // Make a request to the server endpoint that runs the Python script
-      const response = await axios.post('/api/runPy');
-
-
-      // Handle the response from the server
-      console.log(response.data);
-
-
+  try {
+      const scriptResult = await runPython();
+      console.log(scriptResult.data);
     } catch (error) {
       console.error('An error occurred:', error);
     }
   };
 
   useEffect(() => {
-    getMessages();
+    getMessagesFunction();
   },);
 
   const generateWeekDates = (startOfWeek) => {

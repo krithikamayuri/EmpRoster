@@ -946,10 +946,14 @@ app.post('/api/send-messages', (req, res) => {
 
 app.get('/api/messages', (req, res) => {
     try {
-        res.json(msgData);
+        //res.json(msgData);
+        res.status(200).json({
+            success: true,
+            message: 'ok',
+            data: msgData,
+          });
     } catch (error) {
         console.error('An error occurred:', error);
-        res.status(500).json({ message: 'Internal server error' });
     }
 });
 

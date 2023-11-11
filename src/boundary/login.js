@@ -2,7 +2,6 @@
 //import { login } from '../controller/loginController';
 import loginImage from "../images/login-small.jpg";
 import logo from "../images/logo.png";
-
 const React = require('react');
 const { login } = require('../controller/loginController');
 
