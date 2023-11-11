@@ -112,12 +112,12 @@ function AddEmployee() {
       formIsValid = false;
     }
     if (!emp_phoneno || emp_phoneno.length !== 8) {
-  setErrors((prevErrors) => ({
-    ...prevErrors,
-    emp_phoneno: "Phone Number must be exactly 8 digits long",
-  }));
-  formIsValid = false;
-}
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emp_phoneno: "Phone Number must be exactly 8 digits long",
+      }));
+      formIsValid = false;
+    }
     if (!emp_psw) {
       setErrors((prevErrors) => ({
         ...prevErrors,
