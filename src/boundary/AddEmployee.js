@@ -111,6 +111,13 @@ function AddEmployee() {
       }));
       formIsValid = false;
     }
+    if (!emp_phoneno || emp_phoneno.length !== 8) {
+  setErrors((prevErrors) => ({
+    ...prevErrors,
+    emp_phoneno: "Phone Number must be exactly 8 digits long",
+  }));
+  formIsValid = false;
+}
     if (!emp_psw) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -158,45 +165,48 @@ function AddEmployee() {
       return;
     }
 
+    if(formIsValid){
 
+      const formdata = {
 
-    const formdata = {
+        emp_psw,
+        emp_email,
+        emp_name,
+        emp_phoneno,
+        emp_emergency_contact,
+        emp_address,
+      };
+      if (!emp_phoneno || !emp_emergency_contact || !emp_psw || !emp_email || !emp_name || !emp_address || !confirmPassword) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+      setIsLoading(true); // Set loading state to true
+      axios
+        .post('/api/createEmployee', formdata)
+        .then((response) => {
+          console.log('Data saved successfully:', response.data);
 
-      emp_psw,
-      emp_email,
-      emp_name,
-      emp_phoneno,
-      emp_emergency_contact,
-      emp_address,
-    };
-    if (!emp_phoneno || !emp_emergency_contact || !emp_psw || !emp_email || !emp_name || !emp_address || !confirmPassword) {
-      alert("Please fill in all required fields.");
-      return;
+          // Clear input fields after successful submission
+
+          setEmp_psw("");
+          setEmp_email("");
+          setemp_name("");
+          setEmp_phoneno("");
+          setEmp_address("");
+          setEmp_emergencycont("");
+          setConfirmPassword("");
+
+          setIsLoading(false);
+          alert(response.data.msg);
+        })
+        .catch((error) => {
+          console.error('Error saving data:', error);
+          setIsLoading(false);
+          alert("Something went wrong");
+        });
+    } else {
+      console.log('Form is not valid');
     }
-    setIsLoading(true); // Set loading state to true
-    axios
-      .post('/api/createEmployee', formdata)
-      .then((response) => {
-        console.log('Data saved successfully:', response.data);
-
-        // Clear input fields after successful submission
-
-        setEmp_psw("");
-        setEmp_email("");
-        setemp_name("");
-        setEmp_phoneno("");
-        setEmp_address("");
-        setEmp_emergencycont("");
-        setConfirmPassword("");
-
-        setIsLoading(false);
-        alert(response.data.msg);
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-        setIsLoading(false);
-        alert("Something went wrong");
-      });
   };
 
   return (
