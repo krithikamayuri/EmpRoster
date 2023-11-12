@@ -22,10 +22,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "jest",
-    "eject": "react-scripts eject"
+      "start": "concurrently \"npm run server\" \"npm run client\"",
+      "server": "cd server && npm run dev",
+      "client": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "jest",
+      "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
