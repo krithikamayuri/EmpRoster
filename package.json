@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://emp-roster-f0769c7281b8.herokuapp.com",
   "private": true,
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.9",
