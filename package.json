@@ -24,7 +24,7 @@
   "scripts": {
       "start": "concurrently \"npm run server\" \"npm run client\"",
       "server": "cd server && npm run dev",
-      "client": "react-scripts start --host 0.0.0.0",
+      "client": "react-scripts start",
       "build": "react-scripts build",
       "test": "jest",
       "eject": "react-scripts eject"
