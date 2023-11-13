@@ -110,10 +110,10 @@ const Report = () => {
           <h1>Generate Reports on Hours Worked</h1>
           <p>Click on the name of an employee to view and download reports</p>
           {empName ? (
-            <ul>
+            <ul style={{ listStyle: "none" }}>
               {empName.map((emp, index) => (
                 <li key={index}>
-                  <button onClick={() => handleEmployeeClick(emp)}>{emp}</button>
+                  <button className='btn btn-outline-info btn-sm w-25 mb-2' onClick={() => handleEmployeeClick(emp)}>{emp}</button>
                 </li>
               ))}
             </ul>

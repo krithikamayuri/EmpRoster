@@ -111,8 +111,8 @@ function AssignEmployees() {
         ...data,
         date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
       }));
-      
-      console.log ("new one:", updatedWeekData);
+
+      console.log("new one:", updatedWeekData);
 
       try {
         const responseData = await assignEmployees(updatedWeekData);
@@ -153,7 +153,7 @@ function AssignEmployees() {
   };
 
   const handlePythonScriptButtonClick = async () => {
-  try {
+    try {
       const scriptResult = await runPython();
       console.log(scriptResult.data);
     } catch (error) {
@@ -175,59 +175,59 @@ function AssignEmployees() {
     return dates;
   };
 
-const handleDayDataChange = (index, data) => {
-  const updatedWeekData = [...weekData];
-  const updatedData = {
-    ...data,
-    date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
-  };
+  const handleDayDataChange = (index, data) => {
+    const updatedWeekData = [...weekData];
+    const updatedData = {
+      ...data,
+      date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
+    };
 
-  // Check if start time and end time are the same
-  if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime === updatedData.endTime ) {
-    // Display an error message or handle it as needed
-    const errorMessage = (
-      <>
-        Start and end timings are the same for, {updatedData.date}.<br />
-        The default (09:00 - 17:00) will be used if you do make adjustments.
-      </>
-    );
-    
+    // Check if start time and end time are the same
+    if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime === updatedData.endTime) {
+      // Display an error message or handle it as needed
+      const errorMessage = (
+        <>
+          Start and end timings are the same for, {updatedData.date}.<br />
+          The default (09:00 - 17:00) will be used if you do make adjustments.
+        </>
+      );
+
       setErrorMessages((prevMessages) => {
         const newMessages = [...prevMessages];
         newMessages[index] = errorMessage;
         return newMessages;
       });
-    return;
-  }
+      return;
+    }
 
-  // Check if end time is later than start time
-  if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime > updatedData.endTime) {
-    // Display an error message or handle it as needed
-    //const errorMessage = `End time must be later than start time for ${updatedData.date}`;
-    const errorMessage = (
-      <>
-        End time is earlier than start time for, {updatedData.date}.<br />
-        The default (09:00 - 17:00) will be used if you do make adjustments.
-      </>
-    );
+    // Check if end time is later than start time
+    if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime > updatedData.endTime) {
+      // Display an error message or handle it as needed
+      //const errorMessage = `End time must be later than start time for ${updatedData.date}`;
+      const errorMessage = (
+        <>
+          End time is earlier than start time for, {updatedData.date}.<br />
+          The default (09:00 - 17:00) will be used if you do make adjustments.
+        </>
+      );
+      setErrorMessages((prevMessages) => {
+        const newMessages = [...prevMessages];
+        newMessages[index] = errorMessage;
+        return newMessages;
+      });
+      return;
+    }
+
+    // Reset the error message for the current date
     setErrorMessages((prevMessages) => {
       const newMessages = [...prevMessages];
-      newMessages[index] = errorMessage;
+      newMessages[index] = '';
       return newMessages;
     });
-    return;
-  }
 
-  // Reset the error message for the current date
-  setErrorMessages((prevMessages) => {
-    const newMessages = [...prevMessages];
-    newMessages[index] = '';
-    return newMessages;
-  });
-
-  updatedWeekData[index] = updatedData;
-  setWeekData(updatedWeekData);
-};
+    updatedWeekData[index] = updatedData;
+    setWeekData(updatedWeekData);
+  };
 
   const daysInWeek = generateWeekDates(selectedWeek);
 
@@ -251,81 +251,105 @@ const handleDayDataChange = (index, data) => {
             <h4 className=''>EverGreen Solutions - Manager Dashboard</h4>
           </div>
           <div className='manager_nav' style={{ background: 'linear-gradient(rgb(170, 139, 86), rgb(135, 100, 69))', padding: '10px', borderBottom: '2px solid black', color: "#fff", borderTop: '2px solid black' }}>
-              <button onClick={handleReportButtonClick}>Working Hours Report</button>
-              <button onClick={handleScriptButtonClick}>Assign Employees</button>
-              <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
-              <button onClick={handleEmployeeButtonClick}>Add Employees</button>
-              <button onClick={handleLateButtonClick}>Clock In Reports</button>
-              <button onClick={handleMgerButtonClick}>Go to home page</button>
-            </div>
+            <button onClick={handleReportButtonClick}>Working Hours Report</button>
+            <button onClick={handleScriptButtonClick}>Assign Employees</button>
+            <button onClick={handleShiftButtonClick}>Process Shift Cancellation Requests</button>
+            <button onClick={handleEmployeeButtonClick}>Add Employees</button>
+            <button onClick={handleLateButtonClick}>Clock In Reports</button>
+            <button onClick={handleMgerButtonClick}>Go to home page</button>
+          </div>
           <div>
-            <h2>Assign Employees for a Week</h2>
-            <label>Select a Week: </label>
+            <h2 className='text-center my-2'>Assign Employees for a Week</h2>
+            <div className='text-center'>
+               <label>Select a Week: </label>
             <input
               type="date"
+              className='form-control w-25 mx-auto mb-2'
               value={moment(selectedWeek).format('YYYY-MM-DD')}
               onChange={(e) => handleWeekChange(e.target.value)}
             />
+            </div>
+           
             <form onSubmit={handleSubmit}>
               {daysInWeek.map((day, index) => (
                 <div key={day}>
-                  <h5>{moment(day).format('DD-MM-YYYY')}</h5>
-                  <label>Staff Required: </label>
-                  <input
-                    type="number"
-                    value={weekData[index]?.staffRequired || ''}
-                    onChange={(e) =>
-                      handleDayDataChange(index, {
-                        ...weekData[index],
-                        staffRequired: e.target.value,
-                        startTime: e.target.value > 0 ? '09:00' : null,
-                        endTime: e.target.value > 0 ? '17:00' : null,
-                      })
-                    }
-                  />
-                  <label>Start Time: </label>
-                  <select
-                    value={weekData[index]?.startTime || '09:00'}
-                    onChange={(e) =>
-                      handleDayDataChange(index, {
-                        ...weekData[index],
-                        startTime: e.target.value,
-                      })
-                    }
-                  >
-                    {timeOptions.map((time, timeIndex) => (
-                      <option key={timeIndex} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                  <label>End Time: </label>
-                  <select
-                    value={weekData[index]?.endTime || '17:00'}
-                    onChange={(e) =>
-                      handleDayDataChange(index, {
-                        ...weekData[index],
-                        endTime: e.target.value,
-                      })
-                    }
-                  >
-                    {timeOptions.map((time, timeIndex) => (
-                      <option key={timeIndex} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
+                  <div className='row' style={{ backgroundColor: "#1c572124", margin: "10px 0", padding: "10px" }}>
+                    <div className='col-md-6 my-2'>
+                      <h5>{moment(day).format('DD-MM-YYYY')}</h5>
+                      <label>Staff Required: </label>
+                      <input
+                        type="number"
+                        className='form-control w-75'
+                        value={weekData[index]?.staffRequired || ''}
+                        onChange={(e) =>
+                          handleDayDataChange(index, {
+                            ...weekData[index],
+                            staffRequired: e.target.value,
+                            startTime: e.target.value > 0 ? '09:00' : null,
+                            endTime: e.target.value > 0 ? '17:00' : null,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className='col-md-6'>
+                      <h5>Timings</h5>
+                      <div className='row'>
+                        <div className='col-6'>
+                          <label>Start Time: </label>
+                          <select
+                            value={weekData[index]?.startTime || '09:00'}
+                            className='form-control w-50'
+                            onChange={(e) =>
+                              handleDayDataChange(index, {
+                                ...weekData[index],
+                                startTime: e.target.value,
+                              })
+                            }
+                          >
+                            {timeOptions.map((time, timeIndex) => (
+                              <option key={timeIndex} value={time}>
+                                {time}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className='col-6'>
+                          <label>End Time: </label>
+                          <select
+                            value={weekData[index]?.endTime || '17:00'}
+                            className='form-control w-50'
+                            onChange={(e) =>
+                              handleDayDataChange(index, {
+                                ...weekData[index],
+                                endTime: e.target.value,
+                              })
+                            }
+                          >
+                            {timeOptions.map((time, timeIndex) => (
+                              <option key={timeIndex} value={time}>
+                                {time}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+
                   {errorMessages[index] && <p className="error-message">{errorMessages[index]}</p>}
                 </div>
               ))}
-              <button type="submit">Add shift data</button>
+              <button type="submit" className='btn btn-success btn-sm'>Add shift data</button>
             </form>
             {successMessage && <p className="success-message">{successMessage}</p>}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
             <br></br>
             <h5>Auto-assign Employees</h5>
-            <button onClick={handlePythonScriptButtonClick}>Assign Employees</button>
+            <button onClick={handlePythonScriptButtonClick} className='btn btn-success btn-sm mb-3'>Assign Employees</button>
 
             {messages.message && (
               <pre>
@@ -345,10 +369,10 @@ const handleDayDataChange = (index, data) => {
               </pre>
             )}
           </div>
-          </div>
+        </div>
       )}
     </>
   )
-};  
+};
 
 export default AssignEmployees;
