@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import AssignEmployees from '../src/boundary/assignEmployees';
+import AssignEmployees from '../src/boundary/AssignEmployees';
 import { assignEmployees } from '../src/controller/assignEmployeesController';
 
 // Mock the assignEmployees function from assignEmployeesController.js
@@ -14,61 +14,114 @@ describe('AssignEmployees Component', () => {
 
   it('should handle week change', () => {
     const wrapper = shallow(<AssignEmployees />);
-    const instance = wrapper.instance();
+    const dateInput = wrapper.find('input[type="date"]');
 
-    instance.handleWeekChange(new Date()); // Pass a sample date
-    expect(wrapper.state('selectedWeek')).toEqual(new Date());
+    dateInput.simulate('change', { target: { value: '2023-01-01' } });
+
+    expect(wrapper.find('input[type="date"]').prop('value')).toEqual('2023-01-01');
   });
 
   it('should handle day data change', () => {
     const wrapper = shallow(<AssignEmployees />);
-    const instance = wrapper.instance();
+    const updatedData = [
+      {
+        date: '2023-01-01',
+        staffRequired: 3,
+        startTime: '09:00',
+        endTime: '17:00',
+      },
+      {
+        date: '2023-01-01',
+        staffRequired: 3,
+        startTime: '09:00',
+        endTime: '17:00',
+      },
+      {
+        date: '2023-01-01',
+        staffRequired: 3,
+        startTime: '09:00',
+        endTime: '17:00',
+      },
+      {
+        date: '2023-01-01',
+        staffRequired: 3,
+        startTime: '09:00',
+        endTime: '17:00',
+      },
+      {
+        date: '2023-01-01',
+        staffRequired: 3,
+        startTime: '09:00',
+        endTime: '17:00',
+      },
+      {
+        date: '2023-01-01',
+        staffRequired: 3,
+        startTime: '09:00',
+        endTime: '17:00',
+      },
+      {
+        date: '2023-01-01',
+        staffRequired: 3,
+        startTime: '09:00',
+        endTime: '17:00',
+      }
+    ];
 
-    // Assuming you have a specific date to use for testing
-    const sampleDate = new Date();
-    const sampleData = {
-      staffRequired: 3,
-      startTime: '09:00',
-      endTime: '17:00',
-    };
+    wrapper.instance().handleDayDataChange(0, updatedData);
 
-    instance.handleDayDataChange(0, sampleData); // Assuming you want to update data for the first day
-    const updatedWeekData = wrapper.state('weekData');
-    
-    // Make assertions based on the expected state changes
-    expect(updatedWeekData[0].staffRequired).toEqual(3);
-    expect(updatedWeekData[0].startTime).toEqual('09:00');
-    expect(updatedWeekData[0].endTime).toEqual('17:00');
+    // Assert that the state is updated correctly
+    expect(wrapper.state('weekData')[0]).toEqual(updatedData);
   });
 
-  it('should handle form submission', async () => {
+  it('should handle form submission with successful assignment', async () => {
     const wrapper = shallow(<AssignEmployees />);
-    const instance = wrapper.instance();
+    const mockEvent = { preventDefault: jest.fn() };
 
     // Mock the assignEmployees function's response
     assignEmployees.mockResolvedValue({
       message: 'Assignment successful',
     });
 
+    // Set up necessary state or input changes
+
     // Simulate form submission
-    const form = wrapper.find('form');
-    const preventDefault = jest.fn(); // Mock preventDefault function
-    form.simulate('submit', { preventDefault });
+    await wrapper.instance().handleSubmit(mockEvent);
 
     // Wait for the assignEmployees function to be called and the state to update
     await new Promise(resolve => setTimeout(resolve, 0));
 
     // Assert that the assignEmployees function was called with the correct parameters
-    // You may need to adjust this based on your actual implementation
-    expect(assignEmployees).toHaveBeenCalledWith(/* pass expected parameters */);
+    expect(assignEmployees).toHaveBeenCalledWith(expect.any(Array));
 
     // Assertions for the success scenario
     // Check that the component updated its state appropriately
     expect(wrapper.state('successMessage')).toBe('Shift information successfully added.');
     expect(wrapper.state('errorMessage')).toBe('');
 
-    // Additional assertions as needed
+    // Additional assertions based on the specific behavior of your component
   });
 
-  // Add more test cases as needed for other functions and scenarios
+  it('should handle form submission with failed assignment', async () => {
+    const wrapper = shallow(<AssignEmployees />);
+    const mockEvent = { preventDefault: jest.fn() };
+
+    // Mock the assignEmployees function's response to simulate a failed assignment
+    assignEmployees.mockRejectedValue(new Error('Assignment failed'));
+
+    // Set up necessary state or input changes
+
+    // Simulate form submission
+    await wrapper.instance().handleSubmit(mockEvent);
+
+    // Wait for the assignEmployees function to be called and the state to update
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    // Assertions for the failed assignment scenario
+    // Check that the component updated its state appropriately
+    expect(wrapper.state('successMessage')).toBe('');
+    expect(wrapper.state('errorMessage')).toBe('Shift information failed to add.');
+
+    // Additional assertions based on the specific behavior of your component
+  });
 });
