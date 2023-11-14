@@ -9,19 +9,6 @@ import ManagerDashboard from './managerDashboard';
 import { assignEmployees } from '../controller/assignEmployeesController';
 import { getMessages } from '../controller/getMessagesController';
 import { runPython } from '../controller/runPythonController';
-/*
-const React = require ('react');
-const { useState, useEffect } = require('react');
-const moment = require('moment');
-const Report = require('./report');
-const LatecomerReports = require('./LatecomerReports');
-const ShiftCancel = require('./processShiftCancel');
-const AddEmployee = require('./AddEmployee');
-const ManagerDashboard = require('./managerDashboard');
-const { assignEmployees } = require('../controller/assignEmployeesController');
-const { getMessages } = require('../controller/getMessagesController');
-const { runPython } = require('../controller/runPythonController'); */
-
 
 function AssignEmployees() {
   const defaultShiftData = {

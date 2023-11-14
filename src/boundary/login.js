@@ -1,9 +1,10 @@
 //import React, { useState } from 'react';
-//import { login } from '../controller/loginController';
+import { login } from '../controller/loginController';
 //import loginImage from "../images/login-small.jpg";
-//import logo from "../images/logo.png";
+import logo from "../images/logo.png";
+import loginImage from '../images/login-small.jpg';
 const React = require('react');
-const { login } = require('../controller/loginController');
+//const { login } = require('../controller/loginController');
 
 const Login = ({ onLogin }) => {
   const [userEmail, setUserEmail] = React.useState('');
@@ -50,13 +51,13 @@ const Login = ({ onLogin }) => {
         <div className="row align-items-center">
           <div className="col-md-6">
             <div>
-              <img src={require('../images/login-small.jpg')} className="image-fluid w-100" alt=""/>
+              <img src={loginImage} className="image-fluid w-100" alt=""/>
             </div>
           </div>
           <div className="col-md-6">
             <div>
               <div className="text-center">
-                <img src={require('../images/logo.png')} alt="" style={{ width: "100px", margin: "auto", marginBottom: "20px", display: "inline-block" }} />
+                <img src={logo} alt="" style={{ width: "100px", margin: "auto", marginBottom: "20px", display: "inline-block" }} />
               </div>
               <h2 className="text-center">Welcome To Evergreen</h2>
               <p className="mb-5 text-center">a cleaning company roster</p>
