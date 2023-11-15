@@ -97,6 +97,7 @@ const CancelShiftRequest = (props) => {
                   <td>{shift.shiftEndTime}</td>
                   <td>
                     <button
+                    id = "cancelRequest"
                       className="btn btn-danger"
                       onClick={() => setSelectedShift(shift)}
                       data-bs-toggle="modal"
@@ -146,7 +147,7 @@ const CancelShiftRequest = (props) => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleCancelShift}>Confirm Cancel</button>
+              <button id="submit" type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleCancelShift}>Confirm Cancel</button>
             </div>
           </div>
         </div>
