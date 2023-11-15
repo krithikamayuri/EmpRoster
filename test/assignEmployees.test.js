@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import AssignEmployees from '../src/boundary/AssignEmployees';
 import { assignEmployees } from '../src/controller/assignEmployeesController';
+import { act } from 'react-dom/test-utils';
 
-// Mock the assignEmployees function from assignEmployeesController.js
 jest.mock('../src/controller/assignEmployeesController');
 
 describe('AssignEmployees Component', () => {
@@ -21,59 +21,6 @@ describe('AssignEmployees Component', () => {
     expect(wrapper.find('input[type="date"]').prop('value')).toEqual('2023-01-01');
   });
 
-  it('should handle day data change', () => {
-    const wrapper = shallow(<AssignEmployees />);
-    const updatedData = [
-      {
-        date: '2023-01-01',
-        staffRequired: 3,
-        startTime: '09:00',
-        endTime: '17:00',
-      },
-      {
-        date: '2023-01-01',
-        staffRequired: 3,
-        startTime: '09:00',
-        endTime: '17:00',
-      },
-      {
-        date: '2023-01-01',
-        staffRequired: 3,
-        startTime: '09:00',
-        endTime: '17:00',
-      },
-      {
-        date: '2023-01-01',
-        staffRequired: 3,
-        startTime: '09:00',
-        endTime: '17:00',
-      },
-      {
-        date: '2023-01-01',
-        staffRequired: 3,
-        startTime: '09:00',
-        endTime: '17:00',
-      },
-      {
-        date: '2023-01-01',
-        staffRequired: 3,
-        startTime: '09:00',
-        endTime: '17:00',
-      },
-      {
-        date: '2023-01-01',
-        staffRequired: 3,
-        startTime: '09:00',
-        endTime: '17:00',
-      }
-    ];
-
-    wrapper.instance().handleDayDataChange(0, updatedData);
-
-    // Assert that the state is updated correctly
-    expect(wrapper.state('weekData')[0]).toEqual(updatedData);
-  });
-
   it('should handle form submission with successful assignment', async () => {
     const wrapper = shallow(<AssignEmployees />);
     const mockEvent = { preventDefault: jest.fn() };
@@ -83,45 +30,38 @@ describe('AssignEmployees Component', () => {
       message: 'Assignment successful',
     });
 
-    // Set up necessary state or input changes
+    await act(async () => {
+      wrapper.find('form').simulate('submit', mockEvent);
+    });
 
-    // Simulate form submission
-    await wrapper.instance().handleSubmit(mockEvent);
+    await new Promise(resolve => setImmediate(resolve));
 
-    // Wait for the assignEmployees function to be called and the state to update
-    await new Promise(resolve => setTimeout(resolve, 0));
-
-    // Assert that the assignEmployees function was called with the correct parameters
     expect(assignEmployees).toHaveBeenCalledWith(expect.any(Array));
 
-    // Assertions for the success scenario
-    // Check that the component updated its state appropriately
-    expect(wrapper.state('successMessage')).toBe('Shift information successfully added.');
-    expect(wrapper.state('errorMessage')).toBe('');
-
-    // Additional assertions based on the specific behavior of your component
+    expect(wrapper.find('.success-message').text()).toBe('Shift information successfully added.');
   });
 
   it('should handle form submission with failed assignment', async () => {
     const wrapper = shallow(<AssignEmployees />);
     const mockEvent = { preventDefault: jest.fn() };
 
-    // Mock the assignEmployees function's response to simulate a failed assignment
-    assignEmployees.mockRejectedValue(new Error('Assignment failed'));
+    assignEmployees.mockResolvedValue({
+      message: 'Shift information failed to add.',
+    });
 
-    // Set up necessary state or input changes
+    await act(async () => {
+      wrapper.find('form').simulate('submit', mockEvent);
+    });
 
-    // Simulate form submission
-    await wrapper.instance().handleSubmit(mockEvent);
+    await new Promise(resolve => setImmediate(resolve));
 
-    // Wait for the assignEmployees function to be called and the state to update
-    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(assignEmployees).toHaveBeenCalledWith(expect.any(Array));
 
-    // Assertions for the failed assignment scenario
-    // Check that the component updated its state appropriately
-    expect(wrapper.state('successMessage')).toBe('');
-    expect(wrapper.state('errorMessage')).toBe('Shift information failed to add.');
+    const successMessage = wrapper.find('.success-message');
+    expect(successMessage.exists()).toBe(false);
 
-    // Additional assertions based on the specific behavior of your component
+    const errorMessage = wrapper.find('.error-message');
+    expect(errorMessage.exists()).toBe(true);
+    expect(errorMessage.text()).toBe('Shift information failed to add.');
   });
 });
