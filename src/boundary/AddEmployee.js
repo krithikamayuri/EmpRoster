@@ -22,6 +22,8 @@ function AddEmployee() {
   const [employeeButtonPressed, setEmployeeButtonPressed] = useState(false);
   const [lateButtonPressed, setLateButtonPressed] = useState(false);
   const [mgerButtonPressed, setMgerButtonPressed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [emp_type, setEmp_type] = useState("partTime");
 
   // Error state for each input field
   const [errors, setErrors] = useState({
@@ -32,6 +34,7 @@ function AddEmployee() {
     emp_name: "",
     emp_address: "",
     confirmPassword: "",
+    emp_type: "",
   });
 
   const handleReportButtonClick = () => {
@@ -87,6 +90,7 @@ function AddEmployee() {
       emp_name: "",
       emp_address: "",
       confirmPassword: "",
+      emp_type: "",
     });
 
     if (isLoading) {
@@ -175,9 +179,9 @@ function AddEmployee() {
         emp_phoneno,
         emp_emergency_contact,
         emp_address,
+        emp_type,
       };
       if (!emp_phoneno || !emp_emergency_contact || !emp_psw || !emp_email || !emp_name || !emp_address || !confirmPassword) {
-        alert("Please fill in all required fields.");
         return;
       }
       setIsLoading(true); // Set loading state to true
@@ -195,17 +199,17 @@ function AddEmployee() {
           setEmp_address("");
           setEmp_emergencycont("");
           setConfirmPassword("");
+          setEmp_type("");
 
           setIsLoading(false);
           alert(response.data.msg);
         })
         .catch((error) => {
-          console.error('Error saving data:', error);
+          setErrorMessage("Error saving data.");
           setIsLoading(false);
-          alert("Something went wrong");
         });
     } else {
-      console.log('Form is not valid');
+      setErrorMessage("Please fill in all required fields.");
     }
   };
 
@@ -254,6 +258,21 @@ function AddEmployee() {
                   onChange={(e) => { setemp_name(e.target.value) }}
                 />
                 <span className="text-danger">{errors.emp_name}</span> {/* Display error message */}
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 mt-md-0 mt-3">
+                  <label style={{ fontWeight: "bold" }}>Employee Type</label>
+                  <select
+                    name="emp_type"
+                    style={{ width: "90%" }}
+                    value={emp_type}
+                    onChange={(e) => { setEmp_type(e.target.value) }}
+                  >
+                    <option value="partTime">partTime</option>
+                    <option value="fullTime">fullTime</option>
+                  </select>
+                </div>
               </div>
 
               <div className="col-md-6 mt-md-0 mt-3">
@@ -353,9 +372,11 @@ function AddEmployee() {
                 <span className="text-danger">{errors.emp_address}</span>
               </div>
             </div>
-            <button className='text-center btn btn-success' onClick={handlesubmit} disabled={isLoading}>
+            <button id="submitForm" className='text-center btn btn-success' onClick={handlesubmit} disabled={isLoading}>
               {isLoading ? "Saving..." : "Save Data"}
             </button>
+            <br /><br />
+            {errorMessage && <div id="error-message" className="text-danger" style={{ fontWeight: 'bold' }}>{errorMessage}</div>}
           </div>
         </div>
       )}

@@ -133,7 +133,7 @@ function AdminDashboard() {
         alert(response.data.msg);
       })
       .catch((error) => {
-        setErrorMessage("Something went wrong");
+        setErrorMessage("Error saving data");
         console.error('Error saving data:', error);
         setIsLoading(false);
       });

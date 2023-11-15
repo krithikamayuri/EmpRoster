@@ -78,7 +78,7 @@ app.get('/calendar/fetch-events', async (req, res) => {
     }
   });*/
 app.post("/api/createEmployee", async(req, res) => {
-    const { emp_email, emp_name, emp_emergency_contact, emp_phoneno, emp_psw, emp_address } = req.body;
+    const { emp_email, emp_name, emp_emergency_contact, emp_phoneno, emp_psw, emp_address, emp_type } = req.body;
     console.log(req.body);
 
     try{
@@ -103,7 +103,8 @@ app.post("/api/createEmployee", async(req, res) => {
                 emp_phoneno: emp_phoneno,
                 emp_emergency_contact: emp_emergency_contact,
                 emp_email: emp_email,
-                emp_psw: emp_psw
+                emp_psw: emp_psw,
+                emp_type: emp_type,
             });
             const newUser = User.build({
                 userName: emp_name,
@@ -111,7 +112,7 @@ app.post("/api/createEmployee", async(req, res) => {
                 userPhoneNo: emp_phoneno,
                 userEmail: emp_email,
                 userPsw: emp_psw,
-                userTypes: 'employee'
+                userTypes: emp_type,
             });
 
             await newUser.save();
