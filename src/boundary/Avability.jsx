@@ -203,8 +203,8 @@ const renderCheckboxes = (day) => {
 </div>
      
       <div style={{ textAlign: 'center', marginTop: '10px' }}>
-        <button className='btn btn-light text-dark' style={{border: '1.5px solid black'}} onClick={addWeek}><strong>+</strong></button><br></br>
-        <button onClick={handleSubmit} className='btn btn-light btn-success mt-3' style={{border: '1.5px solid black'}}>Submit</button>
+        <button id="addWeek" className='btn btn-light text-dark' style={{border: '1.5px solid black'}} onClick={addWeek}><strong>+</strong></button><br></br>
+        <button id="submitForm" onClick={handleSubmit} className='btn btn-light btn-success mt-3' style={{border: '1.5px solid black'}}>Submit</button>
       </div>
     </div>
     <button onClick={handleGoBack} className='btn btn-outline-dark m-4'><i class="ri-arrow-left-line"></i>Previous page</button>
