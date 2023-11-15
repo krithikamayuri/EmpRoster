@@ -1226,6 +1226,32 @@ app.post('/api/clockinout', async (req, res) => {
     }
   });
 
+  app.get('/api/notifyshiftemployee/:empId', async (req, res) => {
+    const today = new Date();
+    const twoDaysAhead = new Date(today);
+    twoDaysAhead.setDate(today.getDate() + 2);
+    
+    const threeDaysAhead = new Date(today);
+    threeDaysAhead.setDate(today.getDate() + 3);
+
+    try {
+        const shifts = await Shift.findAll({
+            where: {
+                emp_id: req.params.empId,
+                shiftDate: {
+                    [Sequelize.Op.between]: [twoDaysAhead, threeDaysAhead],
+                },
+            },
+        });
+
+        res.json(shifts);
+    } catch (error) {
+        console.error('An error occurred:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
   // Serve static files from the 'build' folder in production
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../build')));

@@ -58,7 +58,7 @@ function EmployeeDashboard(props) {
     <div>
       {error && <p className="error-message">{error}</p>}
       <Router>
-        <Empdashboardnav />
+        <Empdashboardnav employeeId={employeeId} />
         <Routes>
           <Route path="/availabilitysub" element={<Availability />} />
           <Route path="/cancelshift" element={<Cancellation />} />

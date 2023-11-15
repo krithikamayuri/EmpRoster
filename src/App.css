@@ -59,7 +59,6 @@
 
 .nav-link {
   color: white;
-  font-size: larger;
   margin-left: 30px;
 }
 
@@ -116,4 +115,7 @@ body {
 .topGreenHeader {
   background: linear-gradient(to right, green, rgb(57, 81, 68));
   height: 80px;
+}
+.listitem{
+  background-color: #f1f1f1;
 }
