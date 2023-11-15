@@ -13,6 +13,7 @@ function AdminDashboard() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emp_type, setemp_type] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Error state for each input field
   const [errors, setErrors] = useState({
@@ -110,7 +111,7 @@ function AdminDashboard() {
       emp_type,
     };
     if (!emp_phoneno || !emp_psw || !emp_email || !emp_name || !emp_address || !confirmPassword) {
-      alert("Please fill in all required fields.");
+      setErrorMessage("Please fill in all required fields.");
       return;
     }
     setIsLoading(true); // Set loading state to true
@@ -132,9 +133,9 @@ function AdminDashboard() {
         alert(response.data.msg);
       })
       .catch((error) => {
+        setErrorMessage("Something went wrong");
         console.error('Error saving data:', error);
         setIsLoading(false);
-        alert("Something went wrong");
       });
   };
 
@@ -149,7 +150,7 @@ function AdminDashboard() {
         </div>
       </div>
       <div className="container create-account">
-        <button onClick={() => openForm('system', 'manager')} className={(emp_type === 'manager') ? 'active btn btn-outline-primary' : ''} >Create Manager Account</button>
+        <button id="openForm" onClick={() => openForm('system', 'manager')} className={(emp_type === 'manager') ? 'active btn btn-outline-primary' : ''} >Create Manager Account</button>
 
         {/* Conditionally render the forms based on the selectedForm state */}
         {selectedForm === 'system' && (
@@ -249,10 +250,12 @@ function AdminDashboard() {
                 <span className="text-danger">{errors.emp_address}</span>
               </div>
             </div>
-            <button className='text-center btn btn-success' onClick={handlesubmit} disabled={isLoading}>
+            <button id="submitForm" className='text-center btn btn-success' onClick={handlesubmit} disabled={isLoading}>
               {isLoading ? "Saving..." : "Save Data"}
             </button>
             <button className='text-end btn btn-danger' onClick={closeForm}>X</button>
+            <br /><br />
+            {errorMessage && <div id="error-message" className="text-danger" style={{ fontWeight: 'bold' }}>{errorMessage}</div>}
           </div>
         )}
 
