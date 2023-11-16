@@ -332,6 +332,49 @@ function AssignEmployees() {
 
 
                     </div>
+
+
+
+
+                      
+
+                  <div>
+                    <div>
+                    <label>Customer Name: </label>
+                          <input
+                            type="text"
+                            className='form-control w-75'
+                            value={weekData[index]?.customerName || ''}
+                            onChange={(e) =>
+                              handleDayDataChange(index, {
+                                ...weekData[index],
+                                customerName: e.target.value,
+                              })
+                            }
+                          />
+                    </div>
+                    <div>
+                          <label>Customer Address: </label>
+                          <input
+                            type="text"
+                            className='form-control w-75'
+                            value={weekData[index]?.customerAddress || ''}
+                            onChange={(e) =>
+                              handleDayDataChange(index, {
+                                ...weekData[index],
+                                customerAddress: e.target.value,
+                              })
+                            }
+                          />
+                    </div>
+                    </div>
+
+
+
+
+
+
+
                   </div>
 
 

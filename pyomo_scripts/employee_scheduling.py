@@ -301,9 +301,12 @@ if result.solver.status == SolverStatus.ok and result.solver.termination_conditi
                 
                  # Include the single timing for the assigned shift (for the specific day)
                 if d in shift_timings:
-                    start_time, end_time = shift_timings[d]
+                    start_time, end_time, customerName, customerAddress = shift_timings[d]
                     optimized_shift_data[f"{shift_key}_start_time"] = start_time
                     optimized_shift_data[f"{shift_key}_end_time"] = end_time
+                    optimized_shift_data[f"{shift_key}_customerName"] = customerName
+                    optimized_shift_data[f"{shift_key}_customerAddress"] = customerAddress
+
     # Send the optimized_shift_data to the API
     response = requests.post('http://localhost:5000/api/inputShift', json=optimized_shift_data)
 
