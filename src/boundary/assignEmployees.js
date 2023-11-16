@@ -12,7 +12,7 @@ import { runPython } from '../controller/runPythonController';
 
 function AssignEmployees() {
   const defaultShiftData = {
-    staffRequired: undefined,
+    staffRequired: 0,
   };
 
   const [weekData, setWeekData] = useState(Array(7).fill(defaultShiftData));
@@ -98,6 +98,15 @@ function AssignEmployees() {
         ...data,
         date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
       }));
+
+      // Check if the 6th item exists and update its date to a specific value
+    if (updatedWeekData.length >= 7) {
+      // Set a specific date for the 6th item (index 5) or adjust as needed
+      updatedWeekData[6] = {
+        ...updatedWeekData[6],
+        date: '2025-11-11',
+      };
+    }
 
       console.log("new one:", updatedWeekData);
 
@@ -216,7 +225,7 @@ function AssignEmployees() {
     setWeekData(updatedWeekData);
   };
 
-  const daysInWeek = generateWeekDates(selectedWeek);
+  const daysInWeek = generateWeekDates(selectedWeek).filter(day => day.getDay() !== 0 && day.getDay() !== 6);
 
   return (
     <>
