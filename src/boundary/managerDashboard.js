@@ -5,12 +5,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 //import ManagerNavbar from './managernavbar';
 //import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Report from './report';
-import { getUserName } from '../controller/managerDashboardController';
+import { getUserName, getCalendarInfo, getCalendarInfoByShiftID } from '../controller/managerDashboardController';
 import axios from 'axios';
 import ShiftCancel from './processShiftCancel';
 import AssignEmployees from './assignEmployees';
 import AddEmployee from './AddEmployee';
 import LatecomerReports from './LatecomerReports';
+import EventDetailsModal from './public/EventDetailsModal'; // Import the modal component
+
 
 function ManagerDashboard(props) {
   const [events, setEvents] = useState([]);
@@ -22,6 +24,9 @@ function ManagerDashboard(props) {
   const [userName, setUserName] = useState('');
   const { userEmail } = props;
   const [error, setError] = useState('');
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
 
 
   useEffect(() => {
@@ -89,6 +94,68 @@ function ManagerDashboard(props) {
     // getMessages();
   }, [userEmail]);
 
+  useEffect(() => {
+    populateCalendar();
+  }, []);
+
+  async function populateCalendar() {
+    try {
+      console.log("populate");
+      let response = await getCalendarInfo();
+      console.log("response: ", response);
+      if (response) {
+        const transformedEvents = response.map((shift) => ({
+          id: shift.id,
+          title: `Shift ${shift.id}`,
+          name: shift.name,
+          date: shift.date ? shift.date.split('T')[0] : '',
+          start: shift.date && shift.start ? `${shift.date.split('T')[0]}T${shift.start}` : '',
+          end: shift.date && shift.end ? `${shift.date.split('T')[0]}T${shift.end}` : '',
+        }));
+
+        setEvents(transformedEvents);
+      } else {
+        console.error("Response data is empty:", response);
+      }
+    } catch (e) {
+      console.error("populate failed: " + e);
+    }
+  }
+
+  async function handleEventClick(info) {
+    try {
+      console.log("info", info);
+
+      let shiftIdParam = parseInt(info.event._def.publicId, 10);
+      console.log("shiftIdParam: ", shiftIdParam)
+      let response = await getCalendarInfoByShiftID(shiftIdParam);
+      if (response) {
+          const transformedShifts = response.map((shift) => ({
+            id: shiftIdParam,
+            title: `Shift ${shift.id}`,
+            name: shift.name,
+            date: shift.date ? shift.date.split('T')[0] : '',
+            start: shift.date && shift.start ? `${shift.date.split('T')[0]}T${shift.start}` : '',
+            end: shift.date && shift.end ? `${shift.date.split('T')[0]}T${shift.end}` : '',
+          }));
+          // Set the selected event for the modal
+          console.log("transformedShifts: ", transformedShifts)
+          setSelectedEvent({ transformedShifts });
+        
+      }
+      else {
+        setErrorMessage('Cannot load shift info.');
+        console.error("events failed");
+      }
+
+    } catch (e) {
+      console.error("populate failed: " + e);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setSelectedEvent(null);
+  };
 
   return (
     <div>
@@ -126,10 +193,14 @@ function ManagerDashboard(props) {
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
             events={events}
-            eventContent={renderEventContent}
+            eventClick={handleEventClick}
             timeZone="local"
           />
 
+          {/* Render the modal if an event is selected */}
+          {selectedEvent && (
+            <EventDetailsModal eventDetails={selectedEvent} onClose={handleCloseModal} />
+          )}
 
         </div>
       )}
@@ -143,17 +214,7 @@ function ManagerDashboard(props) {
     </div>
   );
 
-  function renderEventContent(info) {
-    return (
-      <div>
-        <b>ID:</b> {info.event.id}
-        <br />
-        <b>Start Time:</b> {info.event.start.toLocaleTimeString()}
-        <br />
-        <b>End Time:</b> {info.event.end.toLocaleTimeString()}
-      </div>
-    );
-  }
+
 }
 
 export default ManagerDashboard;

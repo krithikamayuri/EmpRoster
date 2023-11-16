@@ -1,18 +1,5 @@
-/*
-import axios from 'axios';
-
 export const login = async (userEmail, userPsw) => {
-  try {
-    const response = await axios.post('/api/login', { userEmail, userPsw });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-*/
-
-export const login = async (userEmail, userPsw) => {
-  const url = '/api/login'; // Replace with the actual API endpoint URL
+  const url = 'http://localhost:3001/api/login'; // Replace with the actual API endpoint URL
 
   const requestOptions = {
     method: 'POST',
@@ -23,6 +10,7 @@ export const login = async (userEmail, userPsw) => {
   };
 
   try {
+    console.log("loginController " + "url: " + url)
     const response = await fetch(url, requestOptions);
     
     if (!response.ok) {

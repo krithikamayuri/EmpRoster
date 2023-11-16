@@ -30,9 +30,11 @@ const formatDate = (dateString) => {
             EverGreen Solutions
           </h3>
           <div className="admin" style={{ textAlign: 'center' }}>
-            <p className="text" style={{ color: 'white', fontFamily: 'Verdana, sans-serif', fontSize: '18px', marginRight: '10px' }}>
+          <a href="/settings" style={{ textDecoration: 'none' }}>
+            <p className="text" style={{ color: 'blue', fontFamily: 'Verdana, sans-serif', fontSize: '18px', marginRight: '10px' }}>
               Employee
             </p>
+            </a>
             <style>
               {`
                 .logout-link:hover h5 {
@@ -47,7 +49,7 @@ const formatDate = (dateString) => {
 
         <nav className="navbar navbar-expand-lg" style ={{background: 'linear-gradient(to bottom, #AA8B56, #876445)', marginTop: '0px', borderBottom: '2px solid black'}}>
           <div className="container-fluid">
-            <Link className="navbar-brand text-light" to="/availabilitysub">Calendar</Link>
+            <Link className="navbar-brand text-light" to="/">Calendar</Link>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>

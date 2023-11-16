@@ -13,6 +13,9 @@ import Empdashboardnav from './empdashboardnav';
 import MySwapRequests from "./myswaprequests";
 import CancelShiftRequest from './CancelShiftRequest';
 import TimeTracking from './TimeTracking';
+import GoogleCalendarComponent from './GoogleCalendarComponent';
+import Settings from './Settings';
+import Calendar from './calendar';
 
 
 function EmployeeDashboard(props) {
@@ -40,20 +43,6 @@ function EmployeeDashboard(props) {
     }
   }, [userEmail]); // Include userEmail in the dependencies array
 
-  useEffect(() => {
-    // Fetch events from the server
-    axios.post('/calendar/fetch-events')
-      .then((response) => {
-        setEvents(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    // Get the user's name
-    getName();
-  }, [getName]); // Include getName in the dependencies array
-
   return (
     <div>
       {error && <p className="error-message">{error}</p>}
@@ -67,13 +56,10 @@ function EmployeeDashboard(props) {
           <Route path="/availibility" element={<Avability userEmail={userEmail} />} />
           <Route path="/cancelshiftrequest" element={<CancelShiftRequest userEmail={userEmail} employeeId={props.employeeId}/>}/>
           <Route path="/timetracker" element={<TimeTracking userEmail={userEmail} />} />
-          <Route path="/" element={
-            <FullCalendar
-              plugins={[dayGridPlugin]}
-              initialView="dayGridMonth"
-              events={events}
-            />
-          } />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/" element={<Calendar employeeId={employeeId}/>} />
+
+          <Route path="/g-calendar" element={<GoogleCalendarComponent events={events} />} />
         </Routes>
       </Router>
     </div>
