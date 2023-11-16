@@ -112,7 +112,7 @@ app.post("/api/createEmployee", async(req, res) => {
                 userPhoneNo: emp_phoneno,
                 userEmail: emp_email,
                 userPsw: emp_psw,
-                userTypes: emp_type,
+                userTypes: 'employee',
             });
 
             await newUser.save();
