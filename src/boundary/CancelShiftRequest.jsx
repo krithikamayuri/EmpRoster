@@ -18,14 +18,13 @@ const CancelShiftRequest = (props) => {
         console.log(response.data);
         if(response.data.status === true){
             setShifts(response.data.data);
-
         }
       })
       .catch((error) => {
         console.error('Error fetching shifts:', error);
       });
-  }, [props.userEmail]);
-
+  }, [props.employeeId]);
+  console.log ('shifts data:', shifts)
   const handleGoBack = () => {
     window.history.back(); // This will take the user back to the previous page
   };
@@ -85,6 +84,7 @@ const CancelShiftRequest = (props) => {
       <tbody>
         {shifts.length !== 0 ? (
           shifts.map((shift) => {
+            console.log ('shifts data:', shifts)
             const shiftDate = new Date(shift.shiftDate);
 
             // Check if the shift date is in the future

@@ -22,7 +22,7 @@ describe('CancelShiftRequest Component', () => {
         { shiftID: 2, shiftDate: '2023-01-02', shiftStartTime: '10:00', shiftEndTime: '18:00' },
       ];
   
-      axios.get.mockResolvedValueOnce({ data: { status: true, data: shifts } });
+      axios.get.mockResolvedValue( { status: true, data: shifts } );
   
       const wrapper = shallow(<CancelShiftRequest employeeId="1" />);
   
@@ -34,46 +34,114 @@ describe('CancelShiftRequest Component', () => {
       expect(wrapper.find('tr')).toHaveLength(expectedLength);
   });
 
+
+
+
+
+  it('should only display future shifts', async () => {
+    // Mocking a response with a mixture of past and future shifts
+    const shifts = [
+      { shiftID: 1, shiftDate: '2024-01-01', shiftStartTime: '09:00', shiftEndTime: '17:00' }, // Future shift
+      { shiftID: 2, shiftDate: '2025-01-02', shiftStartTime: '10:00', shiftEndTime: '18:00' }, // Future shift
+      { shiftID: 3, shiftDate: '2023-01-01', shiftStartTime: '11:00', shiftEndTime: '19:00' }, // Past shift
+    ];
+  
+    axios.get.mockResolvedValue({ status: true, data: shifts });
+  
+    const wrapper = shallow(<CancelShiftRequest employeeId="1" />);
+  
+    // Wait for the useEffect to complete
+    await new Promise(resolve => setImmediate(resolve));
+
+    // Log the rendered HTML structure
+  console.log('Rendered HTML:', wrapper.html());
+
+  // Log information about each tr element
+  wrapper.find('tr').forEach((tr, index) => {
+    console.log(`TR Element ${index + 1}:`);
+    console.log('HTML:', tr.html());
+    console.log('Text Content:', tr.text());
+  });
+  
+    // Assert that only the future shifts are rendered in the table
+    const futureShifts = shifts.filter(shift => new Date(shift.shiftDate) > new Date());
+  
+    futureShifts.forEach((shift, index) => {
+      const tr = wrapper.find('tr').at(index + 1); // Adding 1 to skip the header row
+      expect(tr.find('td').at(0).text()).toEqual(shift.shiftID.toString());
+      expect(tr.find('td').at(1).text()).toEqual(new Date(shift.shiftDate).toISOString().split('T')[0]);
+      expect(tr.find('td').at(2).text()).toEqual(shift.shiftStartTime);
+      expect(tr.find('td').at(3).text()).toEqual(shift.shiftEndTime);
+      // Add more assertions if needed
+    });
+  
+    // Ensure there are no extra rows
+    expect(wrapper.find('tr')).toHaveLength(futureShifts.length + 1); // +1 for the header row
+  });
+  
+
+
+
+
+
+  it('should get shifts', async () => {
+    // Mocking the response with both future and past shifts
+    const shifts = [
+      { shiftID: 1, shiftDate: '2025-01-01', shiftStartTime: '09:00', shiftEndTime: '17:00' }, // Future shift
+      { shiftID: 2, shiftDate: '2022-01-01', shiftStartTime: '10:00', shiftEndTime: '18:00' }, // Past shift
+    ];
+
+    const wrapper = shallow(<CancelShiftRequest employeeId="1" />);
+
+    axios.get.mockResolvedValueOnce({ data: { status: true, data: shifts } });
+
+    // Wait for the useEffect to complete
+    await new Promise((resolve) => setImmediate(resolve));
+
+    // Force re-render after fetching shifts
+    wrapper.update();
+
+    //console.log(wrapper.html());
+    // Assert that the component renders only the future shift
+    expect(wrapper.find('tr')).toHaveLength(2);
+    expect(wrapper.find('tr td').at(0).text()).toEqual('1'); // Check the Shift ID of the displayed shift
+  });
+
   it('handles cancel shift request', async () => {
     const wrapper = shallow(<CancelShiftRequest employeeId="1" />);
-    console.log(wrapper.html());
-    const mockShift = { shiftID: 1, emp_id: 1, emp_name: 'John', shiftDate: '2024-11-11', shiftStartTime: '09:00:00', shiftEndTime: '17:00:00', createAt: '2023-11-16 19:00:00', updatedAt: '2023-11-16 19:00:00'};
-    // Mock the Axios GET request to return your desired data
-    axios.get.mockResolvedValueOnce({ data: { status: true, data: [mockShift] } });
 
-    // Wait for any asynchronous rendering or updates
-    await new Promise(resolve => setImmediate(resolve));
+    // Mock the response for fetching shifts
+    const shifts = [{ shiftID: 3000, emp_id: 1, emp_name: 'John', shiftDate: '2024-01-01', shiftStartTime: '09:00:00', shiftEndTime: '17:00:00', createdAt: '2023-10-01 19:00:00', updatedAt: '2023-10-01 19:00:00'}];
+    axios.get.mockResolvedValueOnce({ data: { status: true, data: shifts } });
 
-    // Find the state update function from the useState hook
-    const setShifts = wrapper.find(CancelShiftRequest).props().setShifts;
-
-    // Use the state update function to set the state with the shift data
-    setShifts([mockShift]);
+    // Wait for the useEffect to complete
+    await new Promise((resolve) => setImmediate(resolve));
     
-    console.log(wrapper.html());
-    // Mock the response from the API
-    axios.post.mockResolvedValueOnce({ data: 'Request sent successfully' });
-    
-    // Open the modal
-    wrapper.find('#cancelRequest').simulate('click');
+    // Force re-render after fetching shifts
+    wrapper.update();
 
-    // Simulate user input for "message"
-    wrapper.find('#message').simulate('change', { target: { value: 'Reason for cancellation' } });
+    //console.log(wrapper.html());
+    // Mock the selected shift and message
+    const selectedShift = { shiftID: 1 };
+    const message = 'Cancellation reason';
+    wrapper.find('#cancelRequest').simulate('click'); // Simulate clicking the cancel button
+    wrapper.update(); // Force re-render after state change
+    wrapper.setState({ selectedShift, message });
 
-    // Simulate user input for "file" (if applicable)
-    const fileInput = wrapper.find('#file');
-    if (fileInput.exists()) {
-        fileInput.instance().files = [new File(['file content'], 'filename.txt')];
-        fileInput.simulate('change');
-    }
+    // Mock the file
+    const file = new File(['file contents'], 'file.txt', { type: 'text/plain' });
+    wrapper.setState({ file });
 
-    // Click the "Confirm Cancel" button
-    wrapper.find('.btn-danger').at(1).simulate('click');
+    // Mock the axios post request
+    axios.post.mockResolvedValueOnce({ data: 'Success' });
 
-    // Wait for the asynchronous operation to complete
-    await new Promise(resolve => setImmediate(resolve));
+    // Simulate clicking the confirm cancel button
+    wrapper.find('#submit').simulate('click');
 
-    // Assert that the cancel shift request is made with the correct data
+    // Wait for the axios post request to complete
+    await new Promise((resolve) => setImmediate(resolve));
+
+    // Assert that the axios post request was called with the correct data
     expect(axios.post).toHaveBeenCalledWith('/api/cancelShiftRequest', expect.any(FormData));
   });
 });
