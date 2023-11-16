@@ -144,11 +144,20 @@ model.indicator = Var(model.Days, model.employee, within=Binary)
 
 # Define the 'assign' variable with a single set of tuples as indices
 model.assign = Var(model.Days * model.employee, within=NonNegativeIntegers)
-
+'''
 # Define the objective function
 def objective_rule(model):
     return sum(model.Salary[s] * model.assign[d, e] for d in model.Days for e in model.employee for s in model.Shift) + \
            sum(0.5 * model.Salary['partTime'] * (1 - model.assign[d, e]) for d in model.Days for e in model.employee if model.employeeType[e, 'partTime'] == 1)
+model.objective = Objective(rule=objective_rule, sense=minimize)
+'''
+
+# Modify the objective function to prioritize full-time employees
+def objective_rule(model):
+    return sum(model.Salary[s] * model.assign[d, e] for d in model.Days for e in model.employee for s in model.Shift) + \
+           sum(0.5 * model.Salary['partTime'] * (1 - model.assign[d, e]) for d in model.Days for e in model.employee if model.employeeType[e, 'partTime'] == 1) + \
+           sum(0.1 * model.Salary['fullTime'] * model.assign[d, e] for d in model.Days for e in model.employee if model.employeeType[e, 'fullTime'] == 1)
+
 model.objective = Objective(rule=objective_rule, sense=minimize)
 
 # Staff requirement constraint
@@ -158,7 +167,7 @@ def staff_requirement_constraint(model, d):
     # Return the constraint expression (equality or inequality)
     return total_assigned >= min_required
 model.staff_constraints = Constraint(model.Days, rule=staff_requirement_constraint)
-
+'''
 # Define availability constraints
 def availability_constraint(model, d, e):
     if (d, e) in model.availability:
@@ -167,6 +176,7 @@ def availability_constraint(model, d, e):
         return Constraint.Skip  # If the parameter is undefined, skip the constraint
 
 model.availability_constraints = Constraint(model.Days, model.employee, rule=availability_constraint)
+
 def full_time_work_or_leave_constraint(model, e):
     if model.employeeType[e, 'fullTime'] == 1:
         total_assigned = sum(model.assign[d, e] for d in model.Days)
@@ -191,6 +201,20 @@ model.avoid_leave_constraints = Constraint(model.Days, model.employee, rule=avoi
 
 # Define binary decision variable for leave
 model.leave = Var(model.Days * model.employee, within=Binary)
+'''
+
+# Adjust availability constraint to prioritize full-time employees
+def availability_constraint(model, d, e):
+    if (d, e) in model.availability:
+        if model.employeeType[e, 'fullTime'] == 1:
+            # Prioritize full-time employees
+            return model.assign[d, e] == model.availability[d, e]
+        else:
+            return model.assign[d, e] <= model.availability[d, e]
+    else:
+        return Constraint.Skip
+
+model.availability_constraints = Constraint(model.Days, model.employee, rule=availability_constraint)
 
 solver = SolverFactory('glpk', executable=r'C:\Users\email\OneDrive\Desktop\EmpRoster\glpk-5.0\w64\glpsol.exe')
 
@@ -241,7 +265,7 @@ for day, required_staff in staffRequired.items():
 # Print all the messages together
 for message in messages:
     print(message)
-
+'''
 noLeave_messages = []
 
 # Calculate the total days full-time employees have either submitted their availability or submitted leave
@@ -262,7 +286,7 @@ for e in model.employee:
 # Print all the messages for employees with no availability or leave together
 for message in noLeave_messages:
     print(message)
-
+'''
 # Check if the solver was successful
 if result.solver.status == SolverStatus.ok and result.solver.termination_condition == TerminationCondition.optimal:
     # Retrieve the optimized shift data from the model
@@ -296,7 +320,6 @@ formatted_message = "\n".join([
     unsuccessfulMsg,
     *messages,
     "\n",
-    *noLeave_messages,
     success
 ])
 
