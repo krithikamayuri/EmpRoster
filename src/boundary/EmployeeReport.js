@@ -1,7 +1,7 @@
+import jsPDF from 'jspdf';
 const React = require('react');
 const { useState, useEffect } = require('react');
 const { getHoursWorked } = require('../controller/shiftController');
-const jsPDF = require('jspdf');
 require('jspdf-autotable');
 
 //method to calculate the hours worked for each employee according to shifts
