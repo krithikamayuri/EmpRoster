@@ -9,6 +9,8 @@ const shiftInformation = sequelize.define('shiftInformation', {
   staffRequired: DataTypes.INTEGER,
   startTime: DataTypes.TIME,
   endTime: DataTypes.TIME,
+  customerName: DataTypes.STRING,
+  customerAddress: DataTypes.STRING
 });
 
 (async () => {

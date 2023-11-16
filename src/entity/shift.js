@@ -19,6 +19,8 @@ const Shift = sequelize.define('Shift', {
   shiftDate: DataTypes.DATEONLY,
   shiftStartTime: DataTypes.TIME,
   shiftEndTime: DataTypes.TIME,
+  customerName: DataTypes.STRING,
+  customerAddress: DataTypes.STRING
 });
 
 // Define the association between Shift and Employee models
@@ -35,6 +37,8 @@ Employee.hasMany(Shift, { foreignKey: 'emp_id', sourceKey: 'emp_id' });
       shiftDate: '2023-10-12', 
       shiftStartTime: '10:00:00',
       shiftEndTime: '18:00:00',
+      customerName: 'Sarah',
+      customerAddress: '123 Clementi Rd'
     },
     {
       emp_id: 3,
@@ -42,6 +46,8 @@ Employee.hasMany(Shift, { foreignKey: 'emp_id', sourceKey: 'emp_id' });
       shiftDate: '2023-10-13',
       shiftStartTime: '12:00:00',
       shiftEndTime: '21:00:00',
+      customerName: 'Shane',
+      customerAddress: '45 orchard Rd'
     },
     {
       emp_id: 1,
@@ -49,6 +55,8 @@ Employee.hasMany(Shift, { foreignKey: 'emp_id', sourceKey: 'emp_id' });
       shiftDate: '2023-11-01',
       shiftStartTime: '10:00:00',
       shiftEndTime: '19:00:00',
+      customerName: 'Sarah',
+      customerAddress: '30 Jurong street'
     }
   ];
 

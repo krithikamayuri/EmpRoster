@@ -712,7 +712,7 @@ app.post('/api/assign-employees', async (req, res) => {
 
         // Use map to insert the shift information in a single step
         const insertedShifts = await Promise.all(weekData.map(async (dayData) => {
-            const { date, staffRequired, startTime, endTime } = dayData;
+            const { date, staffRequired, startTime, endTime, customerName, customerAddress } = dayData;
 
             // Add the data to the shiftInformation table and return the result
             return await shiftInformation.create({
@@ -720,6 +720,8 @@ app.post('/api/assign-employees', async (req, res) => {
                 staffRequired,
                 startTime,
                 endTime,
+          customerName,
+          customerAddress
             });
         }));
 
@@ -756,6 +758,8 @@ app.post('/api/inputShift', async (req, res) => {
                 const [date, emp_name] = shiftKey.split(',');
                 const shiftStartTime = shiftData[`${shiftKey}_start_time`];
                 const shiftEndTime = shiftData[`${shiftKey}_end_time`];
+                const customerName = shiftData[`${shiftKey}_customerName`];
+                const customerAddress = shiftData[`${shiftKey}_customerAddress`];
 
                 // Find the emp_id based on emp_name
                 const employee = await Employee.findOne({
@@ -774,6 +778,8 @@ app.post('/api/inputShift', async (req, res) => {
                         shiftDate: new Date(date),
                         shiftStartTime: shiftStartTime,
                         shiftEndTime: shiftEndTime,
+                        customerName: customerName,
+                        customerAddress: customerAddress
                     });
 
                 } else {
@@ -844,7 +850,7 @@ app.get('/api/employeeIds', async (req, res) => {
 app.get('/api/shiftTimings', async (req, res) => {
     try {
         const shiftTimings = await shiftInformation.findAll({
-            sttributes: ['date', 'startTime', 'endTime'],
+            attributes: ['date', 'startTime', 'endTime', 'customerName', 'customerAddress'],
         });
 
         // Create an object to store shift timings in the desired format
@@ -852,8 +858,8 @@ app.get('/api/shiftTimings', async (req, res) => {
 
         // Convert the Sequelize instances to the correct format
         shiftTimings.forEach((shiftTiming) => {
-            const { date, startTime, endTime } = shiftTiming;
-            shiftTimingsFormatted[date] = [startTime, endTime];
+            const { date, startTime, endTime, customerName, customerAddress} = shiftTiming;
+            shiftTimingsFormatted[date] = [startTime, endTime, customerName, customerAddress];
         });
 
         res.json(shiftTimingsFormatted);
