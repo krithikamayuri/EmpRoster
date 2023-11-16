@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export const adminDashboard = async (adminDashboard) => {
-  const url = '/api/register-admins';
+export const addEmployee = async (addEmployee) => {
+  const url = '/api/createEmployee';
 
   try {
-    const response = await axios.post(url, adminDashboard);
+    const response = await axios.post(url, addEmployee);
 
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);

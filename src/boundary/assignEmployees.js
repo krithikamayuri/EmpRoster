@@ -34,7 +34,7 @@ function AssignEmployees() {
   for (let hour = 8; hour < 19; hour++) {
     for (let minute = 0; minute < 60; minute += 30) {
       if (hour === 18 && minute === 30) {
-        break; // Skip 16:30
+        break;
       }
       const formattedHour = hour.toString().padStart(2, '0');
       const formattedMinute = minute.toString().padStart(2, '0');
@@ -47,7 +47,6 @@ function AssignEmployees() {
   };
 
   const handleReportButtonClick = () => {
-    // Set the state to indicate that the button has been pressed
     setReportButtonPressed(true);
     setShiftButtonPressed(false);
   }
@@ -99,9 +98,7 @@ function AssignEmployees() {
         date: moment(daysInWeek[index]).format('YYYY-MM-DD'),
       }));
 
-      // Check if the 6th item exists and update its date to a specific value
     if (updatedWeekData.length >= 7) {
-      // Set a specific date for the 6th item (index 5) or adjust as needed
       updatedWeekData[6] = {
         ...updatedWeekData[6],
         date: '2025-11-11',
@@ -180,7 +177,6 @@ function AssignEmployees() {
 
     // Check if start time and end time are the same
     if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime === updatedData.endTime) {
-      // Display an error message or handle it as needed
       const errorMessage = (
         <>
           Start and end timings are the same for, {updatedData.date}.<br />
@@ -198,8 +194,6 @@ function AssignEmployees() {
 
     // Check if end time is later than start time
     if (updatedData.startTime !== null && updatedData.endTime !== null && updatedData.startTime > updatedData.endTime) {
-      // Display an error message or handle it as needed
-      //const errorMessage = `End time must be later than start time for ${updatedData.date}`;
       const errorMessage = (
         <>
           End time is earlier than start time for, {updatedData.date}.<br />

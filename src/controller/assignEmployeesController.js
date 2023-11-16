@@ -1,7 +1,7 @@
 export const assignEmployees = async (weekData) => {
   const url = '/api/assign-employees';
   
-  const requestOptions = {
+  const assignEmployees = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ export const assignEmployees = async (weekData) => {
   };
 
   try {
-    const response = await fetch(url, requestOptions);
+    const response = await fetch(url, assignEmployees);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import Report from './report';
 import AssignEmployees from './assignEmployees';
 import LatecomerReports from './LatecomerReports';
 import ShiftCancel from './processShiftCancel';
 import ManagerDashboard from './managerDashboard';
+import { addEmployee } from '../controller/addEmployeeController';
 
 function AddEmployee() {
   const [emp_phoneno, setEmp_phoneno] = useState("");
@@ -185,8 +185,9 @@ function AddEmployee() {
         return;
       }
       setIsLoading(true); // Set loading state to true
-      axios
-        .post('/api/createEmployee', formdata)
+      //axios
+      //  .post('/api/createEmployee', formdata)
+      addEmployee(formdata)
         .then((response) => {
           console.log('Data saved successfully:', response.data);
 

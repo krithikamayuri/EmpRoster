@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { adminDashboard } from '../controller/adminDashboardController';
 
 function AdminDashboard() {
 
@@ -115,8 +115,9 @@ function AdminDashboard() {
       return;
     }
     setIsLoading(true); // Set loading state to true
-    axios
-      .post('/api/register-admins', formdata)
+    //axios
+    //  .post('/api/register-admins', formdata)
+    adminDashboard(formdata)
       .then((response) => {
         console.log('Data saved successfully:', response.data);
 
