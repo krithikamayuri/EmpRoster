@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import AssignEmployees from '../src/boundary/AssignEmployees';
+import AssignEmployees from '../src/boundary/assignEmployees';
 import { assignEmployees } from '../src/controller/assignEmployeesController';
 import { act } from 'react-dom/test-utils';
 
