@@ -98,6 +98,10 @@ function ManagerDashboard(props) {
     populateCalendar();
   }, []);
 
+  useEffect(() => {
+    console.log("events: ", selectedEvent);
+  }, [selectedEvent]);
+
   async function populateCalendar() {
     try {
       console.log("populate");
@@ -124,24 +128,24 @@ function ManagerDashboard(props) {
 
   async function handleEventClick(info) {
     try {
-      console.log("info", info);
+      let eventDate = new Date(info.event.start);
+      let currentDate = new Date();
 
-      let shiftIdParam = parseInt(info.event._def.publicId, 10);
+      let shiftIdParam = Number(info.event._def.publicId);
       console.log("shiftIdParam: ", shiftIdParam)
       let response = await getCalendarInfoByShiftID(shiftIdParam);
       if (response) {
-          const transformedShifts = response.map((shift) => ({
+        if (eventDate > currentDate) {
+          const transformedShifts = {
             id: shiftIdParam,
-            title: `Shift ${shift.id}`,
-            name: shift.name,
-            date: shift.date ? shift.date.split('T')[0] : '',
-            start: shift.date && shift.start ? `${shift.date.split('T')[0]}T${shift.start}` : '',
-            end: shift.date && shift.end ? `${shift.date.split('T')[0]}T${shift.end}` : '',
-          }));
-          // Set the selected event for the modal
-          console.log("transformedShifts: ", transformedShifts)
+            title: `Shift ${response[0].id}`,
+            name: response[0].name,
+            date: response[0].date ? response[0].date.split('T')[0] : '',
+            start: response[0].date && response[0].start ? `${response[0].date.split('T')[0]}T${response[0].start}` : '',
+            end: response[0].date && response[0].end ? `${response[0].date.split('T')[0]}T${response[0].end}` : '',
+          }
           setSelectedEvent({ transformedShifts });
-        
+        }
       }
       else {
         setErrorMessage('Cannot load shift info.');

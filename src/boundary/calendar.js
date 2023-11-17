@@ -16,42 +16,39 @@ function Calendar({ employeeId }) {
 
   async function handleEventClick(info) {
     try {
-    let eventDate = new Date(info.event.start);
-    let currentDate = new Date();
-    console.log("info", info);
+      let eventDate = new Date(info.event.start);
+      let currentDate = new Date();
 
-    let shiftIdParam = Number(info.event._def.publicId);
-    console.log("shiftIdParam: " , shiftIdParam)
-    let response = await getCalendarInfoByShiftID(shiftIdParam);
-    if(response){
-      if (eventDate > currentDate) {
-        const transformedShifts = response.map((shift) => ({
-          id: shiftIdParam,
-          title: `Shift ${shift.id}`,
-          name: shift.name,
-          date: shift.date ? shift.date.split('T')[0] : '',
-          start: shift.date && shift.start ? `${shift.date.split('T')[0]}T${shift.start}` : '',
-          end: shift.date && shift.end ? `${shift.date.split('T')[0]}T${shift.end}` : '',
-        }));
-        // Set the selected event for the modal
-        console.log("transformedShifts: " , transformedShifts)
-        setSelectedEvent({transformedShifts});
-      } else {
-        // Show a visual error message for past events
-        setErrorMessage('Cannot click on past events.');
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 3000); // Clear the error message after 3 seconds
+      let shiftIdParam = Number(info.event._def.publicId);
+      console.log("shiftIdParam: ", shiftIdParam)
+      let response = await getCalendarInfoByShiftID(shiftIdParam);
+      if (response) {
+        if (eventDate > currentDate) {
+          const transformedShifts = {
+            id: shiftIdParam,
+            title: `Shift ${response[0].id}`,
+            name: response[0].name,
+            date: response[0].date ? response[0].date.split('T')[0] : '',
+            start: response[0].date && response[0].start ? `${response[0].date.split('T')[0]}T${response[0].start}` : '',
+            end: response[0].date && response[0].end ? `${response[0].date.split('T')[0]}T${response[0].end}` : '',
+          }
+          setSelectedEvent({ transformedShifts });
+        } else {
+          // Show a visual error message for past events
+          setErrorMessage('Cannot click on past events.');
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000); // Clear the error message after 3 seconds
+        }
       }
+      else {
+        setErrorMessage('Cannot load shift info.');
+        console.error("events failed");
+      }
+
+    } catch (e) {
+      console.error("populate failed: " + e);
     }
-    else{
-      setErrorMessage('Cannot load shift info.');
-      console.error("events failed");
-    }
-    
-  } catch (e) {
-    console.error("populate failed: " + e);
-  }
   };
 
   const handleCloseModal = () => {

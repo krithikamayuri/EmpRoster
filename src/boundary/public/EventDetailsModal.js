@@ -34,11 +34,11 @@ function EventDetailsModal({ eventDetails, onClose }) {
           <button className="close-button" onClick={onClose}>&times;</button>
         </div>
         <div className="modal-body">
-          <p><strong>Title:</strong> {eventDetails.title}</p>
-          <p><strong>Name:</strong> {eventDetails.name}</p>
-          <p><strong>Date:</strong> {eventDetails.date}</p>
-          <p><strong>Start Time:</strong> {eventDetails.start}</p>
-          <p><strong>End Time:</strong> {eventDetails.end}</p>
+          <p><strong>Title:</strong> {eventDetails.transformedShifts.title}</p>
+          <p><strong>Name:</strong> {eventDetails.transformedShifts.name}</p>
+          <p><strong>Date:</strong> {eventDetails.transformedShifts.date}</p>
+          <p><strong>Start Time:</strong> {eventDetails.transformedShifts.start}</p>
+          <p><strong>End Time:</strong> {eventDetails.transformedShifts.end}</p>
         </div>
         <div className="modal-footer">
           <button className="add-event-button" onClick={handleAddEvent}>Add Event</button>

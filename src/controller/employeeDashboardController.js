@@ -31,7 +31,7 @@ export const getCalendarInfo = async (empId) => {
 
 export const getCalendarInfoByShiftID = async (shiftID) => {
   try {
-    let url = "http://localhost:5000/api/calendar/fetch-events/" + shiftID;
+    let url = "http://localhost:5000/api/calendar/fetch-shift/" + shiftID;
     const response = await axios.post(url);
     return response.data;
   } catch (error) {
