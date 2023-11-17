@@ -13,7 +13,6 @@ import Empdashboardnav from './empdashboardnav';
 import MySwapRequests from "./myswaprequests";
 import CancelShiftRequest from './CancelShiftRequest';
 import TimeTracking from './TimeTracking';
-import GoogleCalendarComponent from './GoogleCalendarComponent';
 import Settings from './Settings';
 import Calendar from './calendar';
 
@@ -58,8 +57,6 @@ function EmployeeDashboard(props) {
           <Route path="/timetracker" element={<TimeTracking userEmail={userEmail} />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/" element={<Calendar employeeId={employeeId}/>} />
-
-          <Route path="/g-calendar" element={<GoogleCalendarComponent events={events} />} />
         </Routes>
       </Router>
     </div>
