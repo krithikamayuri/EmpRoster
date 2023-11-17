@@ -1,100 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import EventDetailsModal from './public/EventDetailsModal'; // Import the modal component
-import { getCalendarInfo, getCalendarInfoByShiftID } from '../controller/employeeDashboardController';
+import axios from 'axios';
 
-function Calendar({ employeeId }) {
+function Calendar() {
   const [events, setEvents] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
-    populateCalendar(employeeId);
-  }, [employeeId]);
-
-  async function handleEventClick(info) {
-    try {
-    let eventDate = new Date(info.event.start);
-    let currentDate = new Date();
-    console.log("info", info);
-
-    let shiftIdParam = Number(info.event._def.publicId);
-    console.log("shiftIdParam: " , shiftIdParam)
-    let response = await getCalendarInfoByShiftID(shiftIdParam);
-    if(response){
-      if (eventDate > currentDate) {
-        const transformedShifts = response.map((shift) => ({
-          id: shiftIdParam,
-          title: `Shift ${shift.id}`,
-          name: shift.name,
-          date: shift.date ? shift.date.split('T')[0] : '',
-          start: shift.date && shift.start ? `${shift.date.split('T')[0]}T${shift.start}` : '',
-          end: shift.date && shift.end ? `${shift.date.split('T')[0]}T${shift.end}` : '',
-        }));
-        // Set the selected event for the modal
-        console.log("transformedShifts: " , transformedShifts)
-        setSelectedEvent({transformedShifts});
-      } else {
-        // Show a visual error message for past events
-        setErrorMessage('Cannot click on past events.');
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 3000); // Clear the error message after 3 seconds
-      }
-    }
-    else{
-      setErrorMessage('Cannot load shift info.');
-      console.error("events failed");
-    }
-    
-  } catch (e) {
-    console.error("populate failed: " + e);
-  }
-  };
-
-  const handleCloseModal = () => {
-    setSelectedEvent(null);
-  };
-
-  async function populateCalendar(employeeIdParam) {
-    try {
-      console.log("populate");
-      let response = await getCalendarInfo(employeeIdParam);
-      console.log("response: ", response);
-      if (response) {
-        const transformedEvents = response.map((shift) => ({
-          id: shift.id,
-          title: `Shift ${shift.id}`,
-          date: shift.date ? shift.date.split('T')[0] : '',
-          start: shift.date && shift.start ? `${shift.date.split('T')[0]}T${shift.start}` : '',
-          end: shift.date && shift.end ? `${shift.date.split('T')[0]}T${shift.end}` : '',
-        }));
-
-        setEvents(transformedEvents);
-      } else {
-        console.error("Response data is empty:", response);
-      }
-    } catch (e) {
-      console.error("populate failed: " + e);
-    }
-  }
+    // Make a POST request to fetch events from the server
+    axios.post('/calendar/fetch-events')
+      .then((response) => {
+        setEvents(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <div>
-      {errorMessage && <div style={{ color: 'red', marginBottom: '10px' }}>{errorMessage}</div>}
       <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
+        plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
         events={events}
-        eventClick={handleEventClick}
       />
-
-      {/* Render the modal if an event is selected */}
-      {selectedEvent && (
-        <EventDetailsModal eventDetails={selectedEvent} onClose={handleCloseModal} />
-      )}
     </div>
   );
 }

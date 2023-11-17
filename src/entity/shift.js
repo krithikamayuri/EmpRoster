@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../sequelize');
-const Employee = require('./employee'); // Import the Employee model
+const sequelize = require('../sequelize'); 
 
 const Shift = sequelize.define('Shift', {
   shiftID: {
@@ -8,13 +7,7 @@ const Shift = sequelize.define('Shift', {
     primaryKey: true,
     autoIncrement: true,
   },
-  emp_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Employee,
-      key: 'emp_id',
-    },
-  },
+  emp_id: DataTypes.INTEGER,
   emp_name: DataTypes.STRING,
   shiftDate: DataTypes.DATEONLY,
   shiftStartTime: DataTypes.TIME,
@@ -23,9 +16,6 @@ const Shift = sequelize.define('Shift', {
   customerAddress: DataTypes.STRING
 });
 
-// Define the association between Shift and Employee models
-Shift.belongsTo(Employee, { foreignKey: 'emp_id', targetKey: 'emp_id' });
-Employee.hasMany(Shift, { foreignKey: 'emp_id', sourceKey: 'emp_id' });
 (async () => {
   await sequelize.sync();
   console.log('Shift model synced with the database');
@@ -65,7 +55,6 @@ Employee.hasMany(Shift, { foreignKey: 'emp_id', sourceKey: 'emp_id' });
       // Use findOrCreate method to check if a record with the same emp_id and shiftDate already exists
       const [shift, created] = await Shift.findOrCreate({
         where: {
-          shiftID: data.shiftID,
           emp_id: data.emp_id,
           shiftDate: data.shiftDate,
         },

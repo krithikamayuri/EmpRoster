@@ -19,26 +19,6 @@ export const getEmployeesAsync = async () => {
   }
 }
 
-export const getCalendarInfo = async (empId) => {
-  try {
-    let url = "http://localhost:5000/api/calendar/fetch-events/" + empId;
-    const response = await axios.post(url);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export const getCalendarInfoByShiftID = async (shiftID) => {
-  try {
-    let url = "http://localhost:5000/api/calendar/fetch-events/" + shiftID;
-    const response = await axios.post(url);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
-
 // get all shifts by employee
 export const getShiftsByEmployee = async (empId) => {
   try {

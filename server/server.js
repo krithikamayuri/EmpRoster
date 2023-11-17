@@ -22,305 +22,66 @@ const CancelShiftRequest = require("../src/entity/shiftcancelrequests");
 const sequelize = require("../src/sequelize");
 const { Op } = require('sequelize');
 
-const app = express()
-
+const app = express();
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
 
 const { exec } = require('child_process');
-const bodyParser = require('body-parser');
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200, // For legacy browser support
-};
-
-// app.use(cors())
-app.use(cors(corsOptions));
-app.use(express.json({ limit: '10mb' }));
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 
+app.use(cors())
+app.use(express.json());
 
-// app.get('/', (req, res) => {
-//     res.render('index.html');
-// })
-
-// app.post('/oauth2callback', (req, res) => {
-//     const tkn = req.body.token;
-//     const fs = require('fs');
-//     const { google } = require('googleapis');
-
-//     const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
-//     // The file token.json stores the user's access and refresh tokens, and is
-//     // created automatically when the authorization flow completes for the first
-//     // time.
-//     const TOKEN_PATH = 'token.json';
-
-//     // Load client secrets from a local file.
-//     fs.readFile('credentials.json', (err, content) => {
-//         if (err) return console.log('Error loading client secret file:', err);
-//         // Authorize a client with credentials, then call the Google Calendar API.
-//         authorize(JSON.parse(content), listEvents);
-//     });
-
-//     /**
-//      * Create an OAuth2 client with the given credentials, and then execute the
-//      * given callback function.
-//      * @param {Object} credentials The authorization client credentials.
-//      * @param {function} callback The callback to call with the authorized client.
-//      */
-//     function authorize(credentials, callback) {
-//         const { client_secret, client_id, redirect_uris } = credentials.installed;
-//         const oAuth2Client = new google.auth.OAuth2(
-//             client_id, client_secret, redirect_uris[0]);
-
-//         // Check if we have previously stored a token.
-//         fs.readFile(TOKEN_PATH, (err, token) => {
-//             if (err) return getAccessToken(oAuth2Client, callback);
-//             oAuth2Client.setCredentials(JSON.parse(token));
-//             callback(oAuth2Client);
-//         });
-//     }
-
-//     /**
-//      * Get and store new token after prompting for user authorization, and then
-//      * execute the given callback with the authorized OAuth2 client.
-//      * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
-//      * @param {getEventsCallback} callback The callback for the authorized client.
-//      */
-//     function getAccessToken(oAuth2Client, callback) {
-//         oAuth2Client.getToken(tkn, (err, token) => {
-//             if (err) return console.error('Error retrieving access token', err);
-//             oAuth2Client.setCredentials(token);
-//             // Store the token to disk for later program executions
-//             fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-//                 if (err) return console.error(err);
-//                 console.log('Token stored to', TOKEN_PATH);
-//             });
-//             callback(oAuth2Client);
-//         });
-//     }
-
-//     /**
-//      * Lists the next events on the user's primary calendar.
-//      * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
-//      */
-//     function listEvents(auth) {
-//         async function fun() {
-//             const calendar = await google.calendar({ version: 'v3', auth });
-//             calendar.events.list({
-//                 calendarId: 'primary',
-//                 timeMin: (new Date()).toISOString(),
-//                 maxResults: 30,
-//                 singleEvents: true,
-//                 orderBy: 'startTime',
-//             }, (err, res) => {
-//                 if (err) return console.log('The API returned an error: ' + err);
-//                 const events = res.data.items;
-//                 if (events.length) {
-//                     console.log('Your upcoming events:', events);
-//                     events.map((event, i) => {
-//                         var_arr.push(event);
-//                     });
-//                 } else {
-//                     console.log('No upcoming events found.');
-//                 }
-//             });
-//         }
-//         fun()
-//     }
-//     res.send(var_arr)
-//     res.render('index.html')
-// });
-
-
-// app.post('/events', (req, res) => {
-//     // Require google from googleapis package.
-//     const { google } = require('googleapis')
-//     // Require oAuth2 from our google instance.
-//     const { OAuth2 } = google.auth
-
-//     // Create a new instance of oAuth and set our Client ID & Client Secret.
-//     const oAuth2Client = new OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
-
-//     // Call the setCredentials method on our oAuth2Client instance and set our refresh token.
-//     oAuth2Client.setCredentials({
-//         refresh_token: process.env.REFRESH_TOKEN,
-//     })
-
-//     // Create a new calender instance.
-//     const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
-
-//     // Create a new event start date instance for temp uses in our calendar.
-//     const eventStartTime = new Date()
-//     eventStartTime.setDate(eventStartTime.getDay() + 2)
-
-//     // Create a new event end date instance for temp uses in our calendar.
-//     const eventEndTime = new Date()
-//     eventEndTime.setDate(eventEndTime.getDay() + 2)
-//     eventEndTime.setMinutes(eventEndTime.getMinutes() + 60)
-
-//     // Create a dummy event for temp uses in our calendar
-//     const event = {
-//         summary: `${req.body.summary}`,
-//         description: `${req.body.description}`,
-//         colorId: 6,
-//         start: {
-//             dateTime: eventStartTime,
-//         },
-//         end: {
-//             dateTime: eventEndTime,
-//         },
-//     }
-
-//     // Check if we a busy and have an event on our calendar for the same time.
-//     calendar.freebusy.query(
-//         {
-//             resource: {
-//                 timeMin: eventStartTime,
-//                 timeMax: eventEndTime,
-//                 items: [{ id: 'primary' }],
-//             },
-//         },
-//         (err, res) => {
-//             // Check for errors in our query and log them if they exist.
-//             if (err) return console.error('Free Busy Query Error: ', err)
-
-//             // Create an array of all events on our calendar during that time.
-//             const eventArr = res.data.calendars.primary.busy
-
-//             // Check if event array is empty which means we are not busy
-//             if (eventArr.length === 0) {
-//                 // If we are not busy create a new calendar event.
-//                 return calendar.events.insert(
-//                     { calendarId: 'primary', resource: event },
-//                     err => {
-//                         // Check for errors and log them if they exist.
-//                         if (err) return console.error('Error Creating Calender Event:', err)
-//                         // Else log that the event was created.
-//                         return console.log('Event created successfully.')
-//                     })
-//             }
-//             // If event array is not empty log that we are busy.
-//             return console.log(`Sorry I'm busy for that time...`)
-//         }
-//     )
-//     console.log(req.body)
-//     const sgMail = require('@sendgrid/mail')
-//     sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-//     const msg = {
-//         to: req.body.to, // Change to your recipient
-//         from: 'your email goes here', // Change to your verified sender
-//         subject: req.body.summary,
-//         text: req.body.description,
-//         html: req.body.description,
-//     }
-//     sgMail
-//         .send(msg)
-//         .then(() => {
-//             console.log('Email sent')
-//         })
-//         .catch((error) => {
-//             console.error(error)
-//         })
-
-//     res.render('events.html')
-// });
-
-app.post('/api/calendar/fetch-events/:empId', async (req, res) => {
-    try {
-        console.log('Received POST request to /calendar/fetch-events');
-        // Query the database to retrieve shift data
-        const shifts = await Shift.findAll({
-            where: {
-                emp_id: req.params.empId
-            }
-        });
-
-
-        // Format the shift data as FullCalendar events
-        const events = shifts.map((shift) => {
-            return {
-                id: shift.shiftID, // Include the ID
-                date: shift.shiftDate,
-                start: shift.shiftStartTime,
-                end: shift.shiftEndTime,
-            };
-        });
-
-        res.status(200).json(events);
-    } catch (error) {
-        console.error('Error fetching events:', error);
-        res.status(500).json({ error: 'Failed to fetch events' });
-    }
-});
-
-
-app.post('/api/calendar/fetch-events/:shiftID', async (req, res) => {
-    try {
-        console.log('Received POST request to /calendar/fetch-events');
-        // Query the database to retrieve shift data
-        let reqParam = req.params.shiftID;
-
-        // Use include to fetch associated Employee data
-        const shifts = await Shift.findByPk(reqParam, {
-            include: [{ model: Employee }],
-        });
-
-        const events = shifts.map((shift) => {
-            return {
-                id: shift.shiftID, // Include the ID
-                name: shift.Employee.emp_name, // Access emp_name through the associated Employee model
-                date: shift.shiftDate,
-                start: shift.shiftStartTime,
-                end: shift.shiftEndTime,
-            };
-        });
-
-        res.status(200).json(events);
-    } catch (error) {
-        console.error('Error fetching events:', error);
-        res.status(500).json({ error: 'Failed to fetch events' });
-    }
-});
-
-
-
-
-
-app.get('/api/calendar/fetch-events', async (req, res) => {
+app.get('/calendar/fetch-events', async (req, res) => {
     try {
         console.log('Received GET request to /calendar/fetch-events');
-        // Query the database to retrieve shift data
-        const shifts = await Shift.findAll();
-
-        // Format the shift data as FullCalendar events
-        const events = shifts.map((shift) => {
-            return {
-                id: shift.shiftID, // Include the ID
-                name: shift.emp_Name,
-                date: shift.shiftDate,
-                start: shift.shiftStartTime,
-                end: shift.shiftEndTime,
-            };
-        });
-
-        res.status(200).json(events);
+      // Query the database to retrieve shift data
+      const shifts = await Shift.findAll();
+  
+      // Format the shift data as FullCalendar events
+      const events = shifts.map((shift) => {
+        return {
+          id: shift.emp_id, // Include the ID
+          start: shift.shiftStartTime,
+          end: shift.shiftEndTime,
+        };
+      });
+      
+      res.status(200).json(events);
     } catch (error) {
-        console.error('Error fetching events:', error);
-        res.status(500).json({ error: 'Failed to fetch events' });
+      console.error('Error fetching events:', error);
+      res.status(500).json({ error: 'Failed to fetch events' });
     }
-});
-
-
-
-app.post("/api/createEmployee", async (req, res) => {
+  }); 
+/*
+  app.post('/calendar/fetch-events', (req, res) => {
+    try {
+      console.log('Received GET request to /calendar/fetch-events');
+  
+      // Hard-coded sample events for testing
+      const sampleEvents = [
+        {
+          id: 1,
+          start: '2023-11-10T10:00:00',
+          end: '2023-11-10T12:00:00',
+        },
+        {
+          id: 2,
+          start: '2023-11-12T14:00:00',
+          end: '2023-11-12T16:00:00',
+        },
+      ];
+  
+      res.status(200).json(sampleEvents);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      res.status(500).json({ error: 'Failed to fetch events' });
+    }
+  });*/
+app.post("/api/createEmployee", async(req, res) => {
     const { emp_email, emp_name, emp_emergency_contact, emp_phoneno, emp_psw, emp_address, emp_type } = req.body;
     console.log(req.body);
 
-    try {
+    try{
         let employee = null;
         employee = await Employee.findOne({
             where: {
@@ -335,7 +96,7 @@ app.post("/api/createEmployee", async (req, res) => {
             });
         }
 
-        if (employee === null) {
+        if(employee === null){
             const newEmp = Employee.build({
                 emp_name: emp_name,
                 emp_address: emp_address,
@@ -362,7 +123,7 @@ app.post("/api/createEmployee", async (req, res) => {
             });
         }
 
-    } catch (error) {
+    }catch (error){
         // Handle the error
         console.error(error);
         return res.status(500).json({
@@ -597,42 +358,42 @@ app.get('/api/emp_names', async (req, res) => {
 
 app.get('/api/clockInReports', async (req, res) => {
     try {
-        const clockIns = await ClockInOut.findAll({
-            attributes: ['clockId', 'empName', 'clockIn', 'date'],
-            include: [
-                {
-                    model: Shift,
-                    attributes: ['shiftStartTime'],
-                },
-            ],
+      const clockIns = await ClockInOut.findAll({
+        attributes: ['clockId', 'empName', 'clockIn', 'date'],
+        include: [
+            {
+              model: Shift,
+              attributes: ['shiftStartTime'],
+            },
+        ],
+      });
+  
+      if (clockIns.length > 0) {
+        const clockInList = clockIns.map((clockin) => ({
+          clock_id: clockin.clockId,
+          clock_name: clockin.empName,
+          clock_time: clockin.clockIn,
+          clock_date: clockin.date,
+          shift_start_time: clockin.Shift ? clockin.Shift.shiftStartTime : null,
+        }));
+  
+        res.json({
+          success: true,
+          message: 'Clock In information retrieved successfully',
+          clockIns: clockInList,
         });
-
-        if (clockIns.length > 0) {
-            const clockInList = clockIns.map((clockin) => ({
-                clock_id: clockin.clockId,
-                clock_name: clockin.empName,
-                clock_time: clockin.clockIn,
-                clock_date: clockin.date,
-                shift_start_time: clockin.Shift ? clockin.Shift.shiftStartTime : null,
-            }));
-
-            res.json({
-                success: true,
-                message: 'Clock In information retrieved successfully',
-                clockIns: clockInList,
-            });
-        } else {
-            res.json({
-                success: true,
-                message: 'No shifts found for the employee',
-                clockIns: [],
-            });
-        }
+      } else {
+        res.json({
+          success: true,
+          message: 'No shifts found for the employee',
+          clockIns: [],
+        });
+      }
     } catch (error) {
-        console.error('Database query error: ' + error);
-        res.status(500).json({ error: 'Database query error' });
+      console.error('Database query error: ' + error);
+      res.status(500).json({ error: 'Database query error' });
     }
-});
+  });
 
 
 app.get('/api/hoursWorked', async (req, res) => {
@@ -677,9 +438,9 @@ app.get('/api/hoursWorked', async (req, res) => {
 });
 
 app.get('/api/shiftCancelRequests', async (req, res) => {
-    try {
+    try{
         const shiftCancelRequests = await CancelShiftRequest.findAll();
-        if (shiftCancelRequests.length > 0) {
+        if(shiftCancelRequests.length > 0){
             const requestInfo = shiftCancelRequests.map((request) => ({
                 shift_empId: request.empId,
                 shift_shiftId: request.shiftId,
@@ -697,7 +458,7 @@ app.get('/api/shiftCancelRequests', async (req, res) => {
                 shiftCancelRequests: [],
             });
         }
-    } catch (err) {
+    } catch(err) {
         console.error('Database query error: ' + err);
         res.status(500).json({ error: 'Database query error' });
     }
@@ -706,9 +467,9 @@ app.get('/api/shiftCancelRequests', async (req, res) => {
 
 app.post('/api/assign-employees', async (req, res) => {
     try {
-        await shiftInformation.destroy({ where: {} });
-        // Parse the data from the request body
-        const { weekData } = req.body;
+      await shiftInformation.destroy({ where: {} });
+      // Parse the data from the request body
+      const {weekData} = req.body;
 
         // Use map to insert the shift information in a single step
         const insertedShifts = await Promise.all(weekData.map(async (dayData) => {
@@ -725,17 +486,17 @@ app.post('/api/assign-employees', async (req, res) => {
             });
         }));
 
-        // Respond with a success message and the inserted shift data
-        res.status(201).json({
-            success: true,
-            message: 'Assignment successful',
-            data: insertedShifts,
-        });
+      // Respond with a success message and the inserted shift data
+      res.status(201).json({
+        success: true,
+        message: 'Assignment successful',
+       data: insertedShifts,
+      });
     } catch (error) {
-        console.error('An error occurred:', error);
-        res.status(500).json({ message: 'Internal server error' });
+      console.error('An error occurred:', error);
+      res.status(500).json({ message: 'Internal server error' });
     }
-});
+  });
 
 app.post('/api/inputShift', async (req, res) => {
     try {
@@ -896,7 +657,7 @@ const sharedData = [];
 app.post('/api/availability', async (req, res) => {
     try {
         const newData = req.body; // Get the JSON data from the request body
-
+        
         // Clear the sharedData array
         sharedData.length = 0;
 
@@ -930,7 +691,7 @@ app.get('/api/availability', async (req, res) => {
                 for (const record of availability) {
                     const emp_id = record.emp_id;
                     const formattedDate = moment(record.date).format('YYYY-MM-DD');
-
+                   
                     // Find the emp_name based on emp_id
                     const employee = await Employee.findOne({
                         where: {
@@ -1010,7 +771,7 @@ app.get('/api/getemployeeshifts/:empId', async (req, res) => {
                 emp_id: req.params.empId,
                 shiftDate: {
                     [Sequelize.Op.gt]: today,
-                },
+                  },
             },
         });
         res.json(shifts);
@@ -1088,57 +849,57 @@ app.get("/api/getEmployeeByEmail/:email", async (req, res) => {
 
 app.post('/api/postavailable', async (req, res) => {
     try {
-        // Extract data from the request body
-        const { emp_id, date } = req.body;
-
-
-        const availabilityRecords = [];
-
-        // Create a new Availability record for each date
-        date.forEach(async (date) => {
-            const newAvailability = new Availability({
-                emp_id: emp_id,
-                date: date,
-            });
-
-            // Save the record to the database
-            await newAvailability.save();
-            availabilityRecords.push(newAvailability);
+      // Extract data from the request body
+      const { emp_id, date } = req.body;
+  
+   
+      const availabilityRecords = [];
+  
+      // Create a new Availability record for each date
+      date.forEach(async (date) => {
+        const newAvailability = new Availability({
+          emp_id: emp_id,
+          date: date,
         });
-
-        return res.json({
-            status: true,
-            availability: availabilityRecords,
-        });
+  
+        // Save the record to the database
+        await newAvailability.save();
+        availabilityRecords.push(newAvailability);
+      });
+  
+      return res.json({
+        status: true,
+        availability: availabilityRecords,
+      });
     } catch (error) {
-        // Handle the error
-        console.error(error);
-        return res.status(500).json({
-            status: false,
-            msg: 'An error occurred while saving availability data',
-        });
+      // Handle the error
+      console.error(error);
+      return res.status(500).json({
+        status: false,
+        msg: 'An error occurred while saving availability data',
+      });
     }
-});
+  });
 // Define a route to search for an employee by email
 app.get('/api/employee/:email', async (req, res) => {
     const emp_email = req.params.email; // Get the email from the route parameter
-
+  
     try {
-        const employee = await Employee.findOne({
-            where: { emp_email },
-            attributes: ['emp_id', 'emp_name'],
-        });
-
-        if (employee) {
-            res.json({ emp_id: employee.emp_id, emp_name: employee.emp_name });
-        } else {
-            res.status(404).json({ error: 'Employee not found.' });
-        }
+      const employee = await Employee.findOne({
+        where: { emp_email },
+        attributes: ['emp_id','emp_name'],
+      });
+  
+      if (employee) {
+        res.json({ emp_id: employee.emp_id,emp_name:employee.emp_name });
+      } else {
+        res.status(404).json({ error: 'Employee not found.' });
+      }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while searching for the employee.' });
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred while searching for the employee.' });
     }
-});
+  });
 app.get('/api/employees/:emp_id', async (req, res) => {
     const emp_id = req.params.emp_id; // Get the emp_id from the route parameter
 
@@ -1197,7 +958,7 @@ app.get('/api/messages', (req, res) => {
             success: true,
             message: 'ok',
             data: msgData,
-        });
+          });
     } catch (error) {
         console.error('An error occurred:', error);
     }
@@ -1277,15 +1038,15 @@ app.post('/api/cancelShiftRequest', upload.single('file'), async (req, res) => {
     try {
 
         const { empId, shiftId, message, status } = req.body;
-        let fileName = null;
-
+        let fileName = null; 
+    
         if (req.file != null) {
-            const ext = req.file.mimetype.split("/")[1];
-            fileName = req.file.path + "." + ext;
-
-            fs.rename(req.file.path, fileName, () => {
-                console.log("File uploaded and renamed");
-            });
+          const ext = req.file.mimetype.split("/")[1];
+          fileName = req.file.path + "." + ext;
+          
+          fs.rename(req.file.path, fileName, () => {
+            console.log("File uploaded and renamed");
+          });
         }
 
 
@@ -1310,65 +1071,65 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.get('/api/getCancelShiftRequests', async (req, res) => {
     try {
-        const cancelShiftRequests = await CancelShiftRequest.findAll();
-        res.status(200).json({ status: true, data: cancelShiftRequests, message: 'Cancel shift requests retrieved successfully' });
+      const cancelShiftRequests = await CancelShiftRequest.findAll();
+      res.status(200).json({ status: true, data: cancelShiftRequests, message: 'Cancel shift requests retrieved successfully' });
     } catch (error) {
-        console.error('Error fetching cancel shift requests:', error);
-        res.status(500).json({ status: false, error: 'Failed to retrieve cancel shift requests' });
+      console.error('Error fetching cancel shift requests:', error);
+      res.status(500).json({ status: false, error: 'Failed to retrieve cancel shift requests' });
     }
 });
-
+ 
 app.post('/api/approveRequest/:id', async (req, res) => {
     const requestId = parseInt(req.params.id);
-
+  
     try {
-        const request = await CancelShiftRequest.findByPk(requestId);
-
-        if (!request) {
-            res.status(404).json({ status: false, message: 'Request not found' });
-            return;
-        }
-
-        // Update the request status to 'accepted'
-        request.status = 'accepted';
-        await request.save();
-        const shiftId = request.shiftId;
-        const shift = await Shift.findByPk(shiftId);
-
-        if (shift) {
-            await shift.destroy(); // Delete the shift
-        } else {
-            console.log('Shift not found for the request');
-        }
-
-        res.json({ status: true, message: 'Request approved and shift deleted' });
+      const request = await CancelShiftRequest.findByPk(requestId);
+  
+      if (!request) {
+        res.status(404).json({ status: false, message: 'Request not found' });
+        return;
+      }
+  
+      // Update the request status to 'accepted'
+      request.status = 'accepted';
+      await request.save();
+      const shiftId = request.shiftId;
+      const shift = await Shift.findByPk(shiftId);
+  
+      if (shift) {
+        await shift.destroy(); // Delete the shift
+      } else {
+        console.log('Shift not found for the request');
+      }
+  
+      res.json({ status: true, message: 'Request approved and shift deleted' });
     } catch (error) {
-        console.error('Error approving request:', error);
-        res.status(500).json({ status: false, message: 'Internal Server Error' });
+      console.error('Error approving request:', error);
+      res.status(500).json({ status: false, message: 'Internal Server Error' });
     }
 });
-
-
-// API route to reject a request
+  
+  
+  // API route to reject a request
 app.post('/api/rejectRequest/:id', async (req, res) => {
     const requestId = parseInt(req.params.id);
-
+  
     try {
-        const request = await CancelShiftRequest.findByPk(requestId);
-
-        if (!request) {
-            res.status(404).json({ status: false, message: 'Request not found' });
-        } else {
-            request.status = 'rejected';
-            await request.save(); // Save the updated status
-            res.json({ status: true, message: 'Request rejected' });
-        }
+      const request = await CancelShiftRequest.findByPk(requestId);
+  
+      if (!request) {
+        res.status(404).json({ status: false, message: 'Request not found' });
+      } else {
+        request.status = 'rejected';
+        await request.save(); // Save the updated status
+        res.json({ status: true, message: 'Request rejected' });
+      }
     } catch (error) {
-        console.error('Error rejecting request:', error);
-        res.status(500).json({ status: false, message: 'Internal Server Error' });
+      console.error('Error rejecting request:', error);
+      res.status(500).json({ status: false, message: 'Internal Server Error' });
     }
 });
-
+  
 
 app.get('/api/fetchShifts/:empId', async (req, res) => {
     const empId = req.params.empId;
@@ -1380,7 +1141,7 @@ app.get('/api/fetchShifts/:empId', async (req, res) => {
                 emp_id: empId,
                 shiftDate: {
                     [Sequelize.Op.gt]: today,
-                },
+                  },
             },
         });
         if (shiftsByEmployee.length > 0) {
@@ -1396,81 +1157,81 @@ app.get('/api/fetchShifts/:empId', async (req, res) => {
 
 app.post('/api/clockinout', async (req, res) => {
     try {
-        // Extract the shift data from the request body
-        const { empId, date, clockIn, clockOut } = req.body;
-
-        // Use the findOrCreate method to either create a new record or update an existing one
-        const [shift, created] = await ClockInOut.findOrCreate({
-            where: {
-                empId: parseInt(empId),
-                date: date,
-            },
-            defaults: {
-                empId: parseInt(empId),
-                date: date,
-                clockIn: clockIn,
-                clockOut: clockOut,
-            },
-        });
-
-        if (!created) {
-            // A record already exists for the same empId and date, so update the values
-            shift.clockIn = clockIn;
-            shift.clockOut = clockOut;
-            await shift.save();
-        }
-
-        res.status(200).json({ status: true, data: shift, message: 'Data added successfully' });
+      // Extract the shift data from the request body
+      const { empId, date, clockIn, clockOut } = req.body;
+  
+      // Use the findOrCreate method to either create a new record or update an existing one
+      const [shift, created] = await ClockInOut.findOrCreate({
+        where: {
+          empId: parseInt(empId),
+          date: date,
+        },
+        defaults: {
+          empId: parseInt(empId),
+          date: date,
+          clockIn: clockIn,
+          clockOut: clockOut,
+        },
+      });
+  
+      if (!created) {
+        // A record already exists for the same empId and date, so update the values
+        shift.clockIn = clockIn;
+        shift.clockOut = clockOut;
+        await shift.save();
+      }
+  
+      res.status(200).json({ status: true, data: shift, message: 'Data added successfully' });
     } catch (error) {
-        console.error('Error creating/updating shift:', error);
-        res.status(500).json({ error: 'Failed to create/update shift' });
+      console.error('Error creating/updating shift:', error);
+      res.status(500).json({ error: 'Failed to create/update shift' });
     }
-});
-
-
-
-app.post('/api/updateClockOut', async (req, res) => {
+  });
+  
+  
+  
+  app.post('/api/updateClockOut', async (req, res) => {
     try {
-        const { empId, date, clockOut } = req.body;
-
-        const [updated] = await ClockInOut.update(
-            { clockOut },
-            {
-                where: { empId, date },
-            }
-        );
-
-        if (updated > 0) {
-            res.status(200).json({ status: true, message: 'Clock out time and working hours updated successfully' });
-        } else {
-            res.status(404).json({ status: false, message: 'No matching record found to update' });
+      const { empId, date, clockOut } = req.body;
+  
+      const [updated] = await ClockInOut.update(
+        { clockOut },
+        {
+          where: { empId, date },
         }
+      );
+  
+      if (updated > 0) {
+        res.status(200).json({ status: true, message: 'Clock out time and working hours updated successfully' });
+      } else {
+        res.status(404).json({ status: false, message: 'No matching record found to update' });
+      }
     } catch (error) {
-        console.error('Error updating clock out time:', error);
-        res.status(500).json({ status: false, error: 'Failed to update clock out time' });
+      console.error('Error updating clock out time:', error);
+      res.status(500).json({ status: false, error: 'Failed to update clock out time' });
     }
-});
-
-
-app.get('/api/fetchClockInOut', async (req, res) => {
+  });
+  
+  
+  app.get('/api/fetchClockInOut', async (req, res) => {
     try {
-        const { empId, date } = req.query;
-
-        const record = await ClockInOut.findOne({
-            where: { empId, date },
-            attributes: ['clockIn', 'clockOut'],
-        });
-
-        if (record) {
-            res.status(200).json({ status: "true", data: record });
-        } else {
-            res.status(200).json({ status: false, message: 'No data available for this date and employee' });
-        }
+      const { empId, date } = req.query;
+  
+      const record = await ClockInOut.findOne({
+        where: { empId, date },
+        attributes: ['clockIn', 'clockOut'],
+      });
+  
+      if (record) {
+        res.status(200).json({ status: "true", data: record });
+      } else {
+        res.status(200).json({ status: false, message: 'No data available for this date and employee' });
+      }
     } catch (error) {
-        console.error('Error fetching clock in/out data:', error);
-        res.status(500).json({ status: false, error: 'Failed to fetch clock in/out data' });
+      console.error('Error fetching clock in/out data:', error);
+      res.status(500).json({ status: false, error: 'Failed to fetch clock in/out data' });
     }
-});
+  });
 
   app.get('/api/notifyshiftemployee/:empId', async (req, res) => {
     const today = new Date();
@@ -1498,15 +1259,14 @@ app.get('/api/fetchClockInOut', async (req, res) => {
 });
 
 
-// Serve static files from the 'build' folder in production
+  // Serve static files from the 'build' folder in production
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../build')));
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../build', 'index.html'));
+      res.sendFile(path.join(__dirname, '../build', 'index.html'));
     });
-}
-
-const PORT = process.env.PORT || 3001;
+  }
+  const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log("Server started on port " + PORT)
+    console.log("Server started on port 5000")
 })
