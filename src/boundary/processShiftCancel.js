@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import DownloadLink from './DownloadLink';
 import Report from './report';
 import AssignEmployees from './assignEmployees';
 import AddEmployee from './AddEmployee';
 import LatecomerReports from './LatecomerReports';
 import ManagerDashboard from './managerDashboard';
-
+import { getCancelShiftRequests } from '../controller/getCancelShiftController';
+import { rejectShiftRequest } from '../controller/rejectShiftController';
+import { approveShiftRequest } from '../controller/approveShiftController';
 
 function ShiftCancel() {
   const [requests, setRequests] = useState([]);
@@ -20,17 +21,14 @@ function ShiftCancel() {
   useEffect(() => {
     async function fetchRequests() {
       try {
-        const response = await axios.get('/api/getCancelShiftRequests');
-
-        if (response.data.status) {
-          setRequests(response.data.data);
-        } else {
-          console.error('Failed to fetch requests');
-        }
+        const data = await getCancelShiftRequests();
+        setRequests(data);
       } catch (error) {
-        console.error('Error fetching requests:', error);
+        console.error('Error fetching shift cancellation requests:', error);
       }
     }
+
+    fetchRequests();
 
     fetchRequests();
   }, []);
@@ -79,37 +77,35 @@ function ShiftCancel() {
 
   const handleReject = async (requestId) => {
     try {
-      const response = await axios.post(`/api/rejectRequest/${requestId}`); //pass in the request ID
-      if (response.data.status) {
-        // Update the status in the local state
+      const response = await rejectShiftRequest(requestId);
+      if (response.status) {
         setRequests((prevRequests) =>
           prevRequests.map((request) =>
             request.id === requestId ? { ...request, status: 'rejected' } : request
           )
         );
       } else {
-        console.error('Failed to reject request');
+        console.error('Failed to reject shift request');
       }
     } catch (error) {
-      console.error('Error rejecting request:', error);
+      console.error('Error rejecting shift request:', error);
     }
   };
 
   const handleApprove = async (requestId) => {
     try {
-      const response = await axios.post(`/api/approveRequest/${requestId}`); //pass in the request ID
-      if (response.data.status) {
-        // Update the status in the local state
+      const response = await approveShiftRequest(requestId);
+      if (response.status) {
         setRequests((prevRequests) =>
           prevRequests.map((request) =>
             request.id === requestId ? { ...request, status: 'accepted' } : request
           )
         );
       } else {
-        console.error('Failed to approve request');
+        console.error('Failed to approve shift request');
       }
     } catch (error) {
-      console.error('Error approving request:', error);
+      console.error('Error approving shift request:', error);
     }
   };
 

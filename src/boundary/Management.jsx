@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { registerAdmin } from '../controller/registerAdminController';
 
 function Management() {
 
@@ -114,28 +114,26 @@ function Management() {
       return;
     }
     setIsLoading(true); // Set loading state to true
-    axios
-      .post('/api/register-admins', formdata)
-      .then((response) => {
-        console.log('Data saved successfully:', response.data);
+    registerAdmin(formdata)
+    .then((response) => {
+      console.log('Data saved successfully:', response);
 
-        // Clear input fields after successful submission
+      // Clear input fields after successful submission
+      setEmp_psw("");
+      setEmp_email("");
+      setemp_name("");
+      setEmp_phoneno("");
+      setEmp_address("");
+      setConfirmPassword("");
 
-        setEmp_psw("");
-        setEmp_email("");
-        setemp_name("");
-        setEmp_phoneno("");
-        setEmp_address("");
-        setConfirmPassword("");
-
-        setIsLoading(false);
-        alert(response.data.msg);
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-        setIsLoading(false);
-        alert("Something went wrong");
-      });
+      setIsLoading(false);
+      alert(response.msg);
+    })
+    .catch((error) => {
+      console.error('Error saving data:', error);
+      setIsLoading(false);
+      alert("Something went wrong");
+    });
   };
 
 

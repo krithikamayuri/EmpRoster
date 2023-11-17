@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { fetchShifts } from '../controller/fetchShiftsController';
+import { cancelShiftRequest } from '../controller/cancelShiftRequestController';
 
 
 
@@ -12,12 +13,11 @@ const CancelShiftRequest = (props) => {
   const currentDate = new Date(); // Get the current date
   console.log(empId)
   useEffect(() => {
-    // getting the employee's shifts
-    axios.get(`/api/fetchShifts/${props.employeeId}`)
-      .then((response) => {
-        console.log(response.data);
-        if(response.data.status === true){
-            setShifts(response.data.data);
+    fetchShifts(props.employeeId)
+      .then((data) => {
+        console.log(data);
+        if (data.status === true) {
+          setShifts(data.data);
         }
       })
       .catch((error) => {
@@ -44,16 +44,16 @@ const CancelShiftRequest = (props) => {
       }
   
       if (message !== '') {
-        axios
-          .post('/api/cancelShiftRequest', formData)
-          .then((response) => {
-            console.log('Shift canceling request sent:', response.data);
-            alert('Cancellation request sent successfully');
-          })
-          .catch((error) => {
-            console.error('Error canceling shift:', error);
-            alert('Error in sending request');
-          });
+        // Using the imported function for canceling shift request
+        cancelShiftRequest(formData)
+        .then((response) => {
+          console.log('Shift canceling request sent:', response);
+          alert('Cancellation request sent successfully');
+        })
+        .catch((error) => {
+          console.error('Error canceling shift:', error);
+          alert('Error in sending request');
+        });
       } else {
         alert('Please provide a cancellation reason');
       }

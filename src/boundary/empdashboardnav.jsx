@@ -1,15 +1,15 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import nothing from "../images/notfound.jpg";
+import { notifyShiftEmployee } from "../controller/notifyShiftEmployeeController";
 
 function Empdashboardnav(props){
 console.log(props.employeeId)
 const[date, setDate]=useState([])
 const checkShiftNotifications = async () => {
   try {
-    const response = await axios.get(`/api/notifyshiftemployee/${props.employeeId}`);
-    setDate(response.data);
+    const response = await notifyShiftEmployee(props.employeeId);
+    setDate(response);
   } catch (error) {
     console.error('An error occurred:', error);
   }

@@ -6,7 +6,7 @@ import ShiftCancel from './processShiftCancel';
 import { useState } from 'react';
 import ManagerDashboard from './managerDashboard';
 import { useEffect } from 'react';
-import axios from 'axios';
+import { getClockInReports } from '../controller/clockInReportsController';
 
 function LatecomerReports() {
   const [reportButtonPressed, setReportButtonPressed] = useState(false);
@@ -18,10 +18,10 @@ function LatecomerReports() {
   const [lateComings, setLateComings] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/clockInReports')
-      .then(response => {
-        console.log(response.data); // Log the response data
-        setLateComings(response.data.clockIns); // Assuming clockIns is the array containing clock in reports
+    getClockInReports()
+      .then(clockIns => {
+        console.log(clockIns); // Log the response data
+        setLateComings(clockIns);
       })
       .catch(error => {
         console.error(error);

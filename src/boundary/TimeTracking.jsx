@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import axios from 'axios';
+import { getEmployeeData, getClockInOutData, recordClockIn, updateClockOut } from '../controller/TimeTrackingController';
 
 function TimeTracking(props) {
   const [clockInTime, setClockInTime] = useState(null);
@@ -11,78 +11,55 @@ function TimeTracking(props) {
   const [clockOutDisabled, setClockOutDisabled] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`/api/employee/${props.userEmail}`)
-      .then((response) => {
-        console.log(response.data);
-        setEmpId(response.data.emp_id);
-        setEmpName(response.data.emp_name);
-      })
-      .catch((error) => {
-        console.error('Error fetching user data:', error);
-      });
+    async function fetchData() {
+      try {
+        const employeeData = await getEmployeeData(props.userEmail);
+        setEmpId(employeeData.emp_id);
+        setEmpName(employeeData.emp_name);
 
-    axios
-      .get(`/api/fetchClockInOut?empId=${empId}&date=${moment().format('MMMM D, YYYY')}`)
-      .then(response => {
-        console.log(response.data);
-        if (response.data.status === "true") {
-         
-          setClockInTime(response.data.data.clockIn)
-          if(response.data.data.clockOut != null){
-            setClockOutTime(response.data.data.clockOut)
+        const clockInOutData = await getClockInOutData(empId, moment().format('MMMM D, YYYY'));
+        console.log(clockInOutData);
+        if (clockInOutData.status === "true") {
+          setClockInTime(clockInOutData.data.clockIn);
+          if (clockInOutData.data.clockOut !== null) {
+            setClockOutTime(clockInOutData.data.clockOut);
             setClockOutDisabled(true);
           }
-      
           setClockInDisabled(true);
-        
         }
-      })
-      .catch((error) => {
-        console.error('Error fetching clock in/out data:', error);
-      });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
   }, [empId]);
 console.log(clockInTime)
 console.log(clockOutTime)
   // Function to handle clock-in button click
-  const handleClockIn = () => {
+  const handleClockIn = async () => {
     const clockInTimestamp = moment();
-  
-    // Make a POST request to record the clock-in time
-    axios
-      .post('/api/clockinout', {
-        empId,
-        date: moment().format('MMMM D, YYYY'),
-        clockIn: clockInTimestamp.format('HH:mm:ss'), // Format as 24-hour time
-      })
-      .then((response) => {
-        setClockInTime(clockInTimestamp.format('HH:mm'));
-        setClockInDisabled(true);
-      })
-      .catch((error) => {
-        console.error('Error recording clock in time:', error);
-      });
+    try {
+      const response = await recordClockIn(empId, moment().format('MMMM D, YYYY'), clockInTimestamp.format('HH:mm:ss'));
+      setClockInTime(clockInTimestamp.format('HH:mm'));
+      setClockInDisabled(true);
+      console.log(response);
+    } catch (error) {
+      console.error('Error recording clock in time:', error);
+    }
   };
   
 
-  // Function to handle clock-out button click
-  const handleClockOut = () => {
+  const handleClockOut = async () => {
     const clockOutTimestamp = moment();
-  
-    // Make a POST request to update the clock-out time
-    axios
-      .post('/api/updateClockOut', {
-        empId,
-        date: moment().format('MMMM D, YYYY'),
-        clockOut: clockOutTimestamp.format('HH:mm:ss'), // Format as 24-hour time
-      })
-      .then((response) => {
-        setClockOutTime(clockOutTimestamp.format('HH:mm'));
-        setClockOutDisabled(true);
-      })
-      .catch((error) => {
-        console.error('Error updating clock out time:', error);
-      });
+    try {
+      const response = await updateClockOut(empId, moment().format('MMMM D, YYYY'), clockOutTimestamp.format('HH:mm:ss'));
+      setClockOutTime(clockOutTimestamp.format('HH:mm'));
+      setClockOutDisabled(true);
+      console.log(response);
+    } catch (error) {
+      console.error('Error updating clock out time:', error);
+    }
   };
 
   const handleGoBack = () => {
