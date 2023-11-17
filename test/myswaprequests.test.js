@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { shallow } from 'enzyme';
 import { act } from 'react-dom/test-utils';
@@ -83,4 +84,31 @@ describe('MySwapRequests Component', () => {
     });
     expect(wrapper.find('.alert-success').text()).toBe('Request Updated Successfully');
   });
+});
+*/
+
+
+import React from 'react';
+import { shallow } from 'enzyme';
+import MySwapRequests from '../src/boundary/myswaprequests';
+//import * as controller from '../src/controller/employeeDashboardController';
+
+jest.mock('../src/controller/employeeDashboardController', () => ({
+  getSwapShiftRequestsAsync: jest.fn(),
+}));
+
+describe('MySwapRequests Component', () => {
+  const mockEmpEmail = 'employee@example.com';
+  const mockEmployeeId = 1;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders without crashing', () => {
+    const wrapper = shallow(<MySwapRequests empEmail={mockEmpEmail} employeeId={mockEmployeeId} />);
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  
 });

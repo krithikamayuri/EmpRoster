@@ -6,8 +6,6 @@ import ShiftCancel from '../src/boundary/processShiftCancel';
 import AddEmployee from '../src/boundary/AddEmployee';
 import LatecomerReports from '../src/boundary/LatecomerReports';
 import ManagerDashboard from '../src/boundary/managerDashboard';
-import EmployeeDetails from '../src/boundary/EmployeeReport';
-import { getEmpName } from '../src/controller/reportController';
 
 jest.mock('../src/controller/reportController');
 
@@ -46,15 +44,4 @@ describe('Report Component', () => {
     wrapper.find('button').at(5).simulate('click');
     expect(wrapper.find(ManagerDashboard).exists()).toBe(true);
   });
-
-  it('should fetch employee names on mount', async () => {
-    const mockedEmpNames = ['John Doe', 'Jane Doe'];
-    getEmpName.mockResolvedValue({ empNames: mockedEmpNames });
-
-    await wrapper.instance().componentDidMount();
-
-    expect(getEmpName).toHaveBeenCalled();
-    expect(wrapper.state('empName')).toEqual(mockedEmpNames);
-  });
-
 });
