@@ -7,7 +7,7 @@ The Employee Scheduling Application is a powerful tool designed to simplify and 
 ### Key Features
 
 - Automatic Assign Employees: The application can automatically assign shifts to employees based on their availability.
-- Employee Management: Easily add, edit, and remove employees from the system, including their contact information and role assignments.
+- Employee Management: Easily add employees to the system, including their contact information and employee type.
 - Shift Management: Create, update, and delete shifts with ease, specifying shift timings, roles required, and other details.
 - Availability Tracking: Employees can input their availability, making it easier for the system to assign shifts that align with their schedules.
 - Notifications: Automatically notify employees of their assigned shifts via email or in-app notifications.
@@ -40,6 +40,6 @@ https://github.com/ribenaa/EmpRoster.git
 ### Usage
 
 #### User Roles
-- Admin: Can manage employees, shifts, and system settings.
-- Manager: Can create and assign shifts, view schedules, and manage employees.
+- Admin: Can manage manager accounts.
+- Manager: Can automatically assign shifts, view schedules, and create employees.
 - Employee: Can view their own schedule and update their availability.
