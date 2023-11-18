@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.9",
+    "@fullcalendar/interaction": "^6.1.9",
     "@fullcalendar/react": "^6.1.9",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.1",
