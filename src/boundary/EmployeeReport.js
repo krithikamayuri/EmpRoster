@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 const React = require('react');
 const { useState, useEffect } = require('react');
-const { getHoursWorked } = require('../controller/shiftController');
+const { employeeReport } = require('../controller/shiftController');
 require('jspdf-autotable');
 
 //method to calculate the hours worked for each employee according to shifts
@@ -49,7 +49,7 @@ const EmployeeDetails = ({ employeeName }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getHoursWorked(employeeName);
+        const data = await employeeReport(employeeName);
         setShiftInfo(data.shifts);
       } catch (error) {
         console.error('Error fetching data:', error);
