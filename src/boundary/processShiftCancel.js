@@ -172,7 +172,7 @@ function ShiftCancel() {
                           <td>{request.message}</td>
                           <td><DownloadLink filename={request.file} /></td>
                           <td
-                            style={{ color: isAccepted ? 'green' : isPending ? 'yellow' : 'red' }}
+                            style={{ color: isAccepted ? 'green' : isPending ? 'black' : 'red' }}
                           >
                             {request.status}
                           </td>
