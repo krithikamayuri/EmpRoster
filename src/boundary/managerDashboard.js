@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import Report from './report';
-import { managerDashboard } from '../controller/managerDashboardController';
+import { managerDashboard , getCalendarInfo, getCalendarInfoByShiftID} from '../controller/managerDashboardController';
 import axios from 'axios';
 import ShiftCancel from './processShiftCancel';
 import AssignEmployees from './assignEmployees';
