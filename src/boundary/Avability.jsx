@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import axios from 'axios';
+import { availability } from '../controller/availabilityController';
 
 function Availability(props) {
   const [weeks, setWeeks] = useState([]); // State to store weeks
@@ -10,21 +11,6 @@ const [newdates,setNewdate]=useState([])
   useEffect(() => {
     // Fetch user data (replace with your API endpoint)
     axios.get(`/api/employee/${props.userEmail}`)
-      .then((response) => {
-        console.log(response.data);
-        setEmpId(response.data.emp_id);
-
-        // Chain the second request inside the first .then()
-        return axios.get(`/api/employees/${response.data.emp_id}`);
-      })
-      .then((response) => {
-        console.log(response.data);
-        setSelectedDates(response.data.dates);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-      axios.get(`/api/employee/${props.userEmail}`)
       .then((response) => {
         console.log(response.data);
         setEmpId(response.data.emp_id);
@@ -142,6 +128,7 @@ const renderCheckboxes = (day) => {
 
   const handleSubmit = () => {
     // You can make a POST request using Axios here
+    /*
     axios.post('/api/postavailable', { emp_id: empId, date: newdates })
       .then(response => {
         console.log('Data posted successfully:', response.data);
@@ -151,6 +138,13 @@ const renderCheckboxes = (day) => {
       .catch(error => {
         console.error('Error posting data:', error);
         // Handle the error appropriately
+      });*/
+      availability( empId, newdates)
+      .then(() => {
+        alert('Data posted successfully');
+      })
+      .catch((error) => {
+        console.error('Error posting data:', error);
       });
   };
 
