@@ -6,7 +6,7 @@ import ShiftCancel from './processShiftCancel';
 import { useState } from 'react';
 import ManagerDashboard from './managerDashboard';
 import { useEffect } from 'react';
-import { getClockInReports } from '../controller/clockInReportsController';
+import { lateComerReport } from '../controller/lateComerReportController';
 
 function LatecomerReports() {
   const [reportButtonPressed, setReportButtonPressed] = useState(false);
@@ -18,7 +18,7 @@ function LatecomerReports() {
   const [lateComings, setLateComings] = useState([]);
 
   useEffect(() => {
-    getClockInReports()
+    lateComerReport()
       .then(clockIns => {
         console.log(clockIns); // Log the response data
         setLateComings(clockIns);

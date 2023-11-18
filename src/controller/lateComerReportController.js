@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getClockInReports = async () => {
+export const lateComerReport = async () => {
   try {
     const response = await axios.get('/api/clockInReports');
 
