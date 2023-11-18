@@ -68,7 +68,7 @@ useEffect( () => {
     // get employee
     async function getEmployeeByEmail(email) {
       const res = await getEmployeeByEmailAsync(email);
-      if(res.success == true) {
+      if(res.success === true) {
         setEmployee(res.employee);
       }
     }
