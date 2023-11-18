@@ -332,7 +332,7 @@ function AssignEmployees() {
                     <label>Customer Name: </label>
                           <input
                             type="text"
-                            className='form-control w-75'
+                            className='form-control w-50'
                             value={weekData[index]?.customerName || ''}
                             onChange={(e) =>
                               handleDayDataChange(index, {
@@ -346,7 +346,7 @@ function AssignEmployees() {
                           <label>Customer Address: </label>
                           <input
                             type="text"
-                            className='form-control w-75'
+                            className='form-control w-50'
                             value={weekData[index]?.customerAddress || ''}
                             onChange={(e) =>
                               handleDayDataChange(index, {
