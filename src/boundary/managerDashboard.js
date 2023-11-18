@@ -126,7 +126,6 @@ function ManagerDashboard(props) {
         }
       } catch (error) {
         console.error('An error occurred:', error);
-        setError('An error occurred. Please try again later.');
       }
     };
 
