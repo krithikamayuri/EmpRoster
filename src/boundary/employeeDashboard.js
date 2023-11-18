@@ -7,7 +7,7 @@ import Availability from './availabilitysub';
 import Cancellation from './cancelshift';
 import SwapRequest from './swaprequest';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { getUserName } from '../controller/employeeDashboardController';
+import { employeeDashboardController } from '../controller/employeeDashboardController';
 import Avability from "../boundary/Avability"
 import Empdashboardnav from './empdashboardnav';
 import MySwapRequests from "./myswaprequests";
@@ -26,7 +26,7 @@ function EmployeeDashboard(props) {
 
   const getName = useCallback(async () => {
     try {
-      const response = await getUserName(userEmail);
+      const response = await employeeDashboardController(userEmail);
 
       if (response && response.message === 'ok') {
         const userName = response.employeeName;
