@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const availability = async (empId, newDates) => {
+export const availability = async (empId, newDates) => {
     try {
       const response = await axios.post('/api/postavailable', { emp_id: empId, date: newDates });
       console.log('Data posted successfully:', response.data);
