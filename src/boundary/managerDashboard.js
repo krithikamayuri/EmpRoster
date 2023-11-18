@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 //import ManagerNavbar from './managernavbar';
 //import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Report from './report';
-import { getUserName } from '../controller/managerDashboardController';
+import { managerDashboard } from '../controller/managerDashboardController';
 import axios from 'axios';
 import ShiftCancel from './processShiftCancel';
 import AssignEmployees from './assignEmployees';
@@ -71,7 +71,7 @@ function ManagerDashboard(props) {
   useEffect(() => {
     const getName = async () => {
       try {
-        const response = await getUserName(userEmail);
+        const response = await managerDashboard(userEmail);
 
         if (response && response.message === 'ok') {
           const userName = response.managerName;
