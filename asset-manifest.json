@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/EmpRoster/static/css/main.1ff2679b.css",
-    "main.js": "/EmpRoster/static/js/main.bcad2909.js",
+    "main.js": "/EmpRoster/static/js/main.3716b3ab.js",
     "static/js/498.6addbe94.chunk.js": "/EmpRoster/static/js/498.6addbe94.chunk.js",
     "static/js/703.f2c60403.chunk.js": "/EmpRoster/static/js/703.f2c60403.chunk.js",
     "static/js/379.32402ce4.chunk.js": "/EmpRoster/static/js/379.32402ce4.chunk.js",
@@ -11,7 +11,7 @@
     "static/media/notfound.jpg": "/EmpRoster/static/media/notfound.3eb00626b056604490f5.jpg",
     "index.html": "/EmpRoster/index.html",
     "main.1ff2679b.css.map": "/EmpRoster/static/css/main.1ff2679b.css.map",
-    "main.bcad2909.js.map": "/EmpRoster/static/js/main.bcad2909.js.map",
+    "main.3716b3ab.js.map": "/EmpRoster/static/js/main.3716b3ab.js.map",
     "498.6addbe94.chunk.js.map": "/EmpRoster/static/js/498.6addbe94.chunk.js.map",
     "703.f2c60403.chunk.js.map": "/EmpRoster/static/js/703.f2c60403.chunk.js.map",
     "379.32402ce4.chunk.js.map": "/EmpRoster/static/js/379.32402ce4.chunk.js.map",
@@ -19,6 +19,6 @@
   },
   "entrypoints": [
     "static/css/main.1ff2679b.css",
-    "static/js/main.bcad2909.js"
+    "static/js/main.3716b3ab.js"
   ]
 }
