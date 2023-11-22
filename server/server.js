@@ -1215,7 +1215,7 @@ app.get('/api/fetchShifts/:empId', async (req, res) => {
 app.post('/api/clockinout', async (req, res) => {
     try {
         // Extract the shift data from the request body
-        const { empId, date, clockIn, clockOut } = req.body;
+        const { empId, empName, date, clockIn, clockOut } = req.body;
 
         // Use the findOrCreate method to either create a new record or update an existing one
         const [shift, created] = await ClockInOut.findOrCreate({
@@ -1225,6 +1225,7 @@ app.post('/api/clockinout', async (req, res) => {
             },
             defaults: {
                 empId: parseInt(empId),
+                empName: empName,
                 date: date,
                 clockIn: clockIn,
                 clockOut: clockOut,

@@ -40,7 +40,7 @@ console.log(clockOutTime)
   const handleClockIn = async () => {
     const clockInTimestamp = moment();
     try {
-      const response = await recordClockIn(empId, moment().format('MMMM D, YYYY'), clockInTimestamp.format('HH:mm:ss'));
+      const response = await recordClockIn(empId, empName, moment().format('MMMM D, YYYY'), clockInTimestamp.format('HH:mm:ss'));
       setClockInTime(clockInTimestamp.format('HH:mm'));
       setClockInDisabled(true);
       console.log(response);

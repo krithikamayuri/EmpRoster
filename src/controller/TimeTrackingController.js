@@ -20,9 +20,9 @@ export const getClockInOutData = async (empId, date) => {
   }
 };
 
-export const recordClockIn = async (empId, date, clockIn) => {
+export const recordClockIn = async (empId, empName, date, clockIn) => {
   try {
-    const response = await axios.post('/api/clockinout', { empId, date, clockIn });
+    const response = await axios.post('/api/clockinout', { empId, empName, date, clockIn});
     return response.data;
   } catch (error) {
     console.error('Error recording clock in time:', error);

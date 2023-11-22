@@ -112,8 +112,7 @@ function LatecomerReports() {
                     <tr>
                       <th>Name</th>
                       <th>Date</th>
-                      <th>Shift Start Time</th>
-                      <th>Actual Clock-In Time</th>
+                      <th>Clock-In Time</th>
                       <th>Status</th>
                     </tr>
                   </thead>
@@ -129,7 +128,6 @@ function LatecomerReports() {
                     <tr key={latecoming.clock_id}>
                       <td>{latecoming.clock_name}</td>
                       <td>{new Date(latecoming.clock_date).toLocaleDateString()}</td>
-                      <td>{latecoming.shift_start_time}</td>
                       <td>{latecoming.clock_time}</td>
                       <td
                         style={{ color: isLate ? 'red' : 'green' }}

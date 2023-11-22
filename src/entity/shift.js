@@ -25,7 +25,7 @@ const Shift = sequelize.define('Shift', {
       emp_id: 2,
       emp_name: 'Lucy',
       shiftDate: '2023-10-12', 
-      shiftStartTime: '10:00:00',
+      shiftStartTime: '08:00:00',
       shiftEndTime: '18:00:00',
       customerName: 'Sarah',
       customerAddress: '123 Clementi Rd'
@@ -47,7 +47,25 @@ const Shift = sequelize.define('Shift', {
       shiftEndTime: '19:00:00',
       customerName: 'Sarah',
       customerAddress: '30 Jurong street'
-    }
+    },
+    {
+      emp_id: 1,
+      emp_name: 'John',
+      shiftDate: '2023-11-22',
+      shiftStartTime: '10:00:00',
+      shiftEndTime: '19:00:00',
+      customerName: 'Sarah',
+      customerAddress: '30 Jurong street'
+    },
+    {
+      emp_id: 3,
+      emp_name: 'Gina',
+      shiftDate: '2023-10-22',
+      shiftStartTime: '12:00:00',
+      shiftEndTime: '21:00:00',
+      customerName: 'Shane',
+      customerAddress: '45 orchard Rd'
+    },
   ];
 
   for (const data of shiftData) {
