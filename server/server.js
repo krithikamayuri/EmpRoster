@@ -1214,11 +1214,25 @@ app.get('/api/fetchShifts/:empId', async (req, res) => {
 
 app.post('/api/clockinout', async (req, res) => {
     try {
-        // Extract the shift data from the request body
+        // Extract the clock-in/out data from the request body
         const { empId, empName, date, clockIn, clockOut } = req.body;
 
+        // Fetch the shift details based on empId and date
+        const shift = await Shift.findOne({
+            where: {
+                emp_id: parseInt(empId),
+                shiftDate: date,
+            },
+        });
+
+        if (!shift) {
+            // Handle the case where the shift is not found
+            res.status(404).json({ error: 'Shift not found' });
+            return;
+        }
+
         // Use the findOrCreate method to either create a new record or update an existing one
-        const [shift, created] = await ClockInOut.findOrCreate({
+        const [shiftInOut, created] = await ClockInOut.findOrCreate({
             where: {
                 empId: parseInt(empId),
                 date: date,
@@ -1229,22 +1243,32 @@ app.post('/api/clockinout', async (req, res) => {
                 date: date,
                 clockIn: clockIn,
                 clockOut: clockOut,
+                shiftId: shift.shiftID, // Use shiftId fetched from the Shift model
+                shiftStartTime: shift.shiftStartTime, // Include shiftStartTime in defaults
             },
         });
 
         if (!created) {
             // A record already exists for the same empId and date, so update the values
-            shift.clockIn = clockIn;
-            shift.clockOut = clockOut;
-            await shift.save();
+            shiftInOut.clockIn = clockIn;
+            shiftInOut.clockOut = clockOut;
+            await shiftInOut.save();
         }
 
-        res.status(200).json({ status: true, data: shift, message: 'Data added successfully' });
+        res.status(200).json({
+            status: true,
+            data: {
+                ...shiftInOut.toJSON(),
+                shiftStartTime: shift.shiftStartTime, // Include shiftStartTime in the response
+            },
+            message: 'Data added successfully',
+        });
     } catch (error) {
         console.error('Error creating/updating shift:', error);
         res.status(500).json({ error: 'Failed to create/update shift' });
     }
 });
+
 
 
 
