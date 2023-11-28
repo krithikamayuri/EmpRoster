@@ -27,8 +27,13 @@ app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
 
 const { exec } = require('child_process');
 
+/*const corsOptions = {
+    origin: 'https://krithikamayuri.github.io',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
-app.use(cors())
+app.use(cors(corsOptions));*/
+app.use(cors());
 app.use(express.json());
 
 app.post('/api/calendar/fetch-events/:empId', async (req, res) => {
